@@ -1,11 +1,18 @@
-
 <div id='jzebra_dialog' style="z-index:100;display:none;position:absolute;left:400px;border:2px solid #666;width:300px;height:200px;background:#fff;padding:8px;">
 
 	<p id="version"><strong>Status:</strong>  Determining jZebra version. Please wait...</p>
-    <hr/>
-    <applet name="jZebra" code="jzebra.PrintApplet.class" alt="jZebra did not load properly" archive="<%= asset_path('admin/qz_print-1.8.0.jar') -%>" width="0" height="0">
-       <param name="printer" value="zebra">
-    </applet><br><br>
+  <hr/>
+
+  <applet id="qz" archive="/assets/admin/qz-print.jar" name="QZ Print Plugin" code="qz.PrintApplet.class" width="0" height="0">
+    <param name="jnlp_href" value="/assets/admin/qz-print_jnlp.jnlp">
+    <param name="cache_option" value="plugin">
+    <param name="disable_logging" value="false">
+    <param name="initial_focus" value="false">
+  </applet><br />
+
+  <input type="button" onClick="findPrinters()" value="List All Printers"><br />
+  <span>Select Printer: </span><select id="printerList"></select><br />
+  <input type="button" onClick="findPrinter()" value="Detect Printer"><br />
    
 	<table>
 		<tr id="jzebra_shipment_row" style="display:none;">
@@ -16,13 +23,9 @@
 			<td>Gift Message</td>
 			<td id='jzebra_gift_message'></td>
 		</tr>
-		
-		<tr>
-			<td>Select Printer</td>
-			<td><select id="printerList"></select></td>
-		</tr>
-      </table>
+  </table>
+
  	<a href="javascript:printItem();" class="button"><span>Print</span></a>
 	<a href="javascript:hidePrintDialog();" class="button"><span>Cancel</span></a>
-</div>
 
+</div>

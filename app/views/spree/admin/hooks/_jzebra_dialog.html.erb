@@ -1,8 +1,5 @@
 <div id='jzebra_dialog' style="z-index:100;display:none;position:absolute;left:400px;border:2px solid #666;width:300px;height:200px;background:#fff;padding:8px;">
 
-	<p id="status">Printer applet is loading. Please wait...</p>
-  <hr/>
-
   <applet id="qz" archive="/assets/admin/qz-print.jar" name="QZ Print Plugin" code="qz.PrintApplet.class" width="0" height="0">
     <param name="jnlp_href" value="/assets/admin/qz-print_jnlp.jnlp">
     <param name="cache_option" value="plugin">
@@ -10,22 +7,33 @@
     <param name="initial_focus" value="false">
   </applet><br />
 
-  <br />
-  <span>Select Printer: </span><select id="printerList"><option /></select><br />
-  <br />
-  
-	<table>
-		<tr id="jzebra_shipment_row" style="display:none;">
-			<td>Shipment</td>
-			<td id='jzebra_shipment'></td>
-		</tr>
-		<tr id="jzebra_gift_message_row" style="display:none;">
-			<td>Gift Message</td>
-			<td id='jzebra_gift_message'></td>
-		</tr>
-  </table>
+  <div id='printer-loading'>
+    <p>Printer applet is loading. Please wait and allow the applet to run when prompted.</p>
+    <hr/>
+  </div>
 
- 	<a href="javascript:printItem();" class="button"><span>Print</span></a>
+  <div id='printer-loaded' style="visibility: hidden">
+    <p>Printer applet loaded. Please select printer.</p>
+    <hr/>
+
+    <br />
+    <span>Select Printer: </span><select id="printerList"><option /></select><br />
+    <br />
+
+    <table>
+      <tr id="jzebra_shipment_row" style="display:none;">
+        <td>Shipment</td>
+        <td id='jzebra_shipment'></td>
+      </tr>
+      <tr id="jzebra_gift_message_row" style="display:none;">
+        <td>Gift Message</td>
+        <td id='jzebra_gift_message'></td>
+      </tr>
+    </table>
+
+    <a href="javascript:printItem();" class="button"><span>Print</span></a>
+  </div>
+
 	<a href="javascript:hidePrintDialog();" class="button"><span>Cancel</span></a>
 
 </div>

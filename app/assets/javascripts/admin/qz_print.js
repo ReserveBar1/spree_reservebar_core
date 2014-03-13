@@ -139,6 +139,8 @@ function findPrinters() {
       for (i in printers) {
         $('<option/>').val(printers[i]).html(printers[i]).appendTo('#printerList'); 
       }
+      $('#printer-loading').hide()
+      $('#printer-loaded').css('visibility', 'visible');
       
       // Remove reference to this function
       window['qzDoneFinding'] = null;

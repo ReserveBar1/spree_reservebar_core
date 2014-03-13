@@ -83,7 +83,9 @@ function qzDonePrinting() {
   }
   
   // Alert success message
+  $("#progress").slideUp();
   alert('Successfully sent print data to "' + qz.getPrinter() + '" queue.');
+  hidePrintDialog();
 }
 
 /***************************************************************************
@@ -178,12 +180,7 @@ function appendItem() {
     }
   }
 }
-  
-function monitorPrinting() {
-  $("#progress").slideUp();
-  hidePrintDialog();
-}
-    
+
 function monitorAppending() {
   if (isLoaded()) {
      if (!qz.isDoneAppending()) {
@@ -199,7 +196,6 @@ function monitorAppending() {
         alert('Unrecognized print format');
         // qz.printPS(); // PDF documents use printPS function
       }
-            monitorPrinting();
      }
   } else {
           alert("Applet not loaded!");

@@ -1,3 +1,14 @@
+$(function(){
+  // Find printer after printer selection is made.
+  $('#printerList').change(function () {
+      var str = "";
+      $("#printerList option:selected").each(function () {
+          str += $(this).text() + " ";
+      });
+      findPrinter()
+  });
+});
+
 /**
 * Automatically gets called when applet has loaded.
 */

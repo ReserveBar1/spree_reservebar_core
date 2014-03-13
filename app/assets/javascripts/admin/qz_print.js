@@ -191,11 +191,12 @@ function monitorAppending() {
       if ($("#jzebra_dialog").attr("format") == 'raw') {
             qz.print(); // Don't print until all of the data has been appended
       } 
-      else if ($("#jzebra_dialog").attr("format") == 'html') {
-        qz.printHTML();
-      }
+      // else if ($("#jzebra_dialog").attr("format") == 'html') {
+      //   qz.printHTML();
+      // }
       else {
-        qz.printPS(); // PDF documents use printPS function
+        alert('Unrecognized print format');
+        // qz.printPS(); // PDF documents use printPS function
       }
             monitorPrinting();
      }

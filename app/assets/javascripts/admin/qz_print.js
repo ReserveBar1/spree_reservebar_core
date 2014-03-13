@@ -30,6 +30,7 @@ function qzReady() {
         "only a warning and the printer will still work.");
     }
   }
+  findPrinters()
 }
 
 /**

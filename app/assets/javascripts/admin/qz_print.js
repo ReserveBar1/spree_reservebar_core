@@ -180,8 +180,7 @@ function appendItem() {
   
 function monitorPrinting() {
   $("#progress").slideUp();
-  alert("Label sent to printer ...");
-  // hidePrintDialog();
+  hidePrintDialog();
 }
     
 function monitorAppending() {

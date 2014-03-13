@@ -19,15 +19,8 @@ function qzReady() {
   if (qz) {
     try {
       title.innerHTML = title.innerHTML + " " + qz.getVersion();
-    } catch(err) { // LiveConnect error, display a detailed meesage
-      alert("ERROR:  \nThe applet did not load correctly.  Communication to the " + 
-        "applet has failed, likely caused by Java Security Settings.  \n\n" + 
-        "CAUSE:  \nJava 7 update 25 and higher block LiveConnect calls " + 
-        "once Oracle has marked that version as outdated, which " + 
-        "is likely the cause.  \n\nSOLUTION:  \n  1. Update Java to the latest " + 
-        "Java version \n          (or)\n  2. Lower the security " + 
-        "settings from the Java Control Panel.\n\n\nNOTE: It is likely this is " +
-        "only a warning and the printer will still work.");
+    } catch(err) {
+      // moved error code to troubleshooting()
     }
   }
   findPrinters()
@@ -139,7 +132,7 @@ function findPrinters() {
       for (i in printers) {
         $('<option/>').val(printers[i]).html(printers[i]).appendTo('#printerList'); 
       }
-      $('#printer-loading').hide()
+      $('#appletStatus').text('Printer applet loaded. Please select printer.')
       $('#printer-loaded').css('visibility', 'visible');
       
       // Remove reference to this function
@@ -270,4 +263,15 @@ function allowMultiple() {
   qz.allowMultipleInstances(!multiple);
   alert('Allowing of multiple applet instances set to "' + !multiple + '"');
   }
+}
+
+function troubleshooting(){
+  alert(
+    "The applet may not have loaded correctly, likely caused by Java Security Settings.  \n\n" + 
+    "CAUSE:  \nJava 7 update 25 and higher block LiveConnect calls " + 
+    "once Oracle has marked that version as outdated, which " + 
+    "is likely the cause.  \n\nSOLUTION:  \n  1. Update Java to the latest " + 
+    "Java version \n          (or)\n  2. Lower the security " + 
+    "settings from the Java Control Panel."
+  );
 }

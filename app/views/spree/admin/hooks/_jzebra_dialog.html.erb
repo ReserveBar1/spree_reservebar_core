@@ -7,16 +7,10 @@
     <param name="initial_focus" value="false">
   </applet><br />
 
-  <div id='printer-loading'>
-    <p>Printer applet is loading. Please wait and allow the applet to run when prompted.</p>
-    <hr/>
-  </div>
+  <p id='appletStatus'>Printer applet is loading. Please wait and allow the applet to run when prompted.</p>
+  <hr/>
 
   <div id='printer-loaded' style="visibility: hidden">
-    <p>Printer applet loaded. Please select printer.</p>
-    <hr/>
-
-    <br />
     <span>Select Printer: </span><select id="printerList"><option /></select><br />
     <br />
 
@@ -35,5 +29,8 @@
   </div>
 
 	<a href="javascript:hidePrintDialog();" class="button"><span>Cancel</span></a>
+
+  <br /><br /><br />
+  <a href='javascript:troubleshooting();'>Click here if you're having trouble</a>
 
 </div>

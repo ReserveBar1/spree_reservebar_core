@@ -26,7 +26,8 @@ function qzReady() {
         "once Oracle has marked that version as outdated, which " + 
         "is likely the cause.  \n\nSOLUTION:  \n  1. Update Java to the latest " + 
         "Java version \n          (or)\n  2. Lower the security " + 
-        "settings from the Java Control Panel.");
+        "settings from the Java Control Panel.\n\n\nNOTE: It is likely this is " +
+        "only a warning and the printer will still work.");
     }
   }
 }

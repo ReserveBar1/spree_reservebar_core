@@ -4,6 +4,8 @@ OrderNumber,Order Date,AcceptedDate,ProductName,Number of Bottles,Website Produc
   @orders.each do |order|
   	names_array = order.line_items.map{|line_item|line_item.product.try(:name)}.compact
   	prices_array = order.line_items.map{|line_item|line_item.price}.compact
+    shipping_charge_uplift = order.shipping_method.calculator.preferred_uplift rescue 0.0
+    
     csv << [	order.number, 
 				(order.completed_at.nil? ? order.created_at : order.completed_at).to_date,
 				order.accepted_at.nil? ? nil : order.accepted_at.to_date,

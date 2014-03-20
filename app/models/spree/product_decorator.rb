@@ -18,6 +18,9 @@ Spree::Product.class_eval do
   scope :taxons_id_in_tree, lambda {|taxon| 
     Product.taxons_id_in_tree_any(taxon).scope :find 
   }
+
+  validates_inclusion_of :state_blacklist, :in => Spree::Country.where(:name => 'United States').first.states.all.map(&:abbr),
+    :message => "-- %{value} is not a valid state"
   
   after_save :touch_taxons
   

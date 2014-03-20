@@ -68,7 +68,7 @@ Spree::Product.class_eval do
   # This could probably do with some pretty heavy caching
   def ships_to_states
     method = "ships_#{self.shipping_category.name.downcase.gsub(' ','_')}_to".to_sym
-    states = (Spree::Retailer.active.map(&method) - [""]).join(',').split(',').uniq.sort.to_sentence
+    states = (Spree::Retailer.active.map(&method) - [""] - self.state_blacklist.split).join(',').split(',').uniq.sort.to_sentence
   end
   
   # Returns true if this product is availble for shipping to all states.

@@ -14,6 +14,25 @@ module Spree
         
         # Register new searcher class
         Spree::Config.searcher_class = Spree::Search::ReservebarSearch
+
+        Spree::BaseController.class_eval do
+          def title
+            unless @product || @taxon
+              title_string = @title.present? ? @title : accurate_title
+              if title_string.present?
+                if Spree::Config[:always_put_site_name_in_title]
+                  [title_string, default_title].join(' - ')
+                else
+                  title_string
+                end
+              else
+                default_title
+              end
+            else
+              accurate_title
+            end
+          end
+        end
       end
 
       config.autoload_paths += %W(#{config.root}/lib)

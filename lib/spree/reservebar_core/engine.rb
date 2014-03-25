@@ -29,7 +29,20 @@ module Spree
                 default_title
               end
             else
-              accurate_title
+              if @product
+                unless @product.page_title?
+                  return "#{@product.name}, buy or gift. #{default_title}"
+                else
+                  return @product.page_title
+                end
+              end
+              if @taxon
+                unless @taxon.page_title?
+                  return "#{@taxon.name}, buy or gift. #{default_title}"
+                else
+                  return @taxon.page_title
+                end
+              end
             end
           end
         end

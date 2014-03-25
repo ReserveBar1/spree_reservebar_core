@@ -31,14 +31,14 @@ module Spree
             else
               if @product
                 unless @product.page_title?
-                  return "#{@product.name}, buy or gift. #{default_title}"
+                  return "#{@product.name}, Buy Online or Send as a Gift | ReserveBar"
                 else
                   return @product.page_title
                 end
               end
               if @taxon
                 unless @taxon.page_title?
-                  return "#{@taxon.name}, buy or gift. #{default_title}"
+                  return "#{@taxon.name}, Buy Online or Send as a Gift | ReserveBar"
                 else
                   return @taxon.page_title
                 end

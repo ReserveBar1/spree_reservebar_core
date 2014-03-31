@@ -1,6 +1,6 @@
 <% if controller.controller_name == "orders" && controller.action_name == "edit" %>
   <script type="text/javascript">
-    var dataLayer = {
+    var dataLayer = [{
       "navigation" : {
         "pageName" : "Cart"
       },
@@ -10,7 +10,7 @@
       "items" : [
       <%=raw (@order.line_items.map { |line_item| '{"productID": "' + line_item.variant.sku + '", "productName": "' + line_item.variant.name + '", "quantity": ' + line_item.quantity.to_s + ', "productBrand" : "' + line_item.product.brand.title + '" }' if line_item.product.brand.brand_owner.title == "Diageo" }).join(",") %>
       ]
-    };
+    }];
   </script>
   <%= render partial: 'spree/google_tags/gtm_code' %>
 <% end %>

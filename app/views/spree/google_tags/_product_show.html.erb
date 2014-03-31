@@ -1,7 +1,7 @@
 <% if controller.controller_name == "products" && controller.action_name == "show" %>
   <% if @product.brand.brand_owner.title == "Diageo" %>
     <script type="text/javascript">
-      var dataLayer = {
+      var dataLayer = [{
         "navigation" : {
           "pageName" : "Product"
         },
@@ -11,7 +11,7 @@
           "productCategory" : "<%= @product.shipping_category.name -%>",
           "productBrand" : "<%= @product.brand.title -%>"
         }
-      };
+      }];
 
       $("#add-to-cart-button").on("click", function() {
       $(document).trigger("itemAddedToCart", ["<%= @product.master.sku -%>", "<%= @product.name -%>", "<%= @product.brand.title -%>"]);

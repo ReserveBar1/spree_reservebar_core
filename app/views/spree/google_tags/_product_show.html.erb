@@ -1,19 +1,22 @@
-<% if @product.brand.brand_owner.title == "Diageo" %>
-  <script type="text/javascript">
-    var dataLayer = {
-    	"navigation" : {
-    		"pageName" : "Product"
-    	},
-    	"items" : {
-    		"productID" : "<%= @product.master.sku -%>",
-    		"productName" : "<%= @product.name -%>",
-    		"productCategory" : "<%= @product.shipping_category.name -%>",
-    		"productBrand" : "<%= @product.brand.title -%>"
-    	}
-    };
+<% if controller.controller_name == "products" && controller.action_name == "show" %>
+  <% if @product.brand.brand_owner.title == "Diageo" %>
+    <script type="text/javascript">
+      var dataLayer = {
+        "navigation" : {
+          "pageName" : "Product"
+        },
+        "items" : {
+          "productID" : "<%= @product.master.sku -%>",
+          "productName" : "<%= @product.name -%>",
+          "productCategory" : "<%= @product.shipping_category.name -%>",
+          "productBrand" : "<%= @product.brand.title -%>"
+        }
+      };
 
-    $("#add-to-cart-button").on("click", function() {
-    	$(document).trigger("itemAddedToCart", ["<%= @product.master.sku -%>", "<%= @product.name -%>", "<%= @product.brand.title -%>"]);
-    });
-  </script>
+      $("#add-to-cart-button").on("click", function() {
+      $(document).trigger("itemAddedToCart", ["<%= @product.master.sku -%>", "<%= @product.name -%>", "<%= @product.brand.title -%>"]);
+      });
+    </script>
+    <%= render partial: 'spree/google_tags/gtm_code' %>
+  <% end %>
 <% end %>

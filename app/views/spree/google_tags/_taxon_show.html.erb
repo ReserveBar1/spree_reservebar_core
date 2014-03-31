@@ -1,12 +1,15 @@
-<% if @taxon.children.empty? && Spree::BrandOwner.find_by_title("Diageo").brands.map(&:title).include?(@taxon.name) %>
-  <script type="text/javascript">
-    var pageData = {
-    	"navigation" : {
-    		"pageName" : "Brand"
-    	},
-    	"items" : {
-    		"productBrand" : "<%= @taxon.name -%>"
-    	}
-    };
-  </script>
+<% if controller.controller_name == "taxons" && controller.action_name == "show" %>
+  <% if @taxon.children.empty? && Spree::BrandOwner.find_by_title("Diageo").brands.map(&:title).include?(@taxon.name) %>
+    <script type="text/javascript">
+      var pageData = {
+        "navigation" : {
+          "pageName" : "Brand"
+        },
+        "items" : {
+          "productBrand" : "<%= @taxon.name -%>"
+        }
+      };
+    </script>
+    <%= render partial: 'spree/google_tags/gtm_code' %>
+  <% end %>
 <% end %>

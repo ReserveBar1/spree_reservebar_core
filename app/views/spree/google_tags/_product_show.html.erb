@@ -1,22 +1,27 @@
 <% if controller.controller_name == "products" && controller.action_name == "show" %>
   <% if @product.brand.brand_owner.title == "Diageo" %>
-    <script type="text/javascript">
-      var dataLayer = [{
-        "navigation" : {
-          "pageName" : "Product"
-        },
-        "items" : {
-          "productID" : "<%= @product.master.sku -%>",
-          "productName" : "<%= @product.name -%>",
-          "productCategory" : "<%= @product.shipping_category.name -%>",
-          "productBrand" : "<%= @product.brand.title -%>"
-        }
-      }];
 
+    <%= "<!--
+    Start of DoubleClick Floodlight Tag: Please do not remove
+    Activity name of this tag: Product Page_Standard
+    URL of the webpage where the tag is expected to be placed: http://reservebar.com
+    This tag must be placed between the <body> and </body> tags, as close as possible to the opening tag.
+    Creation Date: 03/21/2013
+    -->".html_safe %>    
+    <script type="text/javascript">
+      var axel = Math.random() + "";
+      var a = axel * 10000000000000;
+      document.write('<iframe src="https://2993648.fls.doubleclick.net/activityi;src=2993648;type=rsrvbar;cat=prod;u4=<%= @product.master.sku -%>;u2=<%= @product.name -%>;u3=Diageo;ord=' + a + '?" width="1" height="1" frameborder="0" style="display:none"></iframe>');
+    </script>
+    <noscript>
+      <iframe src="https://2993648.fls.doubleclick.net/activityi;src=2993648;type=rsrvbar;cat=prod;u4=<%= @product.master.sku -%>;u2=<%= @product.name -%>;u3=Diageo;ord=1?" width="1" height="1" frameborder="0" style="display:none"></iframe>
+    </noscript>
+    <%= "<!-- End of DoubleClick Floodlight Tag: Please do not remove -->".html_safe %>
+
+    <script type="text/javascript">
       $("#add-to-cart-button").on("click", function() {
       $(document).trigger("itemAddedToCart", ["<%= @product.master.sku -%>", "<%= @product.name -%>", "<%= @product.brand.title -%>"]);
       });
     </script>
-    <%= render partial: 'spree/google_tags/gtm_code' %>
   <% end %>
 <% end %>

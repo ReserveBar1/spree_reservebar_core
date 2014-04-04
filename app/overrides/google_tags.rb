@@ -6,11 +6,11 @@
 #                      :disabled => false)
 
 # Insert on order summary page 
-# Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
-#                      :name => "googletags_order_summary",
-#                      :insert_top => "body",
-#                      :partial => "spree/google_tags/orders_show",
-#                      :disabled => false)
+Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
+                     :name => "googletags_order_summary",
+                     :insert_top => "body",
+                     :partial => "spree/google_tags/orders_show",
+                     :disabled => false)
                    
 # Insert on taxon page - taxon dependency is handled in the partial
 Deface::Override.new(:virtual_path => "spree/layouts/spree_application",

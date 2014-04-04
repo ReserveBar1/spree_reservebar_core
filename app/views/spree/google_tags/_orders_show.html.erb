@@ -1,21 +1,40 @@
 <% if controller.controller_name == "orders" && controller.action_name == "show" %>
-  <% if flash[:commerce_tracking] %>
+  <% # if flash[:commerce_tracking] %>
     <% if @order.line_items.map {|li| li.product.brand.brand_owner.title}.include?("Diageo") %>
+      <% 
+      product_skus = []
+      quantities = []
+      product_names =[]
+      brands = []
+      items = @order.line_items.select {|l| l.product.brand.brand_owner.title.include? 'Diageo' }
+      items.each do |item|
+        product_skus << item.product.sku
+        quantities << item.quantity
+        product_names << item.product.name.gsub(' ','+')
+        brands << item.product.brand.title
+      end
+      product_skus = product_skus.join('|')
+      quantities = quantities.join('|')
+      product_names =product_names.join('|')
+      brands = brands.join('|')
+      %>
+      <%= "<!--
+      Start of DoubleClick Floodlight Tag: Please do not remove
+      Activity name of this tag: Sales Confimation Page_Standard
+      URL of the webpage where the tag is expected to be placed: http://reservebar.com
+      This tag must be placed between the <body> and </body> tags, as close as possible to the opening tag.
+      Creation Date: 05/17/2013
+      -->".html_safe %>
       <script type="text/javascript">
-        var dataLayer = [{
-          "navigation" : {
-            "pageName" : "Confirmation"
-          },
-          "order" : {
-            "id" : "<%= @order.number %>",
-            "sender": {"city": "<%= @order.bill_address.city -%>", "state": "<%= @order.bill_address.state.abbr -%>" }
-          },
-          "items" : [
-            <%=raw (@order.line_items.map { |line_item| '{"productID": "' + line_item.variant.sku + '", "productName": "' + line_item.variant.name + '", "quantity": ' + line_item.quantity.to_s + ', "productBrand" : "' + line_item.product.brand.title + '" }' if line_item.product.brand.brand_owner.title == "Diageo" }).join(",") %>
-          ]
-        }];
+        var axel = Math.random() + "";
+        var a = axel * 10000000000000;
+        document.write('<iframe src="https://2993648.fls.doubleclick.net/activityi;src=2993648;type=rsrvbar;cat=sale;u4=<%= product_skus -%>;u5=<%= quantities -%>;u6=<%= @order.bill_address.city -%>;u7=<%= @order.bill_address.state.abbr -%>;u2=<%= product_names -%>;u3=<%= brands -%>;u11=<%= @order.number %>;ord=' + a + '?" width="1" height="1" frameborder="0" style="display:none"></iframe>');
       </script>
-      <%= render partial: 'spree/google_tags/gtm_code' %>
+      <noscript>
+        <iframe src="https://2993648.fls.doubleclick.net/activityi;src=2993648;type=rsrvbar;cat=sale;u4=<%= product_skus -%>;u5=<%= quantities -%>;u6=<%= @order.bill_address.city -%>;u7=<%= @order.bill_address.state.abbr -%>;u2=<%= product_names -%>;u3=<%= brands -%>;u11=<%= @order.number %>;ord=1?" width="1" height="1" frameborder="0" style="display:none"></iframe>
+      </noscript>
+
+      <%= "<!-- End of DoubleClick Floodlight Tag: Please do not remove -->".html_safe %>
     <% end %>
-  <% end %>
+  <% # end %>
 <% end %>

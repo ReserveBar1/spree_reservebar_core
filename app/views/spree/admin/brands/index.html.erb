@@ -1,0 +1,20 @@
+<div class="toolbar" data-hook="toolbar">
+  <ul class="actions">
+  </ul>
+  <br class="clear" />
+</div>
+
+<h1><%= t(:listing_owners_and_brands) %></h1>
+
+<table class="index" id="listing_brands">
+  <tr>
+    <th>Brand Owner</th>
+    <th>Brands</th>
+  </tr>
+  <% @brand_owners.each do |owner| %>
+    <tr>
+      <td><%= owner.title %></td>
+      <td><%= owner.brands.map(&:title).to_sentence %></td>
+    </tr>
+  <% end %>
+</table>

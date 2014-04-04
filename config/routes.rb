@@ -42,6 +42,7 @@ Spree::Core::Engine.routes.prepend do
       put :update_shipping_methods
     end
 
+    resources :brands
     
     resources :orders do
       member do

@@ -1,6 +1,8 @@
 <% if controller.controller_name == "taxons" && controller.action_name == "show" %>
   <% if @taxon.children.empty? && Spree::BrandOwner.find_by_title("Diageo").brands.map(&:title).include?(@taxon.name) %>
-    
+
+    <% brand_name = @taxon.name.gsub(' ','+') %>
+
     <%= "<!--
     Start of DoubleClick Floodlight Tag: Please do not remove
     Activity name of this tag: Brand Page_Standard
@@ -11,10 +13,10 @@
     <script type="text/javascript">
       var axel = Math.random() + "";
       var a = axel * 10000000000000;
-      document.write('<iframe src="https://2993648.fls.doubleclick.net/activityi;src=2993648;type=rsrvbar;cat=brand;u3=Diageo;ord=' + a + '?" width="1" height="1" frameborder="0" style="display:none"></iframe>');
+      document.write('<iframe src="https://2993648.fls.doubleclick.net/activityi;src=2993648;type=rsrvbar;cat=brand;u3=<%= brand_name -%>;ord=' + a + '?" width="1" height="1" frameborder="0" style="display:none"></iframe>');
     </script>
     <noscript>
-      <iframe src="https://2993648.fls.doubleclick.net/activityi;src=2993648;type=rsrvbar;cat=brand;u3=Diageo;ord=1?" width="1" height="1" frameborder="0" style="display:none"></iframe>
+      <iframe src="https://2993648.fls.doubleclick.net/activityi;src=2993648;type=rsrvbar;cat=brand;u3=<%= brand_name -%>;ord=1?" width="1" height="1" frameborder="0" style="display:none"></iframe>
     </noscript>
     <%= "<!-- End of DoubleClick Floodlight Tag: Please do not remove -->".html_safe %>
 

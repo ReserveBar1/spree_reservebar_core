@@ -10,8 +10,8 @@
       items.each do |item|
         product_skus << item.product.sku
         quantities << item.quantity
-        product_names << item.product.name.gsub(' ','+')
-        brands << item.product.brand.title
+        product_names << item.product.name.gsub(' ','+').gsub("'","")
+        brands << item.product.brand.title.gsub("'","")
       end
       product_skus = product_skus.join('|')
       quantities = quantities.join('|')

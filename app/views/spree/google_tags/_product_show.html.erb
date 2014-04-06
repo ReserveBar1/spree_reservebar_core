@@ -2,8 +2,8 @@
   <% if @product.brand.brand_owner.title == "Diageo" %>
 
     <% 
-      product_name = @product.name.gsub(' ','+')
-      brand_name = @product.brand.title.gsub(' ','+') 
+      product_name = @product.name.gsub(' ','+').gsub("'","")
+      brand_name = @product.brand.title.gsub(' ','+').gsub("'","")
     %>
     <%= "<!--
     Start of DoubleClick Floodlight Tag: Please do not remove

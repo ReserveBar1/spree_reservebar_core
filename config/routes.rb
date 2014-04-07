@@ -1,6 +1,7 @@
 Spree::Core::Engine.routes.prepend do
   
-  
+  # Ensures pagination isn't cached
+  match '/t/*id/page/:page', :to => 'taxons#show', :as => :nested_taxons
   
   # Routes for business gift white glove service
   resources :business_giftings

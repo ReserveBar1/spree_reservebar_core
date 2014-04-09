@@ -54,7 +54,8 @@ class Spree::Admin::ShipmentDetailsController  < Spree::Admin::ResourceControlle
           :phone          => shipping_address.phone, 
           :address1       => shipping_address.address1,
           :address2       => shipping_address.address2,
-          :address_type   => shipping_address.is_business ? 'commercial' : 'residential'
+          :address_type   => shipping_address.is_business ? 'commercial' : 'residential',
+          :company_name   => shipping_address.company.to_s
       )
       if shipment.order.is_gift?
         # Find the email address of the giftee for this order

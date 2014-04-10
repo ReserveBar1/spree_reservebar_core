@@ -1,27 +1,27 @@
 # Insert on cart page
 # Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
-#                      :name => "googletags_cart",
+#                      :name => "diageotags_cart",
 #                      :insert_top => "body",
-#                      :partial => "spree/google_tags/cart",
+#                      :partial => "spree/floodlight_tags/diageo/cart",
 #                      :disabled => false)
 
 # Insert on order summary page 
 Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
-                     :name => "googletags_order_summary",
+                     :name => "diageotags_order_summary",
                      :insert_top => "body",
-                     :partial => "spree/google_tags/orders_show",
+                     :partial => "spree/floodlight_tags/diageo/orders_show",
                      :disabled => false)
                    
 # Insert on taxon page - taxon dependency is handled in the partial
 Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
-                     :name => "googletags_taxon_show",
+                     :name => "diageotags_taxon_show",
                      :insert_top => "body",
-                     :partial => "spree/google_tags/taxon_show",
+                     :partial => "spree/floodlight_tags/diageo/taxon_show",
                      :disabled => false)
 
 # Insert on product page
 Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
-                     :name => "googletags_product_show",
+                     :name => "diageotags_product_show",
                      :insert_top => "body",
-                     :partial => "spree/google_tags/product_show",
+                     :partial => "spree/floodlight_tags/diageo/product_show",
                      :disabled => false)

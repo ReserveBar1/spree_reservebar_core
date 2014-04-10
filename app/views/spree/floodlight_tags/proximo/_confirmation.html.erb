@@ -1,0 +1,31 @@
+<% if controller.controller_name == "orders" && controller.action_name == "show" %>
+  <% if flash[:commerce_tracking] %>
+    <% 
+    quantities = []
+    product_names =[]
+    costs = []
+    @order.line_items.each do |li|
+      prod_name = li.product.name.downcase
+      if prod_name.include?('maestro dobel') || prod_name.include?('reserva de la familia')
+        quantities << li.quantity
+        product_names << li.product.name.gsub(' ','+').gsub("'","")
+        costs << li.price.to_f
+      end
+    end
+    quantities = quantities.join('|')
+    product_names = product_names.join('|')
+    costs = costs.join('|')
+    %>
+    <% unless product_names.empty? %>
+      <%= "<!--
+      Start of DoubleClick Floodlight Tag: Please do not remove
+      Activity name of this tag: Reserve Bar_Thank You Page
+      URL of the webpage where the tag is expected to be placed: https://www.reservebar.com/checkout/thankyou
+      This tag must be placed between the <body> and </body> tags, as close as possible to the opening tag.
+      Creation Date: 04/09/2014
+      -->".html_safe %>
+      <iframe src="http://3722224.fls.doubleclick.net/activityi;src=3722224;type=Reser00;cat=Reser0;qty=<%= quantities %>;cost=<%= costs %>;u1=<%= product_names %>;ord=<%= @order.number %>?" width="1" height="1" frameborder="0" style="display:none"></iframe>
+      <%= "<!-- End of DoubleClick Floodlight Tag: Please do not remove -->".html_safe %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -11,3 +11,10 @@ Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
                      :insert_top => "body",
                      :partial => "spree/floodlight_tags/proximo/registration",
                      :disabled => false)
+
+# Insert on checkout confirmation page
+Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
+                     :name => "floodlight_proximo_confirmation",
+                     :insert_top => "body",
+                     :partial => "spree/floodlight_tags/proximo/confirmation",
+                     :disabled => false)

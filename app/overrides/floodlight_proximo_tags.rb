@@ -18,3 +18,10 @@ Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
                      :insert_top => "body",
                      :partial => "spree/floodlight_tags/proximo/confirmation",
                      :disabled => false)
+
+# Insert on MAESTRO DOBEL® page
+Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
+                     :name => "floodlight_proximo_dobel",
+                     :insert_top => "body",
+                     :partial => "spree/floodlight_tags/proximo/dobel",
+                     :disabled => false)

@@ -47,3 +47,11 @@ Deface::Override.new(:virtual_path => "spree/taxons/show",
 	                   :insert_before => ".taxon-title",
 	                   :partial => "spree/floodlight_tags/taxon_show",
 	                   :disabled => false)
+
+
+# Insert for Gifts by Holiday, Father's Day, and Cinco de Mayo
+Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
+                     :name => "floodlight_gifts_by_holiday",
+                     :insert_top => "body",
+                     :partial => "spree/floodlight_tags/gifts_by_holiday",
+                     :disabled => false)

@@ -12,9 +12,9 @@
         costs << li.price.to_f
       end
     end
-    quantities = quantities.join('|')
+    quantities = quantities.sum
     product_names = product_names.join('|')
-    costs = costs.join('|')
+    costs = costs.sum
     %>
     <% unless product_names.empty? %>
       <%= "<!--

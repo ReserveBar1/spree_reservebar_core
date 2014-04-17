@@ -1,0 +1,20 @@
+<% if controller.controller_name == "products" && controller.action_name == "show" %>
+  <% if @product.permalink == "maestro-dobel-tequila" %>
+    <%= "<!--
+    Start of DoubleClick Floodlight Tag: Please do not remove
+    Activity name of this tag: Reserve Bar_Product Page_Dobel
+    URL of the webpage where the tag is expected to be placed: http://www.reservebar.com/products/maestro-dobel-tequila
+    This tag must be placed between the <body> and </body> tags, as close as possible to the opening tag.
+    Creation Date: 04/16/2014
+    -->".html_safe %>
+    <script type="text/javascript">
+    var axel = Math.random() + "";
+    var a = axel * 10000000000000;
+    document.write('<iframe src="http://3722224.fls.doubleclick.net/activityi;src=3722224;type=Reser0;cat=Reser006;ord=' + a + '?" width="1" height="1" frameborder="0" style="display:none"></iframe>');
+    </script>
+    <noscript>
+    <iframe src="http://3722224.fls.doubleclick.net/activityi;src=3722224;type=Reser0;cat=Reser006;ord=1?" width="1" height="1" frameborder="0" style="display:none"></iframe>
+    </noscript>
+    <%= "<!-- End of DoubleClick Floodlight Tag: Please do not remove -->".html_safe %>
+  <% end %>
+<% end %>

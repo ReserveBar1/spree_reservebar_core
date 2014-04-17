@@ -15,7 +15,7 @@ Spree::OrdersController.class_eval do
   def handle_customization
     @order = current_order(false)
     # Process if we got customization data from the product or cart page
-    if params[:customization]
+    if params[:customization] && params[:elected_engraving] == 'true'
       # Find line item that can be customized, and set its preferred_customization_data
       begin
         line_item = @order.line_items.last

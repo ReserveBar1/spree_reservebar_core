@@ -62,6 +62,7 @@ Spree::Order.class_eval do
   end
   
   def create_fulfillment_fee!
+    self.adjustments.where(label: "Additional State Fulfillment Fee").destroy_all
     adjustments.create(:amount => self.fulfillment_fee,
                              :source => self,
                              :originator => Spree::FulfillmentFee.first,

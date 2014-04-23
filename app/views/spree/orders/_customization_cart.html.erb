@@ -32,6 +32,7 @@
 		$('#checkout-link').click(function(e) {
 			if ($('[name="customization[data][line1]"]').val().length == 0) {
 				alert('Please enter at least the first line of your engraving data and update the cart.');
+				e.preventDefault();
 			}
 		});
 	});

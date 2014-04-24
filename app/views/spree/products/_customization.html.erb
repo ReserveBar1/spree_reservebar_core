@@ -1,19 +1,25 @@
 <% if @product.engravable? %>
 <input type=hidden name="elected_engraving" value="true" />
 
-<div style="width:577px;height:235px;background:url('/assets/jwb_engraving.jpg');position:relative;border:1px solid #fbb917;margin-top:12px;margin-bottom:12px;">
-	<div style="position:absolute;top:100px;left:83px;width:100px;height:100px;color:#fbb917;text-align:center;">
+<%
+	img_url = '/assets/jwb_engraving.jpg'
+	engraving_color = '#fbb917'
+	char_limit = 15
+%>
+
+<div style="width:577px;height:235px;background:url(<%= img_url %>);position:relative;border:1px solid <%= engraving_color %>;margin-top:12px;margin-bottom:12px;">
+	<div style="position:absolute;top:100px;left:83px;width:100px;height:100px;color:<%= engraving_color %>;text-align:center;">
 		<div id='preview1'></div>
 		<div id='preview2'></div>
 		<div id='preview3'></div>
 	</div>
 	<div style="position:absolute;top:30px;right:50px;height:200px;width:210px;">
-		<h4 style="color:#fbb917;">Your Engraving</h4>
+		<h4 style="color:<%= engraving_color %>;">Your Engraving</h4>
 		<input type=hidden name="customization[type]" value="jwb_engraving" />
 		<input type=text name='customization[data][new][line1]' placeholder="Line 1" style="text-align:center;" onkeyup="validateAndPreviewEngraving('1',this);" /><br/ >
 		<input type=text name='customization[data][new][line2]' placeholder="Line 2" style="text-align:center;" onkeyup="validateAndPreviewEngraving('2',this);" /><br/ >
 		<input type=text name='customization[data][new][line3]' placeholder="Line 3" style="text-align:center;" onkeyup="validateAndPreviewEngraving('3',this);" /><br/ ><br/ >
-		<p style="color:#fbb917;line-height:1.3em;font-size:11px;">
+		<p style="color:<%= engraving_color %>;line-height:1.3em;font-size:11px;">
 		Due to the customized nature of the product, please allow 7 - 10 business days from order processing to fulfillment.
 		</p>
 	</div>
@@ -22,7 +28,7 @@
 <script type="text/javascript">
 	validateAndPreviewEngraving = function(line, element) {
 		var value = element.value;
-		value = value.substring(0,15);
+		value = value.substring(0,<%= char_limit %>);
 		value = value.toUpperCase();
 		element.value = value;
 		$("#preview" + line).html(value);

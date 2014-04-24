@@ -2,9 +2,9 @@
 <input type=hidden name="elected_engraving" value="true" />
 
 <%
-	img_url = '/assets/jwb_engraving.jpg'
-	engraving_color = '#fbb917'
-	char_limit = 15
+	img_url = @product.engraving_image_url
+	engraving_color = @product.engraving_color
+	char_limit = @product.engraving_char_limit
 %>
 
 <div style="width:577px;height:235px;background:url(<%= img_url %>);position:relative;border:1px solid <%= engraving_color %>;margin-top:12px;margin-bottom:12px;">

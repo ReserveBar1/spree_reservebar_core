@@ -1,3 +1,12 @@
 <br/><br />
 <%= f.label :engravable %><br />
-<%= f.check_box :engravable %>
+<%= f.check_box :engravable %><br/>
+
+<%= f.label :engraving_image_url %><br />
+<%= f.text_field :engraving_image_url %><br />
+
+<%= f.label "Engraving color (eg. #fbb917 or rgb(229, 188, 100) )" %><br />
+<%= f.text_field :engraving_color %><br />
+
+<%= f.label "Engraving Character Limit (eg. 15)" %><br />
+<%= f.text_field :engraving_char_limit %>

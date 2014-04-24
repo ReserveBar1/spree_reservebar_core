@@ -3,7 +3,7 @@
   <div style="border:1px solid #888;padding:6px;">
   <b>This order requires custom engraving for all <%= engraving_item.product.name %></b>
   <% customization_data = JSON.parse(engraving_item.preferred_customization) %>
-  <% customization_data["data"].each do |key,value| %>
+  <% customization_data.each do |key,value| %>
     <div><%= "#{key.humanize}: #{value}" %></div>
   <% end %>
   </div>

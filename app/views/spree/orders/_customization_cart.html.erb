@@ -4,8 +4,8 @@
 		<b>Your Engraving: </b><small>(please hit 'Update' if you change it)</small>
 		<% customization_data = JSON.parse(line_item.preferred_customization) %>
 		<input type=hidden name="customization[type]" value="jwb_engraving" />
-		<% customization_data["data"].each do |key,value| %>
-			<div><input type=text class='required' name='customization[data][<%= key -%>]' placeholder="<%= key.humanize -%>" value="<%= value -%>" onchange="validateEngraving(this);" onkeyup="validateEngraving(this);" style="font-size:11px;text-align:center;"/></div>
+		<% customization_data.each do |key,value| %>
+			<div><input type=text class='required' name='customization[data][<%= line_item.id -%>][<%= key -%>]' placeholder="<%= key.humanize -%>" value="<%= value -%>" onchange="validateEngraving(this);" onkeyup="validateEngraving(this);" style="font-size:11px;text-align:center;"/></div>
 		<% end %>
 	</div>
 <% end %>
@@ -32,6 +32,7 @@
 		$('#checkout-link').click(function(e) {
 			if ($('[name="customization[data][line1]"]').val().length == 0) {
 				alert('Please enter at least the first line of your engraving data and update the cart.');
+				e.preventDefault();
 			}
 		});
 	});

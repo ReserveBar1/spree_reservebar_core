@@ -15,11 +15,13 @@ Spree::OrdersController.class_eval do
   def handle_customization
     @order = current_order(false)
     # Process if we got customization data from the product or cart page
-    if params[:customization] && params[:elected_engraving] == 'true'
+    if params[:customization] # && params[:elected_engraving] == 'true'
       # Find line item that can be customized, and set its preferred_customization_data
       begin
-        line_item = @order.line_items.last
-        line_item.preferred_customization = params[:customization].to_json if line_item.product.engravable?
+        params[:customization][:data].each do |id, text|
+          line_item = (id == 'new') ? @order.line_items.last : @order.line_items.where(id: id).first
+          line_item.preferred_customization = text.to_json if line_item.product.engravable?
+        end
       rescue Exception => e
         # Don't do anything for now
         Rails.logger.warn "Failed updating line item with customization data. Order #{@order.number}"
@@ -27,8 +29,10 @@ Spree::OrdersController.class_eval do
     else # Check if a customizable SKU has been added without the customizatiob data in the form
       # Find line item that can be customized, and set its preferred_customization_data
       begin
-        line_item = @order.line_items.last
-        line_item.preferred_customization = {'type' => 'jwb_engraving', 'data' => {'line1' => '', 'line2' => '', 'line3' => ''}}.to_json if line_item.product.engravable?
+        params[:customization][:data].each do |id, text|
+          line_item = (id == 'new') ? @order.line_items.last : @order.line_items.where(id: id).first
+          line_item.preferred_customization = {'type' => 'jwb_engraving', 'data' => {'line1' => '', 'line2' => '', 'line3' => ''}}.to_json if line_item.product.engravable?
+        end
       rescue Exception => e
         # Don't do anything for now
         Rails.logger.warn "Failed updating line item with customization data. Order #{@order.number}"
@@ -36,7 +40,6 @@ Spree::OrdersController.class_eval do
     end
   end
   
-
   def bottle_limit_exceeded
     respond_to do |format|
       format.html {
@@ -80,4 +83,3 @@ Spree::OrdersController.class_eval do
   end
 
 end
-

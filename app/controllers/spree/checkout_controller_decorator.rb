@@ -108,7 +108,12 @@ Spree::CheckoutController.class_eval do
     @order.gift_id = nil if request.put?
   end
   
-  
+  def after_complete
+    groupon_code = Spree::GrouponCode.where(order_id: @order.id).first
+    groupon_code.update_attributes(used_at: Time.now) unless groupon_code.nil?
+    session[:order_id] = nil
+  end
+
 	protected
   
   def set_gift_params

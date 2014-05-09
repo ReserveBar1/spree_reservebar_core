@@ -1,11 +1,11 @@
-<% if line_item.variant.sku.start_with?("JWBCEB") && line_item.preferred_customization %>
+<% if line_item.preferred_customization %>
 		
 	<div>
 		<b>Your Engraving: </b><small>(please hit 'Update' if you change it)</small>
 		<% customization_data = JSON.parse(line_item.preferred_customization) %>
 		<input type=hidden name="customization[type]" value="jwb_engraving" />
-		<% customization_data["data"].each do |key,value| %>
-			<div><input type=text class='required' name='customization[data][<%= key -%>]' placeholder="<%= key.humanize -%>" value="<%= value -%>" onchange="validateEngraving(this);" onkeyup="validateEngraving(this);" style="font-size:11px;text-align:center;"/></div>
+		<% customization_data.each do |key,value| %>
+			<div><input type=text class='required' name='customization[data][<%= line_item.id -%>][<%= key -%>]' placeholder="<%= key.humanize -%>" value="<%= value -%>" onchange="validateEngraving_<%= line_item.id %>(this);" onkeyup="validateEngraving_<%= line_item.id %>(this);" style="font-size:11px;text-align:center;"/></div>
 		<% end %>
 	</div>
 <% end %>
@@ -13,9 +13,9 @@
 <%= javascript_tag do %>
 
 	var engravingGuard = false;
-	validateEngraving = function(element) {
+	validateEngraving_<%= line_item.id %> = function(element) {
 		var value = element.value;
-		value = value.substring(0,15);
+		value = value.substring(0, <%= line_item.product.engraving_char_limit %>);
 		value = value.toUpperCase();
 		element.value = value;
 		if (engravingGuard == false) {
@@ -32,6 +32,7 @@
 		$('#checkout-link').click(function(e) {
 			if ($('[name="customization[data][line1]"]').val().length == 0) {
 				alert('Please enter at least the first line of your engraving data and update the cart.');
+				e.preventDefault();
 			}
 		});
 	});

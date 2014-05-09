@@ -29,10 +29,8 @@ Spree::OrdersController.class_eval do
     else # Check if a customizable SKU has been added without the customizatiob data in the form
       # Find line item that can be customized, and set its preferred_customization_data
       begin
-        params[:customization][:data].each do |id, text|
-          line_item = (id == 'new') ? @order.line_items.last : @order.line_items.where(id: id).first
-          line_item.preferred_customization = {'type' => 'jwb_engraving', 'data' => {'line1' => '', 'line2' => '', 'line3' => ''}}.to_json if line_item.product.engravable?
-        end
+        line_item = @order.line_items.last
+        line_item.preferred_customization = {'line1' => '', 'line2' => '', 'line3' => ''}.to_json if line_item.product.engravable?
       rescue Exception => e
         # Don't do anything for now
         Rails.logger.warn "Failed updating line item with customization data. Order #{@order.number}"

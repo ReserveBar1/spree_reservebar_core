@@ -12,12 +12,12 @@ Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
                      :partial => "spree/google_tags/proximo/proximo_product",
                      :disabled => false)
 
-# # Insert on Proximo cart page
-# Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
-#                      :name => "googletag_proximo_cart",
-#                      :insert_top => "body",
-#                      :partial => "spree/google_tags/proximo/proximo_cart",
-#                      :disabled => false)
+# Insert on Proximo cart page
+Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
+                     :name => "googletag_proximo_cart",
+                     :insert_top => "body",
+                     :partial => "spree/google_tags/proximo/proximo_cart",
+                     :disabled => false)
 
 # # Insert on Proximo order registration page
 # Deface::Override.new(:virtual_path => "spree/layouts/spree_application",

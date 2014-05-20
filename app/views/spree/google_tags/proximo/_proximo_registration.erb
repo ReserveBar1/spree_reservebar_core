@@ -4,9 +4,6 @@
     @order.line_items.map { |i| brand_owners << i.product.brand.brand_owner.title }
   %>
   <% if brand_owners.flatten.uniq.include? 'Proximo' %>
-    <script type="text/javascript">
-      var dataLayer = { "name" : "test" };
-    </script>
     <%= "<!-- Google Tag Manager -->".html_safe %>
     <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-PQXSJX"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>

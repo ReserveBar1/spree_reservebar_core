@@ -47,10 +47,3 @@ Deface::Override.new(:virtual_path => "spree/taxons/show",
 	                   :insert_before => ".taxon-title",
 	                   :partial => "spree/floodlight_tags/taxon_show",
 	                   :disabled => false)
-
-# Insert for Spirits - Tequila
-Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
-                     :name => "floodlight_spirits_tequila",
-                     :insert_top => "body",
-                     :partial => "spree/floodlight_tags/spirits_tequila",
-                     :disabled => false)

@@ -2,4 +2,5 @@
  *= require admin/spree_core
  *= require admin/spree_auth
  *= require admin/retailers
+ *= require admin/fontselect
 */

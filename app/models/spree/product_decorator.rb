@@ -37,6 +37,11 @@ Spree::Product.class_eval do
     where('available_on >= ?', available_on || Time.now)
   end
 
+  # Used by autosuggest to only use searchable products
+  def self.searchable
+    where(searchable: true)
+  end
+
   def self.rlike_any(fields, values)
     where_str = fields.map { |field| Array.new(values.size, "#{self.quoted_table_name}.#{field} RLIKE ?").join(' OR ') }.join(' OR ')
     self.where([where_str, values.map { |value| "[[:<:]]#{value}" } * fields.size].flatten)
@@ -48,11 +53,11 @@ Spree::Product.class_eval do
     ## taxons = Spree::Product.get_taxons(values)
     taxons = Spree::Product.get_related_taxons(values)
     if taxons.blank?
-    	self.where([where_str, values.map { |value| "[[:<:]]#{value}" } * fields.size].flatten)
+      self.where([where_str, values.map { |value| "[[:<:]]#{value}" } * fields.size].flatten)
     else
-		  where_str << " OR spree_taxons.id in (?)"
-		  #self.where([where_str, values.map { |value| "[[:<:]]#{value}" } * fields.size, taxons.map(&:id)].flatten)
-		  self.where([where_str, values.map { |value| "[[:<:]]#{value}" } * fields.size].flatten << taxons.map{|s|s.self_and_descendants}.flatten.map(&:id).uniq)
+      where_str << " OR spree_taxons.id in (?)"
+      #self.where([where_str, values.map { |value| "[[:<:]]#{value}" } * fields.size, taxons.map(&:id)].flatten)
+      self.where([where_str, values.map { |value| "[[:<:]]#{value}" } * fields.size].flatten << taxons.map{|s|s.self_and_descendants}.flatten.map(&:id).uniq)
     end
   end
   

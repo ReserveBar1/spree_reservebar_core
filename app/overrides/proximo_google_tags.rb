@@ -25,10 +25,3 @@ Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
                      :insert_top => "body",
                      :partial => "spree/google_tags/proximo/proximo_registration",
                      :disabled => false)
-
-# Insert on Proximo order confirmation page
-Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
-                     :name => "googletag_proximo_confirmation",
-                     :insert_top => "body",
-                     :partial => "spree/google_tags/proximo/proximo_confirmation",
-                     :disabled => false)

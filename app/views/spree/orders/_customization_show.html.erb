@@ -1,9 +1,15 @@
 <% if item.preferred_customization %>
+	<%
+		engraving_font_style = item.variant.product.engraving_font_style.gsub('+', ' ')
+		engraving_font_link = "http://fonts.googleapis.com/css?family=" + engraving_font_style
+		style_text = "text-align:center; font-family: " + engraving_font_style + "; font-weight: 400; font-size: 12px;"
+	%>
+	<link href="<%= engraving_font_link %>" media="screen" rel="stylesheet" />
 	<div>
 		<b>Your Engraving:</b>
 		<% customization_data = JSON.parse(item.preferred_customization) %>
 		<% customization_data.each do |key,value| %>
-			<div><%= "#{key.humanize}: #{value}" %></div>
+			<div><%= "#{key.humanize}: " %><span style="<%= style_text %>"><%= "#{value}" %></span></div>
 		<% end %>
 	</div>
 <% end %>

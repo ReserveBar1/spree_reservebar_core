@@ -43,9 +43,9 @@
 		  	<p>Thank you for submitting your order with ReserveBar.com. Your order is currently being processed. Once it is ready for shipment, you will receive an email with a FedEx tracking number allowing you to monitor your gift on its way to your gift recipient.</p>
 		  	<p>Please see below for Order Details.</p>
 		  	<p>Thank you again for your order. We look forward to serving you and exceeding your expectations every time here at ReserveBar.com. If you have any questions, please visit our FAQ page on our site.<br></p>
-		
+
 				<p><b><bigger>As a valued customer, you can use promo code 'VALUEDCUSTOMER' at checkout to get $10 off your next purchase.</bigger></b></p>
-				
+
 				<p>Gratefully yours,<br>
 				  ReserveBar.com<br>
 			  Good Spirits. Delivered.</p></td>
@@ -161,18 +161,25 @@
 		      <% bgcolor = cycle('#d8d8d8', '#ffffff') %>
 		      <tr>
 		        <td width="50%" height="21" style="text-align:right;background:<%= bgcolor -%>;font-size:12px;font-family:Georgia;text-decoration:none;font-weight:400;min-height:15.75pt"><%= sanitize(item.variant.product.name, :tags => %w(sup)) %>
-			
+
 					<% if item.preferred_customization %>
+
+            <%
+              engraving_font_style = item.variant.product.engraving_font_style.gsub('+', ' ')
+              engraving_font_link = "http://fonts.googleapis.com/css?family=" + engraving_font_style
+              style_text = "text-align:center; font-family: " + engraving_font_style + "; font-weight: 400; font-size: 12px;"
+            %>
+            <link href="<%= engraving_font_link %>" media="screen" rel="stylesheet" />
 
 						<div>
 							<b>Your Engraving:</b>
 							<% customization_data = JSON.parse(item.preferred_customization) %>
 							<% customization_data.each do |key,value| %>
-								<div><%= "#{key.humanize}: #{value}" %></div>
+								<div><%= "#{key.humanize}: " %><span style="<%= style_text %>"><%= "#{value}" %></span></div>
 							<% end %>
 						</div>
 					<% end %>
-			
+
             </td>
 		        <td width="60px" style="background:<%= bgcolor -%>; text-align:center;">Quantity: <%= item.quantity %>
             </td>
@@ -189,7 +196,7 @@
             	<%= item.gift_package ? number_to_currency(item.gift_package.price * item.quantity) : number_to_currency(0) %>
             </td>
 	        </tr>
-	        <% end %>                
+	        <% end %>
 		      <tr>
 		        <td height="9" style=" border-bottom:2px solid #593D2B" colspan="3">&nbsp;</td>
 	          </tr>

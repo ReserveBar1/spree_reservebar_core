@@ -4,3 +4,10 @@ Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
                      :insert_top => "body",
                      :partial => "spree/floodlight_tags/hennessy/SF_deluxe_product",
                      :disabled => false)
+
+# Insert on V.S Limited Edition by Shepard Fairey product page
+Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
+                     :name => "floodlight_hennessy_SF_limited_product",
+                     :insert_top => "body",
+                     :partial => "spree/floodlight_tags/hennessy/SF_limited_product",
+                     :disabled => false)

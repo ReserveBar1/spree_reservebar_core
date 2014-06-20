@@ -11,3 +11,10 @@ Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
                      :insert_top => "body",
                      :partial => "spree/floodlight_tags/hennessy/SF_limited_product",
                      :disabled => false)
+
+# Insert at checkout for V.S Shepard Fairey products
+Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
+                     :name => "floodlight_hennessy_SF_checkout",
+                     :insert_top => "body",
+                     :partial => "spree/floodlight_tags/hennessy/SF_checkout",
+                     :disabled => false)

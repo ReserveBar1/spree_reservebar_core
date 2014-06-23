@@ -1,0 +1,17 @@
+<h1>Edit Brand</h1>
+
+<%= form_for @brand, :url => admin_brand_path(@brand) do |f| %>
+  <p>
+    <%= f.label :title %><br>
+    <%= f.text_field :title %>
+  </p>
+
+  <p>
+    <%= f.label :brand_owner_id %><br>
+    <%= f.select(:brand_owner_id, @brand_owner_keys) %>
+  </p>
+
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>

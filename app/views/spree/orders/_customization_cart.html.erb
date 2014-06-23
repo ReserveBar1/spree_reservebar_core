@@ -1,5 +1,5 @@
 <% if line_item.preferred_customization %>
-		
+
 	<div>
 		<b>Your Engraving: </b><small>(please hit 'Update' if you change it)</small>
 		<% customization_data = JSON.parse(line_item.preferred_customization) %>
@@ -26,7 +26,7 @@
 			engravingGuard = true;
 		}
 	}
-	
+
 	// check that at least one line of engraving data has been entered, before commencing to checkout
 	$(document).ready(function() {
 		$('#checkout-link').click(function(e) {

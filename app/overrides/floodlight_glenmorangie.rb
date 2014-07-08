@@ -25,3 +25,10 @@ Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
                      :insert_top => "body",
                      :partial => "spree/floodlight_tags/glenmorangie/address",
                      :disabled => false)
+
+# Insert on Confirmation page, if there are Glenmorangie products
+Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
+                     :name => "floodlight_glenmorangie_confirmation",
+                     :insert_top => "body",
+                     :partial => "spree/floodlight_tags/glenmorangie/confirmation",
+                     :disabled => false)

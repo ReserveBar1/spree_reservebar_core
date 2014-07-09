@@ -1,5 +1,12 @@
 <% if controller.controller_name == "products" && controller.action_name == "show" %>
   <% if @product.taxons.map(&:name).include? 'Glenmorangie'%>
+    <%
+      path = request.fullpath
+      if path[0] == '/' && path[1] == '/'
+        path = path[1..path.length]
+      end
+      full_url = request.protocol + request.host_with_port + path
+    %>
     <%= "<!--
     Start of DoubleClick Floodlight Tag: Please do not remove
     Activity name of this tag: PRD_ ReserveBarGlenmorangiePP_20140701
@@ -10,10 +17,10 @@
     <script type="text/javascript">
     var axel = Math.random() + "";
     var a = axel * 10000000000000;
-    document.write('<iframe src="https://4454871.fls.doubleclick.net/activityi;src=4454871;type=prd_2014;cat=prd_r138;u1=<%= @product.permalink %>;ord=' + a + '?" width="1" height="1" frameborder="0" style="display:none"></iframe>');
+    document.write('<iframe src="https://4454871.fls.doubleclick.net/activityi;src=4454871;type=prd_2014;cat=prd_r138;u1=<%= full_url %>;ord=' + a + '?" width="1" height="1" frameborder="0" style="display:none"></iframe>');
     </script>
     <noscript>
-    <iframe src="https://4454871.fls.doubleclick.net/activityi;src=4454871;type=prd_2014;cat=prd_r138;u1=<%= @product.permalink %>;ord=1?" width="1" height="1" frameborder="0" style="display:none"></iframe>
+    <iframe src="https://4454871.fls.doubleclick.net/activityi;src=4454871;type=prd_2014;cat=prd_r138;u1=<%= full_url %>;ord=1?" width="1" height="1" frameborder="0" style="display:none"></iframe>
     </noscript>
     <%= "<!-- End of DoubleClick Floodlight Tag: Please do not remove -->".html_safe %>
   <% end %>

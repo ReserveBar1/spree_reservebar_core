@@ -10,24 +10,8 @@
 
   $.fn.fontselect = function(options) {
 
-     var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-
-     var fonts = [
-      "Droid+Sans",
-      "Lato",
-      "Cabin",
-      "Sorts+Mill+Goudy",
-      "Rufina",
-      "Istok+Web",
-      "Muli",
-      "EB+Garamond",
-      "Nunito",
-      "Didact+Gothic",
-      "Oswald",
-      "Raleway",
-      "Arapey",
-      "Quattrocento",
-      "Crimson+Text"];
+    var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+    var fonts = ["EB Garamond", "Pinyon Script", "Sorts Mill Goudy", "Cabin", "Droid Sans", "Parisienne"];
 
     var settings = {
       style: 'font-select',

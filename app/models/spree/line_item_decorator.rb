@@ -1,25 +1,27 @@
 Spree::LineItem.class_eval do
-  
+
   # calculate amount for corporate (TODO: this may need to be revised for reporting to be the same as the profit)
   def margin_for_site
     product_costs = variant.product_costs.where(:retailer_id => order.retailer_id)
     (product_costs.empty? ? price : (price - product_costs.first.cost_price)) * quantity
   end
-  
-  # Handle case where the product cost for the retailer has not been defined yet
-  def product_cost_for_retailer
+
+  def update_costs
+    return if variant.blank?
+
     product_costs = variant.product_costs.where(:retailer_id => order.retailer_id)
-    product_costs.empty? ? 0 : product_costs.first.cost_price * quantity
+    cost = product_costs.empty? ? 0 : product_costs.first.cost_price * quantity
+    update_attribute_without_callbacks(:product_cost_for_retailer, cost)
   end
-  
+
   # Calulate the profit for a given line item based on the retailer's product costs
   # For routing purposes, we assume that the profit is zero if the product cost is not filled in.
   def profit(retailer)
     product_costs = variant.product_costs.where(:retailer_id => retailer.id)
     product_costs.empty? ? 0 : (price - product_costs.first.cost_price) * quantity
-    
+
   end
-  
+
   # Calculate any shipping surcharges for a line item,based on the global shipping surcharges for the product
   # and the retailer specific surcharges. Retailer specific takes precedence over global
   def shipping_surcharge
@@ -33,11 +35,11 @@ Spree::LineItem.class_eval do
     end
     surcharge
   end
-  
+
   def global_product_shipping_surcharge
-    variant.product.shipping_surcharge * quantity
+    (variant.product.shipping_surcharge * quantity) if variant.product.present?
   end
-  
+
   def retailer_shipping_surcharge
     begin
       return variant.product_costs.where(:retailer_id => self.order.retailer_id).first.shipping_surcharge * quantity
@@ -45,7 +47,7 @@ Spree::LineItem.class_eval do
       return 0.0
     end
   end
-  
+
   # calculate the fulfillment fee for this line item through the product_costs.fulfillment fee times qty
   # If there is a fee defined for this retailer and sku, it is used.
   # Otherwise the retailer's global fulfillment fee is used.
@@ -64,8 +66,8 @@ Spree::LineItem.class_eval do
       end
     end
   end
-  
-  
+
+
   # Returns the total revenue of gift packaging for a given SKU
   def gift_packaging_revenue_for_sku(sku)
     amount = 0.0
@@ -76,7 +78,7 @@ Spree::LineItem.class_eval do
     end
     amount
   end
-  
+
   # Returns the total cost of gift packaging for a given SKU
   def gift_packaging_cost_for_sku(sku)
     amount = 0.0
@@ -88,12 +90,12 @@ Spree::LineItem.class_eval do
     end
     amount
   end
-  
-  
+
+
   # Allows use to add arbitrary customization data to any line item
   # To be used with the Johnnie Walker Blue Label, might later replace with spree_flexi_variants
   # Example data: {:type => 'jwb_engraving, :data => {:line1 => 'bla', :line2 => 'said', :line3 => 'toad'}}
   # Can we derive partial names from the type? - I hope so.
   preference :customization, :string, :default => nil
-  
+
 end

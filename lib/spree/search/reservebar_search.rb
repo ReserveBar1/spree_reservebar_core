@@ -15,5 +15,12 @@ module Spree::Search
 			base_scope.rlike_any_or_in_taxons([:name], (query.split << query).uniq)
 		end
 
+    protected
+
+    # method should return new scope based on base_scope
+    def get_products_conditions_for(base_scope, query)
+      base_scope.like_any([:name, :description], [query])
+    end
+
 	end
 end

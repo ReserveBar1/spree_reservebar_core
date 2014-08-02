@@ -91,6 +91,7 @@ Spree::Admin::OrdersController.class_eval do
     end
 
   end
+  handle_asynchronously :create_and_email_report
 
 	def export
     create_and_email_report(params)

@@ -2,12 +2,12 @@ Spree::Admin::OrdersController.class_eval do
 
 	before_filter :load_retailer
 	after_filter :sync_unread, :only => [:show, :summary]
-	
+
 #	skip_before_filter :authorize_admin, :only => :gift_message
-  
+
 	# Allow export of orders via CSV
   respond_to :csv, :only => :export
-  
+
   def show
     respond_with(@order) do |format|
       if current_user.has_role?("admin")
@@ -17,8 +17,8 @@ Spree::Admin::OrdersController.class_eval do
       end
     end
   end
-  
-  
+
+
 	def index
 	  params[:search] ||= {}
 	  params[:search][:completed_at_is_not_null] ||= '1' if Spree::Config[:show_only_complete_orders_by_default]
@@ -39,7 +39,7 @@ Spree::Admin::OrdersController.class_eval do
 	    params[:search][:completed_at_greater_than] = params[:search].delete(:created_at_greater_than)
 	    params[:search][:completed_at_less_than] = params[:search].delete(:created_at_less_than)
 	  end
-		
+
 		if @current_retailer
 			@orders = @current_retailer.orders.metasearch(params[:search]).includes([:user, :shipments, :payments]).page(params[:page]).per(Spree::Config[:orders_per_page])
 		else
@@ -48,13 +48,13 @@ Spree::Admin::OrdersController.class_eval do
 		respond_with(@orders)
 	end
 
-	def export
+  def create_and_email_report(params)
 	  params[:search] ||= {}
 	  params[:search][:completed_at_is_not_null] ||= '1' if Spree::Config[:show_only_complete_orders_by_default]
 	  @show_only_completed = params[:search][:completed_at_is_not_null].present?
 	  params[:search][:meta_sort] ||= @show_only_completed ? 'completed_at.desc' : 'created_at.desc'
     params[:search][:state_does_not_equal] = 'canceled'
-    
+
 	  @search = Spree::Order.metasearch(params[:search])
 
 	  if !params[:search][:created_at_greater_than].blank?
@@ -76,9 +76,26 @@ Spree::Admin::OrdersController.class_eval do
 		else
 		  @orders = Spree::Order.metasearch(params[:search]).includes(@includes)
 		end
-		respond_with(@orders)
-	end
 
+    # delayed_job
+    # ReportMailer.delay.send_report(@orders, current_user)
+
+    if params[:type] == 'order'
+      OrdersReportMailer.send_report(@orders, current_user, params[:search]).deliver
+    elsif params[:type] == 'product'
+      ProductSalesReportMailer.send_report(@orders, current_user, params[:search]).deliver
+    elsif params[:type] == 'pl_total'
+      ProfitLossTotalReportMailer.send_report(@orders, current_user, params[:search]).deliver
+    elsif params[:type] == 'pl_detail'
+      ProfitLossDetailReportMailer.send_report(@orders, current_user, params[:search]).deliver
+    end
+
+  end
+
+	def export
+    create_and_email_report(params)
+    redirect_back_or_default(request.env["HTTP_REFERER"])
+	end
 
   # Change the currently selected retailer, only avaialble to an admin user.
   def get_retailer_data
@@ -90,17 +107,17 @@ Spree::Admin::OrdersController.class_eval do
 
     redirect_to "/admin/orders"
   end
-  
-    
+
+
   # Purpose: retailer accepts the order
   def accept
     load_order
     # If the order has been canceled, the retailer can no longer accept it
-    if @order.state == 'canceled' 
+    if @order.state == 'canceled'
       flash["notice"] = 'This order has been canceled - do not process it!'
     elsif @order.accepted_at.blank? && (@current_retailer && @current_retailer.id == @order.retailer_id)
     	@order.update_attribute(:accepted_at, Time.now)
-    	
+
     	# If the order only has one payment on it (all order here should have only a single payment)
     	# and the total order amount is lower than the payment amount, due to adjustments made after the order was submitted
     	# reduce the amount in the payment to the order total
@@ -108,7 +125,7 @@ Spree::Admin::OrdersController.class_eval do
     	  @order.payment.update_attribute(:amount, @order.total)
     	  @order.payments.reload
   	  end
-  	  
+
     	begin
     	  @order.payments.each do |payment|
     	    payment.payment_source.send("capture", payment)
@@ -127,11 +144,11 @@ Spree::Admin::OrdersController.class_eval do
     end
     redirect_to admin_order_url(@order)
   end
-  
+
   # Purpose: retailer has packed the order and it is ready for pick up by Fedex / Courier
   def order_complete
     load_order
-    if @order.state == 'canceled' 
+    if @order.state == 'canceled'
       flash["notice"] = 'This order has been canceled - do not process it!'
     elsif @order.packed_at.blank? && (@current_retailer && @current_retailer.id == @order.retailer_id)
     	@order.update_attribute(:packed_at, Time.now)
@@ -166,12 +183,12 @@ Spree::Admin::OrdersController.class_eval do
   # used for testing only to preview the email
   def regular_reminder_email
     @retailers = Spree::Retailer.active
-    
+
     respond_to do |format|
       format.html { render :template => "spree/order_mailer/regular_reminder_email.html.erb", :layout => false }
     end
   end
-  
+
   # Retailer view of order
   def summary
   end
@@ -192,7 +209,7 @@ Spree::Admin::OrdersController.class_eval do
   def sync_unread
   	@order.update_attributes(:unread => false, :viewed_at => Time.now) if @order.unread && (@order.retailer && @order.retailer == @current_retailer)
   end
-  
+
   def log_payment_error(exception)
     new_logger = Logger.new('log/payment_errors.log')
     new_logger.info("\n\n===== Exception Caught at #{Time.now} for Order Number #{@order.number} =====")
@@ -200,6 +217,6 @@ Spree::Admin::OrdersController.class_eval do
     new_logger.info("\n\n===== End Exception  =====\n\n")
   end
 
-  
+
 
 end

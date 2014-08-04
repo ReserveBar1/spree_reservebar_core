@@ -1,66 +1,123 @@
 Spree::Order.class_eval do
 	attr_accessible :is_legal_age, :is_gift, :gift_attributes, :unread, :viewed_at
 	attr_accessor :is_gift
-	
+
 	attr_accessible :has_accepted_terms
 	attr_accessor :has_accepted_terms
 
 	has_and_belongs_to_many :retailers, :join_table => :spree_orders_retailers
 	belongs_to :gift
-	
+
 	accepts_nested_attributes_for :gift
 
   scope :not_older_than_thirty_days,
     lambda {
       where("created_at > ?", Time.now - 30.days)
     }
-  
+
   scope :non_accepted_hours,
     lambda {|n|
       where(["spree_orders.accepted_at is ? and spree_orders.updated_at < ? and spree_orders.state = ?", nil, Time.now - n.hours, "complete"])
     }
-  
+
   search_methods :non_accepted_hours
-	
+
 	# Scope to find all orders that have not been accepted by retailers in a given time frame
 	scope :not_accepted_hours,
     lambda {|number_of_hours|
       where(["spree_orders.accepted_at is ? and spree_orders.updated_at < ? and spree_orders.state = ?", nil, Time.now - number_of_hours.hours, "complete"])
     }
-	
+
 	search_methods :not_accepted_hours
-  
-	state_machine :initial => :cart, :use_transactions => false do
-		before_transition :to => 'delivery', :do => :validate_legal_drinking_age?
-				
-		# add the gift notification after order.finalize!
-		# note that this adds a new callback to the chain, it does not override the existing callbacks
-		# we had called order.finalize! here, which was then executed twice....
-		after_transition :to => 'complete' do |order, transition|
-			order.gift_notification if order.is_gift?
-			Spree::OrderMailer.retailer_submitted_email(order).deliver if (order.retailer && !Spree::MailLog.has_email_been_sent_already?(order, 'Order::retailer_submitted_email') )
-		end
-		
-	end
-	
+
+  # KN: the lines below (before the state_machine is defined) are pulled from the current version of spree
+  # and allow us to redefine the state machine inside this order decorator.
+  # https://github.com/spree/spree/blob/master/core%2Fapp%2Fmodels%2Fspree%2Forder%2Fcheckout.rb#L36-L40
+
+  # To avoid a ton of warnings when the state machine is re-defined
+  StateMachine::Machine.ignore_method_conflicts = true
+  # To avoid multiple occurrences of the same transition being defined
+  # On first definition, state_machines will not be defined
+  state_machines.clear if respond_to?(:state_machines)
+
+  # order state machine (see http://github.com/pluginaweek/state_machine/tree/master for details)
+  state_machine :initial => 'cart', :use_transactions => false do
+
+    event :next do
+      transition :from => 'cart',     :to => 'address'
+      transition :from => 'address',  :to => 'delivery'
+      transition :from => 'delivery', :to => 'payment', :if => :payment_required?
+      transition :from => 'delivery', :to => 'complete'
+      transition :from => 'payment', :to => 'complete'
+    end
+
+    event :cancel do
+      transition :to => 'canceled', :if => :allow_cancel?
+    end
+    event :return do
+      transition :to => 'returned', :from => 'awaiting_return'
+    end
+    event :resume do
+      transition :to => 'resumed', :from => 'canceled', :if => :allow_resume?
+    end
+    event :authorize_return do
+      transition :to => 'awaiting_return'
+    end
+
+    before_transition :to => 'complete' do |order|
+      begin
+        order.process_payments!
+      rescue Core::GatewayError
+        if Spree::Config[:allow_checkout_on_gateway_error]
+          true
+        else
+          false
+        end
+      end
+    end
+
+    before_transition :to => ['delivery'] do |order|
+      order.shipments.each { |s| s.destroy unless s.shipping_method.available_to_order?(order) }
+    end
+
+    after_transition :to => 'complete', :do => :finalize!
+    after_transition :to => 'delivery', :do => :create_tax_charge!
+    after_transition :to => 'payment',  :do => :create_shipment!
+    after_transition :to => 'resumed',  :do => :after_resume
+    after_transition :to => 'canceled', :do => :after_cancel
+
+    # KN: the transition callbacks below were part of our original modifications to the state_machine
+    # they need to be below the code above because, for whatever reason, the order of these things
+    # matters in order for the state machien to work properly
+    before_transition :to => 'delivery', :do => :validate_legal_drinking_age?
+
+    # add the gift notification after order.finalize!
+    # note that this adds a new callback to the chain, it does not override the existing callbacks
+    # we had called order.finalize! here, which was then executed twice....
+    after_transition :to => 'complete' do |order, transition|
+      order.gift_notification if order.is_gift?
+      Spree::OrderMailer.retailer_submitted_email(order).deliver if (order.retailer && !Spree::MailLog.has_email_been_sent_already?(order, 'Order::retailer_submitted_email') )
+    end
+  end
+
 	# Calculate the shipping_surcharges for the order, based on lline items
 	def shipping_surcharge
 	  line_items.inject(0.0) {|charge, line_item| charge = charge + (line_item.quantity * line_item.shipping_surcharge)}
   end
-  
+
   def global_product_shipping_surcharge
 	  line_items.inject(0.0) {|charge, line_item| charge = charge + (line_item.quantity * line_item.global_product_shipping_surcharge)}
   end
-  
+
   def retailer_shipping_surcharge
 	  line_items.inject(0.0) {|charge, line_item| charge = charge + (line_item.quantity * line_item.retailer_shipping_surcharge)}
   end
-  
+
   # calculate the fulfillment_fee based on the line items
   def fulfillment_fee
 	  line_items.inject(0.0) {|charge, line_item| charge = charge + (line_item.fulfillment_fee)}
   end
-  
+
   def create_fulfillment_fee!
     self.adjustments.where(label: "Additional State Fulfillment Fee").destroy_all
     adjustments.create(:amount => self.fulfillment_fee,
@@ -69,20 +126,20 @@ Spree::Order.class_eval do
                              :locked => false,
                              :label => "Additional State Fulfillment Fee")
   end
-  
+
   # returns the shipping charges as pulled from Fedex, before any uplifts have been applied.
   # TODO: Implement
   def ship_fedex
     0.0
   end
-  
+
   # Returns the state fulfillment fee
   def state_fulfillment_fee
     adjustments.eligible.where(:label => 'Additional State Fulfillment Fee').first.amount rescue 0.0
   end
-	
+
 	# Pseudo states that embedd special logic for reservebar.com
-	# uses packed_at column to allow the retailer to indicate that he pas packed the item and it is ready for pick up 
+	# uses packed_at column to allow the retailer to indicate that he pas packed the item and it is ready for pick up
 	# we'll do state transition such that retailer hits 'ready for pick up' , which changes packed_at, and then fede scanning changes to shipped
 	def extended_state
 	  if self.state == 'complete'
@@ -101,8 +158,8 @@ Spree::Order.class_eval do
       self.state
     end
   end
-  
-	
+
+
 	# Override the address used for calculating taxes.
 	# Reservebar.com uses the retailer's physial address, rather then the ship_address to determine taxes
 	# Returns the relevant zone (if any) to be used for taxation purposes.  Uses default tax zone
@@ -111,7 +168,7 @@ Spree::Order.class_eval do
   def tax_zone
     # Handle case of shipping across state boundaries first
     return nil if (retailer && (retailer.physical_address.state_id != ship_address.state_id))
-    
+
     # Handle other cases:
     if Spree::Config[:tax_using_retailer_address]
       if retailer
@@ -124,55 +181,56 @@ Spree::Order.class_eval do
     end
     Spree::Zone.match(zone_address) || Spree::Zone.default_tax
   end
-  
-	
+
+
   def gift_notification
     Spree::OrderMailer.giftee_notify_email(self).deliver unless (self.gift.email.blank? || Spree::MailLog.has_email_been_sent_already?(self, 'Order::giftee_notify_email'))
   end
-	
+
 	def retailer
 	  self.retailers.last
   end
-  
+
   def retailer=(retailer)
     self.retailers = []
     self.retailers << retailer
+    update_line_item_costs
   end
-  
+
 	def retailer_id
 		retailer.id if retailer
 	end
-	
+
 	def validate_legal_drinking_age?
 		is_legal_age
 	end
-	
+
 
 	def is_gift
 		is_gift? ? true : false
 	end
-	
+
 	def is_gift?
 		gift.present?
 	end
-	
+
 	# get all shipping categories for an order, used to find a retailer that can fulfil this order.
 	def shipping_categories
 	  self.line_items.collect {|l| l.product.shipping_category_id}.uniq
   end
-  
+
   # returns true, if the order only has products in the wine category
   def has_only_wine?
-    self.shipping_categories.count == 1 && 
+    self.shipping_categories.count == 1 &&
     self.shipping_categories.first == Spree::ShippingCategory.find_by_name('Wine')
   end
-  
+
   # returns true if this order contains alcoholic items, used by fedex requests to add alcohol and so forth
   def contains_alcohol?
     (self.shipping_categories - [1,2,3,4]).empty? && !self.shipping_categories.empty?
   end
-  
-  
+
+
   # Calculates the total amount due to the retailer based on current settings
   # Note that the gift packaging cost does not go to the retailer, but all sales tax does
   def total_amount_due_to_retailer
@@ -180,7 +238,7 @@ Spree::Order.class_eval do
     product_cost = (self.line_items.collect {|line_item| line_item.product_cost_for_retailer }).sum
     self.tax_total + shipping + product_cost
   end
-  
+
   # Calculate the profit if we route this order to a given retailer, based on the product costs table.
   def profit(retailer)
     begin
@@ -189,21 +247,21 @@ Spree::Order.class_eval do
       0
     end
   end
-  
-  
-  # Returns the number of bottles in the order, so we can limit 
+
+
+  # Returns the number of bottles in the order, so we can limit
   # Cache counts?
   def number_of_bottles
     bottles = self.line_items.inject(0) {|bottles, line_item| bottles + line_item.quantity}
   end
-  
+
   # true if the order contains products that are routed towards / away from any retailer
   def contains_routed_products?
     line_items.inject(false) {|routed, line_item| routed = routed || line_item.product.is_routed?}
   end
-  
+
   private
-  
+
   # Override original method so that the new shipment.state == delivered is accounted for
   # Updates the +shipment_state+ attribute according to the following logic:
   #
@@ -242,7 +300,11 @@ Spree::Order.class_eval do
       })
     end
   end
-  
+
+  def update_line_item_costs
+    line_items.each { |line_item| line_item.update_costs }
+  end
+
   # Pulled in from 1.3.2 version to update the payment_state of the order on cancel
   def after_cancel
     restock_items!
@@ -254,7 +316,7 @@ Spree::Order.class_eval do
       self.payment_state = 'credit_owed'
     end
   end
-  
-  
-  
+
+
+
 end

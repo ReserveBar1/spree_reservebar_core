@@ -260,6 +260,11 @@ Spree::Order.class_eval do
     line_items.inject(false) {|routed, line_item| routed = routed || line_item.product.is_routed?}
   end
 
+  def update_line_item_costs
+    line_items.each { |line_item| line_item.update_costs }
+  end
+
+
   private
 
   # Override original method so that the new shipment.state == delivered is accounted for
@@ -299,10 +304,6 @@ Spree::Order.class_eval do
         :user_id        => (Spree::User.respond_to?(:current) && Spree::User.current && Spree::User.current.id) || self.user_id
       })
     end
-  end
-
-  def update_line_item_costs
-    line_items.each { |line_item| line_item.update_costs }
   end
 
   # Pulled in from 1.3.2 version to update the payment_state of the order on cancel

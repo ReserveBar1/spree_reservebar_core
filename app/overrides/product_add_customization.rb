@@ -4,7 +4,7 @@ Deface::Override.new(:virtual_path => "spree/products/_cart_form",
                      :insert_top => "[data-hook='inside_product_cart_form']",
                      :partial => "spree/products/customization",
                      :disabled => false)
-                     
+
 # Show on cart page with line item
 Deface::Override.new(:virtual_path => "spree/orders/_line_item",
                      :name => "cart_add_customization",
@@ -29,4 +29,10 @@ Deface::Override.new(:virtual_path => "spree/admin/orders/show",
                      :partial => "/spree/admin/orders/customization",
                      :disabled => false)
 
+# Show on admin order edit with line item
+Deface::Override.new(:virtual_path => "spree/admin/orders/edit",
+                     :name => "admin_orders_edit_add_custom_engraving_info",
+                     :insert_top => "[data-hook='admin_order_edit_form']",
+                     :partial => "/spree/admin/orders/update_engraving_text",
+                     :disabled => false)
 

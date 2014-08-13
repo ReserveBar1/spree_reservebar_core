@@ -1,0 +1,33 @@
+<div id="edit-engraving-text" data-hook>
+  <% engraving_items = @order.line_items.select { |line_item| line_item.preferred_customization } %>
+  <% engraving_items.each do |engraving_item| %>
+    <%
+      engraving_font_style = engraving_item.variant.product.engraving_font_style.gsub('+', ' ')
+      engraving_font_link = "http://fonts.googleapis.com/css?family=" + engraving_font_style
+      style_text = "text-align:center; font-family: " + engraving_font_style + "; font-weight: 400; font-size: 12px;"
+      customization_data = JSON.parse(engraving_item.preferred_customization)
+    %>
+    <link href="<%= engraving_font_link %>" media="screen" rel="stylesheet" />
+
+    <div style="border:1px solid #888;padding:6px;">
+    <b>Edit engraving text for all <%= engraving_item.product.name %> below:</b>
+
+    <%= form_for engraving_item, :url => admin_update_engraving_text_path(@order, engraving_item) do |f| %>
+      <div>
+        <%= f.label 'preferences[customization][line1]', "Line 1" %>
+        <%= f.text_field 'preferences[customization][line1]', :value => customization_data["line1"], :id => "engraving_line1", :class => "engraving_text" %>
+      </div>
+      <div>
+        <%= f.label 'preferences[customization][line2]', "Line 2" %>
+        <%= f.text_field 'preferences[customization][line2]', :value => customization_data["line2"], :id => "engraving_line2", :class => "engraving_text" %>
+      </div>
+      <div> 
+        <%= f.label 'preferences[customization][line3]', "Line 3" %>
+        <%= f.text_field 'preferences[customization][line3]', :value => customization_data["line3"], :id => "engraving_line3", :class => "engraving_text" %>
+      </div>
+      <div>
+        <%= f.submit "Update Engraving Text" %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

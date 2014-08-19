@@ -19,7 +19,7 @@ class OrdersReportMailer < ActionMailer::Base
   end
 
   def admin_report
-    column_names = ["OrderNumber", "Order Date", "AcceptedDate", "ProductName", "Number of Bottles", "Website Product Price", "Total Bottle Price", "Gift Packaging Charge (not paid to retailer)", "Shipping Charge", "Shipping Margin (All Surcharges)", "State Fulfillment Fee", "Tax", "Promo discount($)", "Order Total", "Retail Bottle Price", "TotalDisbursementToRetailer (product cost + sales tax)", "Promo name", " Order Status Payment Status", "ShipmentStatus", "Retailer", "Ship-to State", "Customer email address"]
+    column_names = ["OrderNumber", "Order Date", "AcceptedDate", "ProductName", "Number of Bottles", "Website Product Price", "Total Bottle Price", "Gift Packaging Charge (not paid to retailer)", "Shipping Charge", "Shipping Margin (All Surcharges)", "State Fulfillment Fee", "Tax", "Promo discount($)", "Order Total", "Retail Bottle Price", "TotalDisbursementToRetailer (product cost + sales tax)", "Promo name", "Promo code", "Order Status", "Payment Status", "Shipment Status", "Retailer", "Ship-to State", "Customer email address"]
 
     CSV.generate do |csv|
       csv << column_names
@@ -46,6 +46,7 @@ class OrdersReportMailer < ActionMailer::Base
             order.line_items.collect {|line_item| line_item.product_cost_for_retailer }.sum,
             order.retailer ? order.total_amount_due_to_retailer : 0,
             order.adjustments.eligible.promotion.first.try(:label),
+            order.adjustments.eligible.promotion.first.try(:originator).try(:promotion).try(:code),
             order.state,
             order.payment_state,
             order.shipment_state,

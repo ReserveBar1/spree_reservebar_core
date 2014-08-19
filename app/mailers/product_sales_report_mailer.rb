@@ -19,7 +19,7 @@ class ProductSalesReportMailer < ActionMailer::Base
   end
 
   def admin_report
-    column_names = ["OrderNumber", "Order details link", "Customer email address", "Ship-to State", "Product name", "Number of bottles", "Multiple products in the order", "OrderDate", "AcceptedDate", "OrderState", "PaymentState", "ShipmentState", "Product price", "GiftPackagingCost(not paid to retailer)", "RB margin (Product price - product cost)", "Promo", "Total promo discount($)", "Retailer", "ProductCostForRetailer"]
+    column_names = ["OrderNumber", "Order details link", "Customer email address", "Ship-to State", "Product name", "Brand", "Number of bottles", "Multiple products in the order", "OrderDate", "AcceptedDate", "OrderState", "PaymentState", "ShipmentState", "Product price", "GiftPackagingCost(not paid to retailer)", "RB margin (Product price - product cost)", "Promo", "Total promo discount($)", "Retailer", "ProductCostForRetailer"]
 
     CSV.generate do |csv|
       csv << column_names
@@ -32,11 +32,12 @@ class ProductSalesReportMailer < ActionMailer::Base
             order.email,
             order.ship_address.state.abbr,
             line_item.product.nil? ? nil : strip_tags(line_item.product.name).gsub(/&quot;|,/, ''),
+            line_item.product.nil? ? nil : line_item.product.brand.title,
             line_item.quantity,
             (line_items.size > 1 ? "Yes" : "No"),
             (@show_only_completed ? order.completed_at : order.created_at).to_date,
             order.accepted_at.nil? ? nil : order.accepted_at.to_date,
-            order.state,
+            order.present? ? order.state : nil,
             order.payment_state,
             order.shipment_state,
             line_item.price,

@@ -13,18 +13,15 @@
     <b>Edit engraving text for all <%= engraving_item.product.name %> below:</b>
 
     <%= form_for engraving_item, :url => admin_update_engraving_text_path(@order, engraving_item) do |f| %>
-      <div>
-        <%= f.label 'preferences[customization][line1]', "Line 1" %>
-        <%= f.text_field 'preferences[customization][line1]', :value => customization_data["line1"], :id => "engraving_line1", :class => "engraving_text" %>
-      </div>
-      <div>
-        <%= f.label 'preferences[customization][line2]', "Line 2" %>
-        <%= f.text_field 'preferences[customization][line2]', :value => customization_data["line2"], :id => "engraving_line2", :class => "engraving_text" %>
-      </div>
-      <div> 
-        <%= f.label 'preferences[customization][line3]', "Line 3" %>
-        <%= f.text_field 'preferences[customization][line3]', :value => customization_data["line3"], :id => "engraving_line3", :class => "engraving_text" %>
-      </div>
+      <% customization_data.each do |key,value| %>
+        <% if key.last.to_i <= engraving_item.product.engraving_line_limit %>
+          <div>
+            <%= f.label 'preferences[customization][#{key}]', "Line #{key.last}" %>
+            <%= f.text_field 'preferences[customization][#{key}]', :value => value, :id => "engraving_#{key}", :class => "engraving_text" %>
+          </div>
+        <% end %>
+      <% end %>
+
       <div>
         <%= f.submit "Update Engraving Text" %>
       </div>

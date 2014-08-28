@@ -20,8 +20,8 @@
 		<h4 style="color:<%= engraving_color %>;">Your Engraving</h4>
 		<input type=hidden name="customization[type]" value="jwb_engraving" />
     <% (1..@product.engraving_line_limit).each do |number| %>
-      <% line_number = 'line#{number}' %>
-      <input type=text name='customization[data][new][<%= line_number %>]' placeholder="Line #{number}" style="text-align:center;" onkeyup="validateAndPreviewEngraving('#{number}',this);" /><br/ >
+      <% line_number = "line#{number}" %>
+      <input type=text name='customization[data][new][<%= line_number %>]' placeholder="Line <%= number %>" style="text-align:center;" onkeyup="validateAndPreviewEngraving('<%= number %>',this);" /><br/ >
     <% end %>
 		<!--<input type=text name='customization[data][new][line1]' placeholder="Line 1" style="text-align:center;" onkeyup="validateAndPreviewEngraving('1',this);" /><br/ >
 		<input type=text name='customization[data][new][line2]' placeholder="Line 2" style="text-align:center;" onkeyup="validateAndPreviewEngraving('2',this);" /><br/ >

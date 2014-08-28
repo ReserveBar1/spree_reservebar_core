@@ -21,7 +21,9 @@
   validateEngraving_<%= line_item.id %> = function(element) {
     var value = element.value;
     value = value.substring(0, <%= line_item.product.engraving_char_limit %>);
-    value = value.toUpperCase();
+    <% if line_item.product.engraving_uppercase == true %>
+      value = value.toUpperCase();
+    <% end %>
     element.value = value;
     if (engravingGuard == false) {
       $('#checkout-link').click(function(e) {

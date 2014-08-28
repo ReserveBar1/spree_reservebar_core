@@ -16,8 +16,9 @@
       <% customization_data.each do |key,value| %>
         <% if key.last.to_i <= engraving_item.product.engraving_line_limit %>
           <div>
-            <%= f.label 'preferences[customization][#{key}]', "Line #{key.last}" %>
-            <%= f.text_field 'preferences[customization][#{key}]', :value => value, :id => "engraving_#{key}", :class => "engraving_text" %>
+            <% binding.pry %>
+            <%= f.label "preferences[customization][#{key}]", "Line #{key}" %>
+            <%= f.text_field "preferences[customization][#{key}]", :value => value, :id => "engraving_#{key}", :class => "engraving_text" %>
           </div>
         <% end %>
       <% end %>

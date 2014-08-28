@@ -11,6 +11,8 @@
 <%= f.label :engraving_char_limit, "Engraving Character Limit (eg. 15)" %><br />
 <%= f.text_field :engraving_char_limit %><br />
 
+<%= f.label :engraving_line_limit, "Number of Lines for Engraving" %><br />
+<%= f.select :engraving_line_limit, [1,2,3] %><br />
 
 <%= f.label :engraving_top_offset, "Text Top Offset (eg. 100)" %><br />
 <%= f.text_field :engraving_top_offset %> px<br />

@@ -9,7 +9,9 @@ en:
     canceled: Cancelled
     delivered: Delivered
   retailers: Retailers
+  company_costs: Company Costs
   listing_retailers: "Listing Retailers"
+  listing_company_costs: "Listing Company Costs"
   new_retailer: "New Retailer"
   content: Content
   order_cancel: Cancel Order

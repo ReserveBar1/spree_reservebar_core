@@ -1,0 +1,32 @@
+<div class="toolbar" data-hook="toolbar">
+  <ul class="actions">
+    <%= button_link_to "New Company Cost", spree.new_admin_company_cost_path, :icon => 'add' %>
+  </ul>
+  <br class="clear" />
+</div>
+
+<h1><%= t(:listing_company_costs) %></h1>
+
+<table class="index" id="listing_company_costs">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Dollar Value (e.g. 1.50)</th>
+      <th>Percentage (e.g. 3.52, not 0.0352)</th>
+      <th style="width:150px;"><%= t(:action) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @company_costs.each do |cost| %>
+      <tr id="spree_company_cost_<%= cost.id %>">
+        <td><%= cost.name %></td>
+        <td><%= cost.value %></td>
+        <td><%= cost.percentage %></td>
+        <td>
+          <%= link_to_delete cost %> &nbsp;
+          <%= link_to_edit cost %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

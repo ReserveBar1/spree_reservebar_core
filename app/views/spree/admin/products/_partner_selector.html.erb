@@ -1,0 +1,2 @@
+<%= f.label :partner %><br />
+<%= f.collection_select :partner_id, Partner.all, :id, :name, {:include_blank => 'Select a Partner'} %>

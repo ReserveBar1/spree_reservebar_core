@@ -30,16 +30,16 @@ class ProfitAndLoss < ActiveRecord::Base
     self.net_revenues_after_promotion = set_net_revenues_after_promotion
   end
 
-  def summary
-    {
-      "Gross Proceeds Before Promotion" => gross_proceeds_before_promotion,
-      "Net Retailer Disbursements" => net_retailer_disbursements,
-      "Total Packaging Costs" => total_packaging_cost,
-      "Total Disbursements" => total_disbursements,
-      "Net Revenues Before Promotion" => net_revenues_before_promotion,
-      "Net Revenues After Promotion" => net_revenues_after_promotion
-    }
-  end
+  # def summary
+  #   {
+  #     "Gross Proceeds Before Promotion" => gross_proceeds_before_promotion,
+  #     "Net Retailer Disbursements" => net_retailer_disbursements,
+  #     "Total Packaging Costs" => total_packaging_cost,
+  #     "Total Disbursements" => total_disbursements,
+  #     "Net Revenues Before Promotion" => net_revenues_before_promotion,
+  #     "Net Revenues After Promotion" => net_revenues_after_promotion
+  #   }
+  # end
 
   private
 
@@ -86,6 +86,7 @@ class ProfitAndLoss < ActiveRecord::Base
   end
 
   def set_credit_card_fees
+    self.credit_card_percentage = set_credit_card_percentage
     credit_card_percentage * (retailer_bottle_price + sales_tax)
   end
 
@@ -125,13 +126,7 @@ class ProfitAndLoss < ActiveRecord::Base
     net_revenues_before_promotion - promotions
   end
 
-  private
-
-  def shipping_charge_uplift
-    order.shipping_method.calculator.preferred_uplift rescue 0.0
-  end
-
-  def credit_card_percentage
+  def set_credit_card_percentage
     credit_card_cost = Spree::CompanyCost.find_by_name("Credit Card Fees")
 
     if credit_card_cost.present?
@@ -150,5 +145,10 @@ class ProfitAndLoss < ActiveRecord::Base
       0.0
     end
   end
+
+  def shipping_charge_uplift
+    order.shipping_method.calculator.preferred_uplift rescue 0.0
+  end
+
 
 end

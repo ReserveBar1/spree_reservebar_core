@@ -3,7 +3,7 @@
 <%= form_for @company_cost, :url => admin_company_cost_path(@company_cost) do |f| %>
   <p>
     <%= f.label :name %><br>
-    <%= f.text_field :name %>
+    <%= @company_cost.name %>
   </p>
 
   <p>

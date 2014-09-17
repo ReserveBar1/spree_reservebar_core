@@ -7,7 +7,7 @@ class ProfitAndLoss < ActiveRecord::Base
     self.total_bottle_price = set_total_bottle_price
     self.gift_packaging_charge = set_gift_packaging_charge
     self.shipping_charge = set_shipping_charge
-    self.shipping_margin = set_shipping_margin
+    # self.shipping_margin = set_shipping_margin
     self.state_fulfillment_fee = set_state_fulfillment_fee
     self.sales_tax = set_sales_tax
     self.gross_proceeds_before_promotion = set_gross_proceeds_before_promotion
@@ -30,17 +30,6 @@ class ProfitAndLoss < ActiveRecord::Base
     self.net_revenues_after_promotion = set_net_revenues_after_promotion
   end
 
-  # def summary
-  #   {
-  #     "Gross Proceeds Before Promotion" => gross_proceeds_before_promotion,
-  #     "Net Retailer Disbursements" => net_retailer_disbursements,
-  #     "Total Packaging Costs" => total_packaging_cost,
-  #     "Total Disbursements" => total_disbursements,
-  #     "Net Revenues Before Promotion" => net_revenues_before_promotion,
-  #     "Net Revenues After Promotion" => net_revenues_after_promotion
-  #   }
-  # end
-
   private
 
   def set_total_bottle_price
@@ -55,9 +44,9 @@ class ProfitAndLoss < ActiveRecord::Base
     order.ship_total
   end
 
-  def set_shipping_margin
-    shipping_charge_uplift + order.shipping_surcharge
-  end
+  # def set_shipping_margin
+  #   shipping_charge_uplift + order.shipping_surcharge
+  # end
 
   def set_state_fulfillment_fee
     order.state_fulfillment_fee
@@ -71,7 +60,6 @@ class ProfitAndLoss < ActiveRecord::Base
     sum = total_bottle_price +
             gift_packaging_charge +
             shipping_charge +
-            shipping_margin +
             state_fulfillment_fee +
             sales_tax
     sum.to_f

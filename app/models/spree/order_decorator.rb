@@ -8,6 +8,8 @@ Spree::Order.class_eval do
 	has_and_belongs_to_many :retailers, :join_table => :spree_orders_retailers
 	belongs_to :gift
 
+  has_one :profit_and_loss, :dependent => :destroy
+
 	accepts_nested_attributes_for :gift
 
   scope :not_older_than_thirty_days,
@@ -97,6 +99,7 @@ Spree::Order.class_eval do
     after_transition :to => 'complete' do |order, transition|
       order.gift_notification if order.is_gift?
       Spree::OrderMailer.retailer_submitted_email(order).deliver if (order.retailer && !Spree::MailLog.has_email_been_sent_already?(order, 'Order::retailer_submitted_email') )
+      order.create_profit_and_loss
     end
   end
 
@@ -263,7 +266,6 @@ Spree::Order.class_eval do
   def update_line_item_costs
     line_items.each { |line_item| line_item.update_costs }
   end
-
 
   private
 

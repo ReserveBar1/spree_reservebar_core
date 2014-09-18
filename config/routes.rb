@@ -48,6 +48,8 @@ Spree::Core::Engine.routes.prepend do
 
     resources :brands
 
+    resources :company_costs
+
     resources :orders do
       member do
       	get :order_complete

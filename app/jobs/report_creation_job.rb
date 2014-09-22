@@ -35,6 +35,8 @@ class ReportCreationJob < Struct.new(:current_user, :params)
       ProductSalesReportMailer.send_report(@orders, current_user, params['search']).deliver
     elsif params['type'] == 'profit_and_loss'
       ProfitAndLossReportMailer.send_report(@orders, current_user, params['search']).deliver
+    elsif params['type'] == 'retailers'
+      RetailersReportMailer.send_report(@orders, current_user, params['search']).deliver
     end
   end
 

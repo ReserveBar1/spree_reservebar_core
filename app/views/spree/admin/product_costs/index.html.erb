@@ -86,4 +86,18 @@
       </div>
     <% end %>
   </div>
+
+  <div>
+    <h3>Import Retailer Costs</h3>
+    <%= form_tag import_admin_retailer_product_costs_path, :multipart => true do %>
+      <div>
+        <p style="margin-left: 10px;"><%= file_field_tag :file %></p>
+      </div>
+      <div>
+        <p class="form-buttons">
+          <%= button "Import Costs" %>
+        </p>
+      </div>
+    <% end %>
+  </div>
 <% end %>

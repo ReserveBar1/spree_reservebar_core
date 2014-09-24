@@ -2,14 +2,13 @@
   <% engraving_items = @order.line_items.select { |line_item| line_item.preferred_customization } %>
   <% engraving_items.each do |engraving_item| %>
     <%
-      engraving_font_style = engraving_item.variant.product.engraving_font_style.to_s.gsub('+', ' ')
-      engraving_font_link = "http://fonts.googleapis.com/css?family=" + engraving_font_style
-      style_text = "text-align:center; font-family: " + engraving_font_style + "; font-weight: 400; font-size: 12px;"
+      #engraving_font_style = engraving_item.variant.product.engraving_font_style.to_s.gsub('+', ' ')
+      #engraving_font_link = "http://fonts.googleapis.com/css?family=" + engraving_font_style
+      #style_text = "text-align:center; font-family: " + engraving_font_style + "; font-weight: 400; font-size: 12px;"
       customization_data = JSON.parse(engraving_item.preferred_customization)
 	    eng_uppercase = engraving_item.product.engraving_uppercase
 	    char_limit = engraving_item.product.engraving_char_limit
     %>
-    <link href="<%= engraving_font_link %>" media="screen" rel="stylesheet" />
 
     <div style="border:1px solid #888;padding:6px;">
     <b>Edit engraving text for all <%= engraving_item.product.name %> below:</b>

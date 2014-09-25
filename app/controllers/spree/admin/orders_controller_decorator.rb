@@ -57,7 +57,17 @@ Spree::Admin::OrdersController.class_eval do
   end
 
   def update_retailer
-    redirect_to admin_order_path(@order)
+    old_retailer = @order.retailer
+    new_retailer = Spree::Retailer.find_by_id(params[:target_retailer_id])
+
+    if new_retailer.present?
+      @order.retailer = new_retailer
+      flash[:notice] = 'Retailer updated'
+      redirect_to admin_order_path(@order)
+    else
+      flash[:error] = 'Please select a retailer'
+      redirect_to edit_admin_order_path(@order)
+    end
   end
 
 	def export

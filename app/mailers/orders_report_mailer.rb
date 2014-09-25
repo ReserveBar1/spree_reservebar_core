@@ -8,7 +8,7 @@ class OrdersReportMailer < ActionMailer::Base
     @orders = orders
     @search_params = search_params
 
-    attachments.inline["orders_report.csv"] = report_csv_file
+    attachments.inline["orders_report.csv"] = { :mime_type => 'text/csv', :content => report_csv_file }
     mail(:to => @current_user.email, :content_type => "multipart/mixed", :reply_to => "noreply@reservebar.com", :subject => "Your orders report is ready.")
   end
 

@@ -48,6 +48,13 @@ Spree::Admin::OrdersController.class_eval do
 		respond_with(@orders)
 	end
 
+  def edit
+    @current_retailer = @order.retailer
+    available_retailers = Spree::Retailer.all
+    @retailers = available_retailers.map { |r| [r.name, r.id] }
+    respond_with(@order)
+  end
+
   def update_retailer
     redirect_to admin_order_path(@order)
   end

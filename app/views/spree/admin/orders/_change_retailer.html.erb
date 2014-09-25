@@ -1,6 +1,10 @@
 <div id='change_retailer'>
   <fieldset>
     <legend>Change Retailer</legend>
-    Current retailer: <%= @order.retailer.name %>
+    <%= form_tag( { controller: 'orders', action: 'update_retailer' }, method: 'post' ) do %>
+      <%= label_tag :target_retailer, "Change retailer from #{@current_retailer.name} to" %>
+      <%= select_tag :target_retailer_id, options_for_select(@retailers), include_blank: '' %>
+      <%= submit_tag 'Update Retailer' %>
+    <% end %>
   </fieldset>
 </div>

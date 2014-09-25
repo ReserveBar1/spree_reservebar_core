@@ -27,6 +27,9 @@ Spree::Core::Engine.routes.prepend do
       get :routes
       get :edit_routes
       put :update_routes
+
+      get :pricing, :as => :pricing
+      get :pricing_export, :as => :pricing_export
     end
 
     match '/get_retailer_data' => 'overview#get_retailer_data'

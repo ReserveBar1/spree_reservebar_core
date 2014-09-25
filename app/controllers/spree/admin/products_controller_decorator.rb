@@ -1,6 +1,6 @@
 Spree::Admin::ProductsController.class_eval do
-  
-  
+
+
   # View the final routes after all routing decisions have been made
   def routes
     @product = ::Spree::Product.find_by_permalink(params[:product_id])
@@ -10,7 +10,7 @@ Spree::Admin::ProductsController.class_eval do
     @product = ::Spree::Product.find_by_permalink(params[:product_id])
     @collection = ::Spree::Route.find_all_by_product_id(@product.id)
   end
-  
+
   # Sends the routing information for all active retailers
   # {routes => {"1" => "preferred", "2" => 'last_resort'}}
   def update_routes
@@ -26,9 +26,21 @@ Spree::Admin::ProductsController.class_eval do
     flash[:notice] = "Routes for this product have been updated"
     redirect_to admin_product_routes_url(@product)
   end
-  
+
+  def pricing
+    @product = Spree::Product.find_by_permalink(params[:product_id])
+    @product_costs = @product.variants_including_master.map(&:product_costs).flatten
+  end
+
+  def pricing_export
+    Delayed::Job.enqueue PricingExportJob.new(current_user, params)
+    flash.notice = "Your report is being created. It will be emailed to you when it is ready."
+    redirect_to admin_product_pricing_url(params[:id])
+  end
+
+
   protected
-  
+
       def collection
         return @collection if @collection.present?
 

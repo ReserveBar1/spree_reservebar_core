@@ -1,0 +1,27 @@
+<%= render :partial => 'spree/admin/shared/product_sub_menu' %>
+
+<%= render :partial => 'spree/admin/shared/product_tabs', :locals => {:current => "Retailer Pricing"} %>
+
+<h2>Retailer Pricing</h2>
+<p>The following table shows which Retailers currently offer this product and their associated costs to Reservebar.com</p>
+
+<table class="index" id="listing_product_costs">
+	<tr>
+		<th>Product Name</th>
+		<th>SKU</th>
+		<th>Retailer</th>
+		<th>Cost</th>
+		<th>Shipping Surcharge</th>
+		<th>Fulfillment Fee</th>
+	</tr>
+  <% @product_costs.each do |product_cost| %>
+    <tr>
+      <td><%= product_cost.variant.name %></td>
+      <td><%= product_cost.variant.sku %></td>
+      <td><%= product_cost.retailer.present? ? product_cost.retailer.name : ""%></td>
+      <td><%= number_to_currency(product_cost.cost_price) %></td>
+      <td><%= number_to_currency(product_cost.shipping_surcharge) %></td>
+      <td><%= number_to_currency(product_cost.fulfillment_fee) %></td>
+    </tr>
+  <% end %>
+</table>

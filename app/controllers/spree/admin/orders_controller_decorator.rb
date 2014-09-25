@@ -48,6 +48,10 @@ Spree::Admin::OrdersController.class_eval do
 		respond_with(@orders)
 	end
 
+  def update_retailer
+    redirect_to admin_order_path(@order)
+  end
+
 	def export
 	  params[:search] ||= {}
 	  params[:search][:completed_at_is_not_null] ||= '1' if Spree::Config[:show_only_complete_orders_by_default]

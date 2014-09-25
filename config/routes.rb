@@ -60,6 +60,7 @@ Spree::Core::Engine.routes.prepend do
       	get :retailer_submitted_email
       	get :retailer_canceled_email
       	get :summary
+        post :update_retailer
       end
       resources :shipments do
         resources :shipment_details do

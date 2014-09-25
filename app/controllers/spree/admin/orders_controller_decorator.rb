@@ -50,7 +50,8 @@ Spree::Admin::OrdersController.class_eval do
 
   def edit
     @current_retailer = @order.retailer
-    available_retailers = Spree::Retailer.all
+    same_merch_account = "merchant_account = ? AND id != ?"
+    available_retailers = Spree::Retailer.where(same_merch_account, @current_retailer.merchant_account, @current_retailer.id)
     @retailers = available_retailers.map { |r| [r.name, r.id] }
     respond_with(@order)
   end

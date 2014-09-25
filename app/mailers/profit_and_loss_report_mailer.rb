@@ -14,7 +14,7 @@ class ProfitAndLossReportMailer < ActionMailer::Base
     end
     @search_params = search_params
 
-    attachments["profit_loss_report.csv"] = report_csv_file
+    attachments["profit_loss_report.csv"] = { :mime_type => 'text/csv', :content => report_csv_file }
     mail(:to => @current_user.email, :reply_to => "noreply@reservebar.com", :subject => "Your profit/loss total report is ready.")
   end
 

@@ -63,6 +63,14 @@ Spree::OrderMailer.class_eval do
     subject += "#{t('order_mailer.retailer_submitted_email.subject')}"
     mail(:to => order.retailer.email, :reply_to => "orders@reservebar.com", :bcc => Spree::Config[:mail_bcc], :subject => subject)
   end
+
+  # removed from retailer
+  def retailer_removed_email(order, resend=false)
+    @order = order
+    subject = (resend ? "[#{t(:resend).upcase}] " : "")
+    subject += "#{t('order_mailer.retailer_removed_email.subject')}"
+    mail(:to => order.retailer.email, :reply_to => "orders@reservebar.com", :bcc => Spree::Config[:mail_bcc], :subject => subject)
+  end
   
   # send email to reservebar.com that retailer has accepted an order
   def accepted_notification(order, resend = false)

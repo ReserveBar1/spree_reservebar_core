@@ -44,6 +44,42 @@ Spree::Admin::OrdersController.class_eval do
     respond_with(@orders)
   end
 
+  def edit
+    unless @order.state == 'canceled'
+      @current_retailer = @order.retailer
+      if @order.accepted_at.blank?
+        available_retailers = Spree::Retailer.where("id != ?", @current_retailer.id)
+      else
+        same_merch_account = "merchant_account = ? AND id != ?"
+        available_retailers = Spree::Retailer.where(same_merch_account, @current_retailer.merchant_account, @current_retailer.id)
+      end
+      @retailers = available_retailers.map { |r| [r.name, r.id] }
+    end
+    respond_with(@order)
+  end
+
+  def update_retailer
+    old_retailer = @order.retailer
+    new_retailer = Spree::Retailer.find_by_id(params[:target_retailer_id])
+
+    if new_retailer.present?
+      begin
+        @order.retailer = new_retailer
+        Spree::OrderMailer.retailer_removed_email(@order).deliver if (old_retailer)
+        Spree::OrderMailer.retailer_submitted_email(@order).deliver if (@order.retailer)
+      rescue
+        @order.retailer = old_retailer
+        flash[:error] = 'Something went wrong changing the retailer, likely with sending the emails. Please check the logs.'
+        redirect_to edit_admin_order_path(@order) and return
+      end
+      flash[:notice] = 'Retailer updated. Emails sent to the old and new retailer.'
+      redirect_to admin_order_path(@order)
+    else
+      flash[:error] = 'Please select a retailer'
+      redirect_to edit_admin_order_path(@order)
+    end
+  end
+
   def export
     Delayed::Job.enqueue ReportCreationJob.new(current_user, params)
     flash.notice = "Your report is being created. It will be emailed to you when it is ready."

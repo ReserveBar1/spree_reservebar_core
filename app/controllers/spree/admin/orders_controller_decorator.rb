@@ -62,7 +62,8 @@ Spree::Admin::OrdersController.class_eval do
 
     if new_retailer.present?
       @order.retailer = new_retailer
-      flash[:notice] = 'Retailer updated'
+      Spree::OrderMailer.retailer_submitted_email(@order).deliver if (@order.retailer)
+      flash[:notice] = 'Retailer updated. Email sent to the new retailer.'
       redirect_to admin_order_path(@order)
     else
       flash[:error] = 'Please select a retailer'

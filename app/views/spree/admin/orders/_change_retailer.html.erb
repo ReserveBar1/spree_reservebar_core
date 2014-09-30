@@ -8,5 +8,8 @@
       <%= select_tag :target_retailer_id, options_for_select(@retailers), include_blank: '' %>
       <%= submit_tag 'Update Retailer' %>
     <% end %>
+    <% if @order.accepted_at.present? %>
+      <p>NOTE: You can only choose from retailers that have the same merchant account as the original retailer because this order has already been accepted.</p>
+    <% end %>
   </fieldset>
 </div>

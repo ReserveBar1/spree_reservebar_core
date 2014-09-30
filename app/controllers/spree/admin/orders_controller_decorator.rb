@@ -61,9 +61,16 @@ Spree::Admin::OrdersController.class_eval do
     new_retailer = Spree::Retailer.find_by_id(params[:target_retailer_id])
 
     if new_retailer.present?
-      @order.retailer = new_retailer
-      Spree::OrderMailer.retailer_submitted_email(@order).deliver if (@order.retailer)
-      flash[:notice] = 'Retailer updated. Email sent to the new retailer.'
+      begin
+        @order.retailer = new_retailer
+        Spree::OrderMailer.retailer_removed_email(@order).deliver if (old_retailer)
+        Spree::OrderMailer.retailer_submitted_email(@order).deliver if (@order.retailer)
+      rescue
+        @order.retailer = old_retailer
+        flash[:error] = 'Something went wrong changing the retailer, likely with sending the emails. Please check the logs.'
+        redirect_to edit_admin_order_path(@order) and return
+      end
+      flash[:notice] = 'Retailer updated. Emails sent to the old and new retailer.'
       redirect_to admin_order_path(@order)
     else
       flash[:error] = 'Please select a retailer'

@@ -12,4 +12,9 @@ $(function(){
       // Hide engraving options
     }
   });
+
+  $('#enable-change-retailer').click(function() {
+    $('#enable-change-retailer').hide()
+    $('#change_retailer').show()
+  });
 });

@@ -1,4 +1,6 @@
-<div id='change_retailer'>
+<p id='enable-change-retailer' style='font-size: 15px; text-decoration: underline; font-weight:bold; margin-left: 14px;'>Change Retailer?</p>
+
+<div id='change_retailer' style="display: none;">
   <fieldset>
     <legend>Change Retailer</legend>
     <%= form_tag( { controller: 'orders', action: 'update_retailer' }, method: 'post' ) do %>

@@ -49,14 +49,16 @@ Spree::Admin::OrdersController.class_eval do
 	end
 
   def edit
-    @current_retailer = @order.retailer
-    if @order.accepted_at.blank?
-      available_retailers = Spree::Retailer.where("id != ?", @current_retailer.id)
-    else
-      same_merch_account = "merchant_account = ? AND id != ?"
-      available_retailers = Spree::Retailer.where(same_merch_account, @current_retailer.merchant_account, @current_retailer.id)
+    unless @order.state == 'canceled'
+      @current_retailer = @order.retailer
+      if @order.accepted_at.blank?
+        available_retailers = Spree::Retailer.where("id != ?", @current_retailer.id)
+      else
+        same_merch_account = "merchant_account = ? AND id != ?"
+        available_retailers = Spree::Retailer.where(same_merch_account, @current_retailer.merchant_account, @current_retailer.id)
+      end
+      @retailers = available_retailers.map { |r| [r.name, r.id] }
     end
-    @retailers = available_retailers.map { |r| [r.name, r.id] }
     respond_with(@order)
   end
 

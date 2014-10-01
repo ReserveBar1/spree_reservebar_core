@@ -1,0 +1,43 @@
+<div id="edit-engraving-text" data-hook>
+  <% engraving_items = @order.line_items.select { |line_item| line_item.preferred_customization } %>
+  <% engraving_items.each do |engraving_item| %>
+    <%
+      #engraving_font_style = engraving_item.variant.product.engraving_font_style.to_s.gsub('+', ' ')
+      #engraving_font_link = "http://fonts.googleapis.com/css?family=" + engraving_font_style
+      #style_text = "text-align:center; font-family: " + engraving_font_style + "; font-weight: 400; font-size: 12px;"
+      customization_data = JSON.parse(engraving_item.preferred_customization)
+	    eng_uppercase = engraving_item.product.engraving_uppercase
+	    char_limit = engraving_item.product.engraving_char_limit
+    %>
+
+    <div style="border:1px solid #888;padding:6px;">
+    <b>Edit engraving text for all <%= engraving_item.product.name %> below:</b>
+
+    <%= form_for engraving_item, :url => admin_update_engraving_text_path(@order, engraving_item) do |f| %>
+      <% customization_data.each do |key,value| %>
+        <% if key.last.to_i <= engraving_item.product.engraving_line_limit %>
+          <div>
+            <%= f.label "preferences[customization][#{key}]", "Line #{key}" %>
+            <%= f.text_field "preferences[customization][#{key}]", :value => value, :id => "engraving_#{key}", :class => "engraving_text", :onkeyup => "validateAndPreviewEngraving('#{key}',this);" %>
+          </div>
+        <% end %>
+      <% end %>
+
+      <div>
+        <%= f.submit "Update Engraving Text" %>
+      </div>
+    <% end %>
+
+    <%= javascript_tag do %>
+      validateAndPreviewEngraving = function(line, element) {
+        var value = element.value;
+        value = value.substring(0,<%= char_limit %>);
+        <% if eng_uppercase == true %>
+          value = value.toUpperCase();
+        <% end %>
+        element.value = value;
+        $("#engraving" + line).html(value);
+      }
+    <% end %>
+  <% end %>
+</div>

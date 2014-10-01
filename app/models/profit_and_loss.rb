@@ -70,7 +70,7 @@ class ProfitAndLoss < ActiveRecord::Base
   end
 
   def set_corrugated_box_fee
-    0.0
+    corrugated_box_fee_value
   end
 
   def set_credit_card_fees
@@ -129,6 +129,16 @@ class ProfitAndLoss < ActiveRecord::Base
 
     if corrugated_cost.present?
       corrugated_cost.value
+    else
+      0.0
+    end
+  end
+
+  def corrugated_box_fee_value
+    corrugated_box_fee = Spree::CompanyCost.find_by_name("Corrugated Box Fee")
+
+    if corrugated_box_fee.present?
+      corrugated_box_fee.value
     else
       0.0
     end

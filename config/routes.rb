@@ -32,6 +32,11 @@ Spree::Core::Engine.routes.prepend do
       get :pricing_export, :as => :pricing_export
     end
 
+    resources :product_groups do
+      # get :pricing, :as => :pricing
+      get :pricing_export, :as => :pricing_exports
+    end
+
     match '/get_retailer_data' => 'overview#get_retailer_data'
     match '/orders/get_retailer_data' => 'orders#get_retailer_data'
 

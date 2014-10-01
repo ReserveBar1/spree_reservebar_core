@@ -6,10 +6,10 @@
 $(function(){
   $('#product_engravable').change(function() {
     if( $(this).attr('checked') == 'checked') {
-      // Show engraving options
+      $('#engraving-properties').show();
     }
     else {
-      // Hide engraving options
+      $('#engraving-properties').hide();
     }
   });
   $('#product_engraving_font_style').fontselect();

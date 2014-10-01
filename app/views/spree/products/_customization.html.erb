@@ -7,6 +7,8 @@
 	char_limit = @product.engraving_char_limit
 	text_top = @product.engraving_top_offset
 	text_left = @product.engraving_left_offset
+	input_top = @product.engraving_input_top_offset
+	input_left = @product.engraving_input_left_offset
 	eng_uppercase = @product.engraving_uppercase
 	engraving_font_style = @product.engraving_font_style.gsub('+', ' ')
 	engraving_font_link = "http://fonts.googleapis.com/css?family=" + engraving_font_style
@@ -21,7 +23,7 @@
 		<div id='preview2'></div>
 		<div id='preview3'></div>
 	</div>
-	<div style="position:absolute;top:30px;right:50px;height:200px;width:210px;">
+	<div style="position:absolute;top:<%= input_top %>px;left:<%= input_left %>px;height:200px;width:210px;">
 		<h4 style="color:<%= engraving_color %>;">Your Engraving</h4>
 		<input type=hidden name="customization[type]" value="jwb_engraving" />
     <% (1..@product.engraving_line_limit).each do |number| %>

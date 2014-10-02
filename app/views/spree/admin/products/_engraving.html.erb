@@ -12,7 +12,7 @@
 <%= f.text_field :engraving_char_limit %><br />
 
 <%= f.label :engraving_font_style %><br />
-<%= f.text_field :engraving_font_style %><br />
+<%= f.select :engraving_font_style, ["EB Garamond", "Pinyon Script", "Sorts Mill Goudy", "Cabin", "Droid Sans", "Parisienne"] %><br />
 
 <%= f.label :engraving_line_limit, "Number of Lines for Engraving" %><br />
 <%= f.select :engraving_line_limit, [1,2,3] %><br />

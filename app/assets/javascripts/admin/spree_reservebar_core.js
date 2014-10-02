@@ -12,5 +12,4 @@ $(function(){
       // Hide engraving options
     }
   });
-  $('#product_engraving_font_style').fontselect();
 });

@@ -1,5 +1,6 @@
 class ProductSalesReportMailer < ActionMailer::Base
   include ActionView::Helpers::SanitizeHelper
+  include ActionView::Helpers::NumberHelper
 
   default :from => "noreply@reservebar.com"
 
@@ -8,7 +9,7 @@ class ProductSalesReportMailer < ActionMailer::Base
     @orders = orders
     @search_params = search_params
 
-    attachments.inline["product_sales_report.csv"] = report_csv_file
+    attachments["product_sales_report.csv"] = report_csv_file
     mail(:to => @current_user.email, :content_type => "multipart/mixed", :reply_to => "noreply@reservebar.com", :subject => "Your product sales report is ready.")
   end
 
@@ -39,13 +40,13 @@ class ProductSalesReportMailer < ActionMailer::Base
             order.state,
             order.payment_state,
             order.shipment_state,
-            line_item.price,
-            line_item.adjustments.eligible.gift_packaging.map(&:amount).sum,
-            line_item.margin_for_site,
+            number_to_currency(line_item.price),
+            number_to_currency(line_item.adjustments.eligible.gift_packaging.map(&:amount).sum),
+            number_to_currency(line_item.margin_for_site),
             order.adjustments.eligible.promotion.first.try(:label),
-            order.adjustments.eligible.promotion.first.try(:amount),
+            number_to_currency(order.adjustments.eligible.promotion.first.try(:amount)),
             order.retailer.try(:name),
-            line_item.product_cost_for_retailer
+            number_to_currency(line_item.product_cost_for_retailer)
           ]
         end
       end

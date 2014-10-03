@@ -18,17 +18,41 @@
 		<div id='preview2'></div>
 		<div id='preview3'></div>
 	</div>
-	<div style="position:absolute;top:<%= input_top %>px;left:<%= input_left %>px;height:200px;width:210px;">
-		<h4 style="color:<%= engraving_color %>;">Your Engraving</h4>
-		<input type=hidden name="customization[type]" value="jwb_engraving" />
-    <% (1..@product.engraving_line_limit).each do |number| %>
-      <% line_number = "line#{number}" %>
-      <input type=text name='customization[data][new][<%= line_number %>]' placeholder="Line <%= number %>" style="text-align:center;" onkeyup="validateAndPreviewEngraving('<%= number %>',this);" /><br/ >
-    <% end %>
-		<p style="color:<%= engraving_color %>;line-height:1.3em;font-size:11px;">
-		Due to the customized nature of the product, please allow 7 - 10 business days from order processing to fulfillment.
-		</p>
-	</div>
+
+	<% unless @product.has_horizontal_engraving? %>
+		<div style="position:absolute;top:<%= input_top %>px;left:<%= input_left %>px;height:200px;width:210px;">
+			<h4 style="color:<%= engraving_color %>;">Your Engraving</h4>
+			<input type=hidden name="customization[type]" value="jwb_engraving" />
+	    <% (1..@product.engraving_line_limit).each do |number| %>
+	      <% line_number = "line#{number}" %>
+	      <input type=text name='customization[data][new][<%= line_number %>]' placeholder="Line <%= number %>" style="text-align:center;" onkeyup="validateAndPreviewEngraving('<%= number %>',this);" /><br/ >
+	    <% end %>
+			<p style="color:<%= engraving_color %>;line-height:1.3em;font-size:11px;">
+				Due to the customized nature of the product, please allow 7 - 10 business days from order processing to fulfillment.
+			</p>
+		</div>
+	<% else %>
+		<table style="position:absolute;top:<%= input_top %>px;left:<%= input_left %>px; width:430px;">
+			<tr style='border: none;'>
+				<td style='padding: 0px;'>
+					<div >
+						<h4 style="color:<%= engraving_color %>;">Your Engraving</h4>
+						<input type=hidden name="customization[type]" value="jwb_engraving" />
+						<% (1..1).each do |number| %>
+							<% line_number = "line#{number}" %>
+							<input type=text name='customization[data][new][<%= line_number %>]' placeholder="Line <%= number %>" style="text-align:center;" onkeyup="validateAndPreviewEngraving('<%= number %>',this);" /><br/ >
+						<% end %>
+					</div>
+				</td>
+				<td style='padding-left: 60px;'>
+					<p style="color:<%= engraving_color %>;line-height:1.3em;font-size:11px;">
+						Due to the customized nature of the product, please allow 7 - 10 business days from order processing to fulfillment.
+					</p>
+				</td>
+			</tr>
+		</table>
+	<% end %>
+
 </div>
 
 <script type="text/javascript">

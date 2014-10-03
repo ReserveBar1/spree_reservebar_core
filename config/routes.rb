@@ -38,7 +38,9 @@ Spree::Core::Engine.routes.prepend do
       get :activate
       get :suspend
       put :update_shipping
-      resources :product_costs
+      resources :product_costs do
+        collection { post :import }
+      end
       get :regular_reminder_email
       get :counties
       put :update_counties

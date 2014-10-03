@@ -13,7 +13,7 @@
 %>
 
 <div style="width:577px;height:235px;background:url(<%= img_url %>);position:relative;border:1px solid <%= engraving_color %>;margin-top:12px;margin-bottom:12px;">
-  <div style="position:absolute;top:<%= text_top %>px;left:<%= text_left %>px;width:100px;height:100px;color:<%= engraving_color %>;text-align:center;">
+  <div style="position:absolute;top:<%= text_top %>px;left:<%= text_left %>px;height:100px;color:<%= engraving_color %>;text-align:center;">
     <div id='preview1'></div>
     <div id='preview2'></div>
     <div id='preview3'></div>
@@ -38,7 +38,7 @@
           <div >
             <h4 style="color:<%= engraving_color %>;">Your Engraving</h4>
             <input type=hidden name="customization[type]" value="jwb_engraving" />
-            <% (1..1).each do |number| %>
+            <% (1..@product.engraving_line_limit).each do |number| %>
               <% line_number = "line#{number}" %>
               <input type=text name='customization[data][new][<%= line_number %>]' placeholder="Line <%= number %>" style="text-align:center;" onkeyup="validateAndPreviewEngraving('<%= number %>',this);" /><br/ >
             <% end %>

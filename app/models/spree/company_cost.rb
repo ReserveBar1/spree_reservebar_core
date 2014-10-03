@@ -9,11 +9,11 @@ module Spree
 
     validates_numericality_of :value,      :allow_nil => true,
                                            :less_than_or_equal_to => 999999.99,
-                                           :greater_than_or_equal_to => 0.1
+                                           :greater_than_or_equal_to => 0.0
 
     validates_numericality_of :percentage, :allow_nil => true,
                                            :less_than_or_equal_to => 100.0,
-                                           :greater_than_or_equal_to => 0.1
+                                           :greater_than_or_equal_to => 0.0
 
     private
 

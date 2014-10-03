@@ -1,5 +1,6 @@
 class OrdersReportMailer < ActionMailer::Base
   include ActionView::Helpers::SanitizeHelper
+  include ActionView::Helpers::NumberHelper
 
   default :from => "noreply@reservebar.com"
 
@@ -11,8 +12,8 @@ class OrdersReportMailer < ActionMailer::Base
     end
     @search_params = search_params
 
-    attachments.inline["orders_report.csv"] = { :mime_type => 'text/csv', :content => report_csv_file }
-    mail(:to => @current_user.email, :reply_to => "noreply@reservebar.com", :subject => "Your orders report is ready.")
+    attachments["orders_report.csv"] = report_csv_file
+    mail(:to => @current_user.email, :content_type => "multipart/mixed", :reply_to => "noreply@reservebar.com", :subject => "Your orders report is ready.")
   end
 
   private
@@ -54,6 +55,7 @@ class OrdersReportMailer < ActionMailer::Base
       @orders.each do |order|
         names_array = order.line_items.map{|line_item|line_item.product.try(:name)}.compact
         prices_array = order.line_items.map{|line_item|line_item.price}.compact
+        prices_array = prices_array.map { |p| number_to_currency(p) } if prices_array.present?
         shipping_charge_uplift = order.shipping_method.calculator.preferred_uplift rescue 0.0
 
         csv << [order.number,
@@ -62,18 +64,18 @@ class OrdersReportMailer < ActionMailer::Base
                 names_array.empty? ? nil : strip_tags(names_array.join('|')).gsub(/&quot;|,/, ''),
                 order.number_of_bottles,
                 prices_array.empty? ? nil : prices_array.join('|'),
-                order.profit_and_loss.total_bottle_price,
-                order.profit_and_loss.gift_packaging_charge,
-                order.profit_and_loss.gift_packaging_cost,
-                order.profit_and_loss.corrugated_cost,
-                order.profit_and_loss.shipping_costs,
-                order.profit_and_loss.state_fulfillment_fee,
-                order.profit_and_loss.sales_tax,
-                order.profit_and_loss.promotions,
-                order.total,
-                order.profit_and_loss.retailer_bottle_price,
-                order.profit_and_loss.credit_card_fees,
-                order.retailer ? order.profit_and_loss.net_retailer_disbursements : 0,
+                number_to_currency(order.profit_and_loss.total_bottle_price),
+                number_to_currency(order.profit_and_loss.gift_packaging_charge),
+                number_to_currency(order.profit_and_loss.gift_packaging_cost),
+                number_to_currency(order.profit_and_loss.corrugated_cost),
+                number_to_currency(order.profit_and_loss.shipping_costs),
+                number_to_currency(order.profit_and_loss.state_fulfillment_fee),
+                number_to_currency(order.profit_and_loss.sales_tax),
+                number_to_currency(order.profit_and_loss.promotions),
+                number_to_currency(order.total),
+                number_to_currency(order.profit_and_loss.retailer_bottle_price),
+                number_to_currency(order.profit_and_loss.credit_card_fees),
+                order.retailer ? number_to_currency(order.profit_and_loss.net_retailer_disbursements) : number_to_currency(0.00),
                 order.adjustments.eligible.promotion.first.try(:label),
                 order.state,
                 order.payment_state,
@@ -100,9 +102,9 @@ class OrdersReportMailer < ActionMailer::Base
             order.state,
             order.payment_state,
             order.shipment_state,
-            order.tax_total,
-            (order.line_items.collect {|line_item| line_item.product_cost_for_retailer }).sum,
-            order.retailer ? order.total_amount_due_to_retailer : 0
+            number_to_currency(order.tax_total),
+            number_to_currency((order.line_items.collect {|line_item| line_item.product_cost_for_retailer }).sum),
+            order.retailer ? number_to_currency(order.total_amount_due_to_retailer) : number_to_currency(0.00)
           ]
       end
 

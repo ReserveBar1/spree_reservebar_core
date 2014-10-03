@@ -10,10 +10,11 @@
   input_top = @product.engraving_input_top_offset
   input_left = @product.engraving_input_left_offset
   eng_uppercase = @product.engraving_uppercase
+  engraving_width = @product.engraving_width
 %>
 
 <div style="width:577px;height:235px;background:url(<%= img_url %>);position:relative;border:1px solid <%= engraving_color %>;margin-top:12px;margin-bottom:12px;">
-  <div style="position:absolute;top:<%= text_top %>px;left:<%= text_left %>px;height:100px;color:<%= engraving_color %>;text-align:center;">
+  <div style="position:absolute;top:<%= text_top %>px;left:<%= text_left %>px;width:<%= engraving_width %>px;height:100px;color:<%= engraving_color %>;text-align:center;overflow:hidden;">
     <div id='preview1'></div>
     <div id='preview2'></div>
     <div id='preview3'></div>

@@ -12,8 +12,6 @@ $(function(){
       $('#engraving-properties').hide();
     }
   });
-  $('#product_engraving_font_style').fontselect();
-
   $('#enable-change-retailer').click(function() {
     $('#enable-change-retailer').hide()
     $('#change_retailer').show()

@@ -12,13 +12,12 @@
 	engraving_font_style = @product.engraving_font_style
 	engraving_font_size = font_sizes.select { |f|  f[0] == engraving_font_style }.flatten[1]
 	engraving_font_link = "http://fonts.googleapis.com/css?family=" + engraving_font_style.gsub(' ', '+')
-	style_text = "text-align:center; font-family: " + engraving_font_style + "; font-weight: 400; font-size: #{engraving_font_size};"
 %>
 
 <link href="<%= engraving_font_link %>" media="screen" rel="stylesheet" />
 
 <div style="width:577px;height:235px;background:url(<%= img_url %>);position:relative;border:1px solid <%= engraving_color %>;margin-top:12px;margin-bottom:12px;">
-	<div style="position:absolute;top:<%= text_top %>px;left:<%= text_left %>px;width:100px;height:100px;color:<%= engraving_color %>;<%= style_text %>">
+	<div style="position:absolute;top:<%= text_top %>px;left:<%= text_left %>px;width:100px;height:100px;color:<%= engraving_color %>;text-align:center;font-family:'<%= engraving_font_style %>';font-weight:400;font-size:<%= engraving_font_size %>;">
 		<div id='preview1'></div>
 		<div id='preview2'></div>
 		<div id='preview3'></div>

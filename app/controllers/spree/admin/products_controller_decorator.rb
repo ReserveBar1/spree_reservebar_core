@@ -29,7 +29,7 @@ Spree::Admin::ProductsController.class_eval do
 
   def pricing
     @product = Spree::Product.find_by_permalink(params[:product_id])
-    @product_costs = @product.variants_including_master.map(&:product_costs).flatten
+    @product_costs = @product.product_costs
   end
 
   def pricing_export

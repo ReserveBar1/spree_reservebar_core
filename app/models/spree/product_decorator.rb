@@ -91,6 +91,10 @@ Spree::Product.class_eval do
     !(routes.reject {|r| r.route == 'neutral'}).empty?
   end
 
+  def product_costs
+    variants_including_master.map(&:product_costs).flatten
+  end
+
   private
 
 	def self.get_related_taxons(*ids_or_records_or_names)

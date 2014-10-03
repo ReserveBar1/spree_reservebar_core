@@ -1,0 +1,4 @@
+<% if @current_user.has_role?("admin") %>
+  <%= link_to 'Product Pricing Report (for Product Group)', admin_product_group_pricing_exports_url(@product_group) %>
+<% end %>
+

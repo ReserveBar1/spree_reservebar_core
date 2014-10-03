@@ -95,6 +95,17 @@ Spree::Core::Engine.routes.prepend do
       get :print_test_label
     end
 
+    resources :reports, :only => [:index, :show] do  # <= add this block
+      collection do
+        get :sales_total
+        post :sales_total
+        get :product_pricing
+        post :product_pricing
+        get :product_group_pricing
+        post :product_group_pricing
+      end
+    end
+
 
   end
 end

@@ -1,11 +1,11 @@
 class ProductPricingReportMailer < ActionMailer::Base
   include ActionView::Helpers::SanitizeHelper
+  include ActionView::Helpers::NumberHelper
 
   default :from => "noreply@reservebar.com"
 
-  def send_report(product_costs, user)
+  def send_report(user)
     @current_user = user
-    @product_costs = product_costs
 
     attachments["product_pricing_report.csv"] = { :mime_type => 'text/csv', :content => report_csv_file }
     mail(:to => @current_user.email, :content_type => "multipart/mixed", :reply_to => "noreply@reservebar.com", :subject => "Your product pricing report is ready.")
@@ -13,32 +13,38 @@ class ProductPricingReportMailer < ActionMailer::Base
 
   private
 
-  def admin_user?
-    @current_user.has_role?("admin")
+  def variants
+    @variants ||= Spree::Product.all.collect(&:variants_including_master).flatten
+  end
+
+  def retailers
+    @retailers ||= Spree::Retailer.all
+  end
+
+  def retailer_states
+    retailers.map { |r| r.physical_address.state.abbr }
+  end
+
+  def retailer_names
+    retailers.map(&:name)
   end
 
   def admin_report
-    column_names = ["Product Name",
-                    "SKU",
-                    "Retailer",
-                    "Cost",
-                    "Shipping Surcharge",
-                    "Fulfillment Fee"]
-
     CSV.generate do |csv|
-      csv << column_names
+      csv << ["SKU"] + retailer_states
+      csv << [" "]   + retailer_names
 
-      @product_costs.each do |product_cost|
-        csv << [product_cost.variant.name,
-                product_cost.variant.sku,
-                product_cost.retailer.present? ? product_cost.retailer.name : "",
-                product_cost.cost_price,
-                product_cost.shipping_surcharge,
-                product_cost.fulfillment_fee
-               ]
+      variants.each do |variant|
+        ary = []
+        product_costs = variant.product_cost_for_retailers.map { |cost| number_to_currency(cost) }
+        ary = [variant.sku] + product_costs
+        csv << ary
       end
     end
+  end
 
+  def admin_user?
+    @current_user.has_role?("admin")
   end
 
   def non_admin_report

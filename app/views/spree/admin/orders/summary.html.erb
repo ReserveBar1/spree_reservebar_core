@@ -22,14 +22,14 @@
     <br class="clear" /><p></p>
 	<%= button_link_to(I18n.t("packaging_slip.print"), "/admin/invoice/#{@order.number}/packaging_slip.pdf" , :target => "_blank", :style => "margin-left:10px;") %>
 	<br class="clear" /><p></p>
-	
+
 	<p style="margin-left:10px;">Please print the packaging slip, check that the content of the package is correct, and put the packaging slip inside the package.</p>
 
 
 	<% if @order.gift %>
 		<%= button_link_to("Print Gift Card", "#{admin_order_gift_print_card_url(@order, @order.gift)}.pdf?token=#{@order.gift.token}", :target => "_blank", :style => "margin-left:10px;") %>
 	<br class="clear" /><p></p>
-	
+
 	<p  style="margin-left:10px;">Please print gift message on ReserveBar gift card stock. Ensure paper is loaded correctly with the appropriate side facing up. Please insert into outer shipper as the last step prior to sealing the package, taking additional care not to fold, crease or rip the card as we want to ensure the gift recipient sees it first prior to retrieving  the bottle from outer shipper.</p>
 	<% end %>
 
@@ -63,12 +63,18 @@
       <tr data-hook="order_details_line_item_row">
         <td width="400"><%= sanitize(item.variant.product.name, :tags => %w(sup)) %> <%= "(" + variant_options(item.variant) + ")" unless item.variant .option_values.empty? %>
 		<% if item.preferred_customization %>
+			<%
+				engraving_font_style = engraving_item.variant.product.engraving_font_style.gsub('+', ' ')
+				engraving_font_link = "http://fonts.googleapis.com/css?family=" + engraving_font_style
+				style_text = "text-align:center; font-family: " + engraving_font_style + "; font-weight: 400; font-size: 12px;"
+			%>
+			<link href="<%= engraving_font_link %>" media="screen" rel="stylesheet" />
 
 			<div>
 				<b>Requires Custom Engraving</b>
 				<% customization_data = JSON.parse(item.preferred_customization) %>
 				<% customization_data.each do |key,value| %>
-					<div><%= "#{key.humanize}: #{value}" %></div>
+					<div><%= "#{key.humanize}: " %><span style="<%= style_text %>"><%= "#{value}" %></span></div>
 				<% end %>
 			</div>
 		<% end %>

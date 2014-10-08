@@ -8,7 +8,7 @@ class ProductPricingReportMailer < ActionMailer::Base
     @current_user = user
 
     attachments["product_pricing_report.csv"] = { :mime_type => 'text/csv', :content => report_csv_file }
-    mail(:to => @current_user.email, :content_type => "multipart/mixed", :reply_to => "noreply@reservebar.com", :subject => "Your product pricing report is ready.")
+    mail(:to => @current_user.email, :reply_to => "noreply@reservebar.com", :subject => "Your product pricing report is ready.")
   end
 
   private

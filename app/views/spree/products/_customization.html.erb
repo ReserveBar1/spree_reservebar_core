@@ -2,25 +2,25 @@
 <input type=hidden name="elected_engraving" value="true" />
 
 <%
-	font_sizes = [["EB Garamond", "16px"], ["Pinyon Script", "18px"], ["Sorts Mill Goudy", "13px"], ["Cabin", "14px"], ["Droid Sans", "14px"], ["Parisienne", "18px"]]
-	img_url = @product.engraving_image_url
-	engraving_color = @product.engraving_color
-	char_limit = @product.engraving_char_limit
-	text_top = @product.engraving_top_offset
-	text_left = @product.engraving_left_offset
+  font_sizes = [["EB Garamond", "16px"], ["Pinyon Script", "18px"], ["Sorts Mill Goudy", "13px"], ["Cabin", "14px"], ["Droid Sans", "14px"], ["Parisienne", "18px"]]
+  img_url = @product.engraving_image_url
+  engraving_color = @product.engraving_color
+  char_limit = @product.engraving_char_limit
+  text_top = @product.engraving_top_offset
+  text_left = @product.engraving_left_offset
   input_top = @product.engraving_input_top_offset
   input_left = @product.engraving_input_left_offset
-	eng_uppercase = @product.engraving_uppercase
-	engraving_font_style = @product.engraving_font_style
-	engraving_font_size = font_sizes.select { |f|  f[0] == engraving_font_style }.flatten[1]
-	engraving_font_link = "http://fonts.googleapis.com/css?family=" + engraving_font_style.gsub(' ', '+')
+  eng_uppercase = @product.engraving_uppercase
+  engraving_font_style = @product.engraving_font_style
+  engraving_font_size = font_sizes.select { |f|  f[0] == engraving_font_style }.flatten[1]
+  engraving_font_link = "http://fonts.googleapis.com/css?family=" + engraving_font_style.gsub(' ', '+')
   engraving_width = @product.engraving_width
 %>
 
 <link href="<%= engraving_font_link %>" media="screen" rel="stylesheet" />
 
 <div style="width:577px;height:235px;background:url(<%= img_url %>);position:relative;border:1px solid <%= engraving_color %>;margin-top:12px;margin-bottom:12px;">
-	<div style="position:absolute;top:<%= text_top %>px;left:<%= text_left %>px;width:<%= engraving_width %>px;height:100px;color:<%= engraving_color %>;text-align:center;font-family:'<%= engraving_font_style %>';font-weight:400;font-size:<%= engraving_font_size %>;overflow:hidden;">
+  <div style="position:absolute;top:<%= text_top %>px;left:<%= text_left %>px;width:<%= engraving_width %>px;height:100px;color:<%= engraving_color %>;text-align:center;font-family:'<%= engraving_font_style %>';font-weight:400;font-size:<%= engraving_font_size %>;overflow:hidden;">
     <div id='preview1'></div>
     <div id='preview2'></div>
     <div id='preview3'></div>

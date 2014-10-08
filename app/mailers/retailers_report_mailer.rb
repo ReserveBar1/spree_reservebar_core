@@ -13,7 +13,7 @@ class RetailersReportMailer < ActionMailer::Base
     @search_params = search_params
 
     attachments["retailer_orders_report.csv"] = { :mime_type => 'text/csv', :content => report_csv_file }
-    mail(:to => @current_user.email, :reply_to => "noreply@reservebar.com", :subject => "Your orders report is ready.")
+    mail(:to => @current_user.email, :reply_to => "noreply@reservebar.com", :subject => "Your retailer orders report is ready.")
   end
 
   private

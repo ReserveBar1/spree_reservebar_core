@@ -18,7 +18,7 @@ Spree::Variant.class_eval do
   def product_cost_for_retailer(retailer)
     matching_product_cost = product_costs.select { |pc| pc.retailer == retailer }.first
 
-    if matching_product_cost.present?
+    if matching_product_cost.present? && matching_product_cost.cost_price > 0.00
       matching_product_cost.cost_price
     else
       "N.A."
@@ -31,7 +31,7 @@ Spree::Variant.class_eval do
     retailers ||= Spree::Retailer.all
 
     retailers.each do |retailer|
-      product_costs << product_cost_for_retailer(retailer).to_f
+      product_costs << product_cost_for_retailer(retailer)
     end
 
     product_costs

@@ -36,7 +36,7 @@ class ProductPricingReportMailer < ActionMailer::Base
 
       variants.each do |variant|
         ary = []
-        product_costs = variant.product_cost_for_retailers.map { |cost| number_to_currency(cost) }
+        product_costs = variant.product_cost_for_retailers.map { |cost| cost.is_a?(String) ? cost : number_to_currency(cost) }
         ary = [variant.sku] + product_costs
         csv << ary
       end

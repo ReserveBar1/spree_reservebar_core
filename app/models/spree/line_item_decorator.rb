@@ -6,6 +6,14 @@ Spree::LineItem.class_eval do
     (product_costs.empty? ? price : (price - product_costs.first.cost_price)) * quantity
   end
 
+  def update_costs
+    return if variant.blank?
+
+    product_costs = variant.product_costs.where(:retailer_id => order.retailer_id)
+    cost = product_costs.empty? ? 0 : product_costs.first.cost_price * quantity
+    update_attribute_without_callbacks(:product_cost_for_retailer, cost)
+  end
+
   # Handle case where the product cost for the retailer has not been defined yet
   def product_cost_for_retailer
     product_costs = variant.product_costs.where(:retailer_id => order.retailer_id)

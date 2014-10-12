@@ -65,7 +65,7 @@ Spree::Admin::OrdersController.class_eval do
     if new_retailer.present?
       begin
         @order.retailer = new_retailer
-        Spree::OrderMailer.retailer_removed_email(@order).deliver if (old_retailer)
+        Spree::OrderMailer.retailer_removed_email(@order, old_retailer).deliver if (old_retailer)
         Spree::OrderMailer.retailer_submitted_email(@order).deliver if (@order.retailer)
       rescue
         @order.retailer = old_retailer

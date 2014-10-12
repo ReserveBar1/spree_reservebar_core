@@ -65,11 +65,12 @@ Spree::OrderMailer.class_eval do
   end
 
   # removed from retailer
-  def retailer_removed_email(order, resend=false)
+  def retailer_removed_email(order, retailer, resend=false)
     @order = order
+    old_retailer = retailer
     subject = (resend ? "[#{t(:resend).upcase}] " : "")
     subject += "#{t('order_mailer.retailer_removed_email.subject')}"
-    mail(:to => order.retailer.email, :reply_to => "orders@reservebar.com", :bcc => Spree::Config[:mail_bcc], :subject => subject)
+    mail(:to => old_retailer.email, :reply_to => "orders@reservebar.com", :bcc => Spree::Config[:mail_bcc], :subject => subject)
   end
   
   # send email to reservebar.com that retailer has accepted an order

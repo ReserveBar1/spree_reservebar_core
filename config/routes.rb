@@ -27,6 +27,14 @@ Spree::Core::Engine.routes.prepend do
       get :routes
       get :edit_routes
       put :update_routes
+
+      get :pricing, :as => :pricing
+      get :pricing_export, :as => :pricing_export
+    end
+
+    resources :product_groups do
+      # get :pricing, :as => :pricing
+      get :pricing_export, :as => :pricing_exports
     end
 
     match '/get_retailer_data' => 'overview#get_retailer_data'
@@ -50,6 +58,8 @@ Spree::Core::Engine.routes.prepend do
 
     resources :brands
 
+    resources :company_costs
+
     resources :orders do
       member do
       	get :order_complete
@@ -62,6 +72,7 @@ Spree::Core::Engine.routes.prepend do
       	get :retailer_submitted_email
       	get :retailer_canceled_email
       	get :summary
+        post :update_retailer
       end
       resources :shipments do
         resources :shipment_details do
@@ -87,6 +98,17 @@ Spree::Core::Engine.routes.prepend do
     # Add a route to print a test label for the shipping methods
     resources :shipping_methods do
       get :print_test_label
+    end
+
+    resources :reports, :only => [:index, :show] do  # <= add this block
+      collection do
+        get :sales_total
+        post :sales_total
+        get :product_pricing
+        post :product_pricing
+        get :product_group_pricing
+        post :product_group_pricing
+      end
     end
 
 

@@ -1,0 +1,6 @@
+<% if @current_user.has_role?("admin") %>
+  <tr data-hook="reports_row">
+    <td><%= link_to "Product Pricing", product_pricing_admin_reports_url %></td>
+    <td>Retailer Product Pricing By SKU</td>
+  </tr>
+<% end %>

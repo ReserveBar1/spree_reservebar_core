@@ -1,0 +1,17 @@
+<% unless @order.state == 'canceled' %>
+  <p id='enable-change-retailer' style='font-size: 15px; text-decoration: underline; font-weight:bold; margin-left: 14px;'>Change Retailer?</p>
+
+  <div id='change_retailer' style="display: none;">
+    <fieldset>
+      <legend>Change Retailer</legend>
+      <%= form_tag( { controller: 'orders', action: 'update_retailer' }, method: 'post' ) do %>
+        <%= label_tag :target_retailer, "Change retailer from #{@current_retailer.name} to" %>
+        <%= select_tag :target_retailer_id, options_for_select(@retailers), include_blank: '' %>
+        <%= submit_tag 'Update Retailer' %>
+      <% end %>
+      <% if @order.accepted_at.present? %>
+        <p>NOTE: You can only choose from retailers that have the same merchant account as the original retailer because this order has already been accepted.</p>
+      <% end %>
+    </fieldset>
+  </div>
+<% end %>

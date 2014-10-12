@@ -1,0 +1,4 @@
+<% if @current_user.has_role?("admin") %>
+  <%= link_to 'Product Pricing Report', admin_product_pricing_export_url(@product) %>
+<% end %>
+

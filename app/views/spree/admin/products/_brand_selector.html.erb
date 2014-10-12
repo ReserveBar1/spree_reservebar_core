@@ -1,2 +1,4 @@
 <%= f.label :brand %><br />
 <%= f.collection_select :brand_id, Spree::Brand.all, :id, :title, {:include_blank => 'Select a Brand'} %>
+<br />
+<br />

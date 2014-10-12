@@ -5,7 +5,12 @@
 	query[:search][:created_at_less_than] = params[:search][:created_at_less_than] if params[:search][:created_at_less_than]
 	query[:search][:created_at_less_than] = params[:search][:completed_at_less_than] if params[:search][:completed_at_less_than]
 %>
-<%= link_to 'Orders report', '/admin/orders/export.csv?type=order&' + query.to_query %> / 
-<%= link_to 'Product sales report', '/admin/orders/export.csv?type=product&' + query.to_query %> / 
-<%= link_to 'P&L total report', '/admin/orders/export.csv?type=pl_total&' + query.to_query %> / 
-<%= link_to 'P&L detail report', '/admin/orders/export.csv?type=pl_detail&' + query.to_query %>
+
+<% if @current_user.has_role?("admin") %>
+  <%= link_to 'Orders Report', '/admin/orders/export?type=order&' + query.to_query %> / 
+  <%= link_to 'Profit & Loss Report', '/admin/orders/export?type=profit_and_loss&' + query.to_query %> /
+<% end %>
+<%= link_to 'Retailer Orders Report', '/admin/orders/export?type=retailers&' + query.to_query %> / 
+<%= link_to 'Product Sales Report', '/admin/orders/export?type=product&' + query.to_query %>
+
+

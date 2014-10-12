@@ -9,7 +9,9 @@ en:
     canceled: Cancelled
     delivered: Delivered
   retailers: Retailers
+  company_costs: Company Costs
   listing_retailers: "Listing Retailers"
+  listing_company_costs: "Listing Company Costs"
   new_retailer: "New Retailer"
   content: Content
   order_cancel: Cancel Order
@@ -37,6 +39,8 @@ en:
         subject:  "Your Gift Has Been Shipped"
     retailer_submitted_email:
         subject: "New Order Submitted"
+    retailer_removed_email:
+        subject: "ORDER REMOVED"
     retailer_canceled_email:
         subject: "Order Canceled"
     accepted_notification:

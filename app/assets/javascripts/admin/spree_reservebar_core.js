@@ -6,10 +6,14 @@
 $(function(){
   $('#product_engravable').change(function() {
     if( $(this).attr('checked') == 'checked') {
-      // Show engraving options
+      $('#engraving-properties').show();
     }
     else {
-      // Hide engraving options
+      $('#engraving-properties').hide();
     }
+  });
+  $('#enable-change-retailer').click(function() {
+    $('#enable-change-retailer').hide()
+    $('#change_retailer').show()
   });
 });

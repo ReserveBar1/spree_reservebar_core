@@ -63,18 +63,11 @@
       <tr data-hook="order_details_line_item_row">
         <td width="400"><%= sanitize(item.variant.product.name, :tags => %w(sup)) %> <%= "(" + variant_options(item.variant) + ")" unless item.variant .option_values.empty? %>
 		<% if item.preferred_customization %>
-			<%
-				engraving_font_style = engraving_item.variant.product.engraving_font_style.gsub('+', ' ')
-				engraving_font_link = "http://fonts.googleapis.com/css?family=" + engraving_font_style
-				style_text = "text-align:center; font-family: " + engraving_font_style + "; font-weight: 400; font-size: 12px;"
-			%>
-			<link href="<%= engraving_font_link %>" media="screen" rel="stylesheet" />
-
 			<div>
 				<b>Requires Custom Engraving</b>
 				<% customization_data = JSON.parse(item.preferred_customization) %>
 				<% customization_data.each do |key,value| %>
-					<div><%= "#{key.humanize}: " %><span style="<%= style_text %>"><%= "#{value}" %></span></div>
+					<div><%= "#{key.humanize}: " %><span><%= "#{value}" %></span></div>
 				<% end %>
 			</div>
 		<% end %>

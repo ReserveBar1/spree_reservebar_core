@@ -5,12 +5,12 @@ require 'spree/reservebar_core/order_splitter'
 require 'exceptions'
 
 Spree::CheckoutController.class_eval do
-  
+
   # Ajax update for coupon codes
   respond_to :js, :only => [:apply_coupon]
 
   before_filter :set_gift_params, :only => :update
-  
+
   # if we don't have a retailer that can ship alcohol to the state, we need to set a warning flag and throw the user back to the address state
   rescue_from Exceptions::NoRetailerShipsToStateError, :with => :rescue_from_no_retailer_ships_to_state_error
 
@@ -61,7 +61,6 @@ Spree::CheckoutController.class_eval do
     end
   end
 
-
   # Before we proceed to the delivery step we need to make a selection for the retailer based on the 
   # Shipping address selected earlier and the order contents
   # The retailer selector will return false if we cannot ship to the state.
@@ -95,19 +94,18 @@ Spree::CheckoutController.class_eval do
     end
   end
 
-
   def before_payment
     current_order.payments.destroy_all if request.put?
     current_order.bill_address = Spree::Address.default
   end
-  
+
   def before_address
     @order.bill_address ||= Spree::Address.default
     @order.ship_address ||= Spree::Address.default
     @order.gift.destroy if request.put? && @order.gift
     @order.gift_id = nil if request.put?
   end
-  
+
   def after_complete
     groupon_code = Spree::GrouponCode.where(order_id: @order.id).first
     groupon_code.update_attributes(used_at: Time.now) unless groupon_code.nil?
@@ -123,7 +121,7 @@ Spree::CheckoutController.class_eval do
       params[:order].delete(:gift_attributes)
     end
   end
-  
+
   # called if user attempts to place order in state where we don't ship alcohol to
   def rescue_from_no_retailer_ships_to_state_error
     flash[:notice] = "Thank you for attempting to make a purchase with ReserveBar. We appreciate your business; unfortunately we cannot accept your order. The reason for this is ReserveBar cannot currently deliver to your intended state due to that state's regulations.  
@@ -137,7 +135,7 @@ Spree::CheckoutController.class_eval do
     <br />In the meantime, if you have other gifting needs for delivery in other counties or states, we invite you to continue shopping. Delivery information is provided on every product detail page (just under the 'Add to Cart' button). You can also review our <a href='/pages/delivery'>delivery map</a>. We apologize for the inconvenience and thank you again for gifting with ReserveBar.".html_safe
     redirect_to cart_path
   end
-  
+
   # Retailer selector did not find a retailer that can ship the entire order, but there are retailers shipping somethign to the state
   # Need to run search to see if there is a posible order split and what messaging to display
   def rescue_from_no_retailer_can_ship_full_order_error
@@ -176,13 +174,13 @@ Spree::CheckoutController.class_eval do
     end
     redirect_to cart_path
   end
-  
+
   # called if user attempts to place order without accepting the legal drinking age
   def rescue_from_not_legal_drinking_age_error
     flash[:notice] = "You need to be of legal drinking age to place an order."
     render :edit
   end
-  
+
   # Called if the user enters an address where tax and zip do not match or other taxcloud errors
   def rescue_from_taxcloud_error(exception)
     begin
@@ -192,12 +190,10 @@ Spree::CheckoutController.class_eval do
     end
     redirect_to '/checkout/address'
   end
-  
-    
-    def rescue_from_spree_gateway_error(exception)
-      flash[:error] = t(:spree_gateway_error_flash_for_checkout_detailed) + exception.message
-      render :edit
-    end
-    
-  
+
+  def rescue_from_spree_gateway_error(exception)
+    flash[:error] = t(:spree_gateway_error_flash_for_checkout_detailed) + exception.message
+    render :edit
+  end
+
 end

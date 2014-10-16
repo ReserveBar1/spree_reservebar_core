@@ -33,7 +33,7 @@ class ProductSalesReportMailer < ActionMailer::Base
             order.email,
             order.ship_address.state.abbr,
             line_item.product.nil? ? nil : strip_tags(line_item.product.name).gsub(/&quot;|,/, ''),
-            line_item.product.nil? ? nil : line_item.product.partner.name,
+            line_item.product.nil? ? nil : line_item.product.partner.try(:name),
             line_item.product.nil? ? nil : line_item.product.brand.title,
             line_item.quantity,
             (line_items.size > 1 ? "Yes" : "No"),

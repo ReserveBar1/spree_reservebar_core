@@ -18,3 +18,10 @@ Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
                      :insert_top => "body",
                      :partial => "spree/floodlight_tags/belvedere/address",
                      :disabled => false)
+
+# Insert on Confirmation page, if there are Belvedere products
+Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
+                     :name => "floodlight_belvedere_confirmation",
+                     :insert_top => "body",
+                     :partial => "spree/floodlight_tags/belvedere/confirmation",
+                     :disabled => false)

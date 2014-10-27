@@ -31,7 +31,7 @@
     <td valign="top" align="left"><br /></td>
     <td valign="top" colspan="4"><table width="100%">
       <tbody><tr>
-        <td width="100%" valign="top" align="left" style="margin:0;font: 11px Georgia, 'Times New Roman', Times, serif; font-weight:normal; text-justify:distribute"><p>Dear <%= @order.retailer.name %>:</p>
+        <td width="100%" valign="top" align="left" style="margin:0;font: 11px Georgia, 'Times New Roman', Times, serif; font-weight:normal; text-justify:distribute"><p>Dear <%= @old_retailer.name %>:</p>
           <p>RE: Order Number: <a href="http://<%= Spree::Config[:site_url] %>/admin/orders/<%= @order.number %>"><%= @order.number %></a></p>
           <p>Please note that this order has been removed from your list of open orders due to an out of stock situation or inability to fulfill the order within our desginated shipping window. As such, you are not responsible for fulfilling this order at the present time.</p>
           <p>If you have any questions, please contact ReserveBar at <a href="mailto:orders@reservebar.com">orders@reservebar.com</a>.</p>

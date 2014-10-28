@@ -12,6 +12,13 @@ Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
                      :partial => "spree/floodlight_tags/belvedere/products",
                      :disabled => false)
 
+# Insert on cart page, if there are Belvedere products
+Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
+                     :name => "floodlight_belvedere_cart",
+                     :insert_top => "body",
+                     :partial => "spree/floodlight_tags/belvedere/cart",
+                     :disabled => false)
+
 # Insert on Address page, if there are Belvedere products
 Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
                      :name => "floodlight_belvedere_address",

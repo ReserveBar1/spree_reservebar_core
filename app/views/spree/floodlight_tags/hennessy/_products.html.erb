@@ -1,0 +1,27 @@
+<% if controller.controller_name == "products" && controller.action_name == "show" %>
+  <% if @product.taxons.map(&:name).include? 'Hennessy'%>
+    <%
+      path = request.fullpath
+      if path[0] == '/' && path[1] == '/'
+        path = path[1..path.length]
+      end
+      full_url = request.protocol + request.host_with_port + path
+    %>
+    <%= "<!--
+    Start of DoubleClick Floodlight Tag: Please do not remove
+    Activity name of this tag: PRD_ ReserveBarHennessyPP_2014-10-27
+    URL of the webpage where the tag is expected to be placed: http://http://www.reservebar.com/products/hennessyproducts
+    This tag must be placed between the <body> and </body> tags, as close as possible to the opening tag.
+    Creation Date: 10/27/2014
+    -->".html_safe %>
+    <script type="text/javascript">
+    var axel = Math.random() + "";
+    var a = axel * 10000000000000;
+    document.write('<iframe src="http://3988497.fls.doubleclick.net/activityi;src=3988497;type=prd_0618;cat=prd_r0;u8=<%= full_url %>;ord=' + a + '?" width="1" height="1" frameborder="0" style="display:none"></iframe>');
+    </script>
+    <noscript>
+    <iframe src="http://3988497.fls.doubleclick.net/activityi;src=3988497;type=prd_0618;cat=prd_r0;u8=[Page URL];ord=1?" width="1" height="1" frameborder="0" style="display:none"></iframe>
+    </noscript>
+    <%= "<!-- End of DoubleClick Floodlight Tag: Please do not remove -->".html_safe %>
+  <% end %>
+<% end %>

@@ -21,6 +21,7 @@ class RetailersReportMailer < ActionMailer::Base
   def report_csv_file
     column_names = ["Order Number",
                     "Order Date",
+                    "Retailer Name",
                     "Accepted Date",
                     "Product Name",
                     "Number of Bottles",
@@ -47,6 +48,7 @@ class RetailersReportMailer < ActionMailer::Base
 
         csv << [order.number,
                 (order.completed_at.nil? ? order.created_at : order.completed_at).to_date,
+                order.try(:retailer).try(:name),
                 order.accepted_at.nil? ? nil : order.accepted_at.to_date,
                 names_array.empty? ? nil : strip_tags(names_array.join('|')).gsub(/&quot;|,/, ''),
                 order.number_of_bottles,

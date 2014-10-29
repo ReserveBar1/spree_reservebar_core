@@ -24,7 +24,17 @@ module Spree
         order.shipping_categories.each do |shipping_category_id|
           query << "ships_#{Spree::ShippingCategory.find(shipping_category_id).name.downcase.gsub(' ','_')}_to like :state"
         end
-        retailers = Spree::Retailer.active.where(query.join(' and '),  :state => "%#{state.abbr}%")
+        can_ship_retailers = Spree::Retailer.active.where(query.join(' and '),  :state => "%#{state.abbr}%")
+
+        # Remove retailers who have a zero price for any item in the order
+        items = order.line_items
+        no_price_retailers = []
+        can_ship_retailers.each do |retailer|
+          zeros = retailer.product_costs.where(variant_id: items.map(&:variant_id)).map(&:cost_price).select { |a| a == 0 }
+          no_price_retailers << retailer.id unless zeros.empty?
+        end
+        retailers = can_ship_retailers.select { |r| !no_price_retailers.include? r.id }
+
         # if we have more than one retailer that can ship to the state, pick the one that is located in the state, otherwise, just pick random
         if retailers.count > 1
           begin

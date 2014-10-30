@@ -13,7 +13,6 @@
       end
       quantities = quantities.sum
       product_names = product_names.join('|')
-      binding.pry
       ship_city = @order.ship_address.city
       ship_state = @order.ship_address.state.abbr
       ship_country = @order.ship_address.country.iso

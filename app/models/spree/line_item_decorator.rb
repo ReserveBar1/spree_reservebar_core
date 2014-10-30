@@ -19,6 +19,7 @@ Spree::LineItem.class_eval do
     product_costs = variant.product_costs.where(:retailer_id => order.retailer_id)
     cost = product_costs.empty? ? 0 : product_costs.first.cost_price * quantity
     update_attribute_without_callbacks(:product_cost_for_retailer, cost)
+    return cost
   end
 
   # Calulate the profit for a given line item based on the retailer's product costs

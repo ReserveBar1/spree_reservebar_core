@@ -79,11 +79,9 @@ class ProfitAndLoss < ActiveRecord::Base
   end
 
   def set_net_retailer_disbursements
-    sum = retailer_bottle_price +
-            sales_tax +
-            corrugated_box_fee +
-            credit_card_fees
-    sum.to_f
+    net = retailer_bottle_price + sales_tax +
+            corrugated_box_fee - credit_card_fees
+    net.to_f
   end
 
   def set_gift_packaging_cost

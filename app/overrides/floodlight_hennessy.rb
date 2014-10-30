@@ -1,34 +1,34 @@
-# Insert on V.S Deluxe Edition by Shepard Fairey product page
+# Insert on Hennessy brand page
 Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
-                     :name => "floodlight_hennessy_SF_deluxe_product",
+                     :name => "floodlight_hennessy_brand",
                      :insert_top => "body",
-                     :partial => "spree/floodlight_tags/hennessy/SF_deluxe_product",
+                     :partial => "spree/floodlight_tags/hennessy/brand",
                      :disabled => false)
 
-# Insert on V.S Limited Edition by Shepard Fairey product page
+# Insert on Hennessy product pages
 Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
-                     :name => "floodlight_hennessy_SF_limited_product",
+                     :name => "floodlight_hennessy_products",
                      :insert_top => "body",
-                     :partial => "spree/floodlight_tags/hennessy/SF_limited_product",
+                     :partial => "spree/floodlight_tags/hennessy/products",
                      :disabled => false)
 
-# Insert at confirmation for V.S Shepard Fairey products
+# Insert on Cart page, if there are Hennessy products
 Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
-                     :name => "floodlight_hennessy_SF_cart",
+                     :name => "floodlight_hennessy_cart",
                      :insert_top => "body",
-                     :partial => "spree/floodlight_tags/hennessy/SF_cart",
+                     :partial => "spree/floodlight_tags/hennessy/cart",
                      :disabled => false)
 
-# Insert at checkout for V.S Shepard Fairey products
+# Insert on Address page, if there are Hennessy products
 Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
-                     :name => "floodlight_hennessy_SF_checkout",
+                     :name => "floodlight_hennessy_address",
                      :insert_top => "body",
-                     :partial => "spree/floodlight_tags/hennessy/SF_checkout",
+                     :partial => "spree/floodlight_tags/hennessy/address",
                      :disabled => false)
 
-# Insert at confirmation for V.S Shepard Fairey products
+# Insert on Confirmation page, if there are Hennessy products
 Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
-                     :name => "floodlight_hennessy_SF_confirmation",
+                     :name => "floodlight_hennessy_confirmation",
                      :insert_top => "body",
-                     :partial => "spree/floodlight_tags/hennessy/SF_confirmation",
+                     :partial => "spree/floodlight_tags/hennessy/confirmation",
                      :disabled => false)

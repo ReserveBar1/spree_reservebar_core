@@ -31,13 +31,19 @@ class ProductPricingReportMailer < ActionMailer::Base
 
   def admin_report
     CSV.generate do |csv|
-      csv << ["SKU"] + retailer_states
-      csv << [" "]   + retailer_names
+      csv << [' ', ' ', ' ', ' '] + retailer_states
+      csv << ['Product Name', 'Website Price', 'Brand', 'SKU'] + retailer_names
 
       variants.each do |variant|
         ary = []
         product_costs = variant.product_cost_for_retailers.map { |cost| cost.is_a?(String) ? cost : number_to_currency(cost) }
-        ary = [variant.sku] + product_costs
+        ary = [
+          variant.name,
+          number_to_currency(variant.price),
+          variant.product.try(:brand).try(:title),
+          variant.sku
+        ]
+        ary += product_costs
         csv << ary
       end
     end

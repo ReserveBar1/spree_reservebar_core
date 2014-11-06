@@ -1,5 +1,12 @@
 <% if controller.controller_name == "products" && controller.action_name == "show" %>
   <% if @product.taxons.map(&:name).include? 'Belvedere'%>
+    <%
+      path = request.fullpath
+      if path[0] == '/' && path[1] == '/'
+        path = path[1..path.length]
+      end
+      full_url = request.protocol + request.host_with_port + path
+    %>
     <%= "<!--
     Start of DoubleClick Floodlight Tag: Please do not remove
     Activity name of this tag: PRD_ReserveBarBelvedereProductPages_20140919
@@ -10,7 +17,7 @@
     <script type="text/javascript">
     var axel = Math.random() + "";
     var a = axel * 10000000000000;
-    document.write('<iframe src="https://3993695.fls.doubleclick.net/activityi;src=3993695;type=prd_2014;cat=Reser0;u1=[Page URL];ord=' + a + '?" width="1" height="1" frameborder="0" style="display:none"></iframe>');
+    document.write('<iframe src="https://3993695.fls.doubleclick.net/activityi;src=3993695;type=prd_2014;cat=Reser0;u1=<%= full_url %>;ord=' + a + '?" width="1" height="1" frameborder="0" style="display:none"></iframe>');
     </script>
     <noscript>
     <iframe src="https://3993695.fls.doubleclick.net/activityi;src=3993695;type=prd_2014;cat=Reser0;u1=[Page URL];ord=1?" width="1" height="1" frameborder="0" style="display:none"></iframe>

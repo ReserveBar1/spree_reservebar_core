@@ -1,1 +1,5 @@
-<script src="//assets.adobedtm.com/d1fb9c3202ec5d5bd54d6595ec32a7cc936ff6c4/satelliteLib-502ecfd71d113cf2e7653adc8810db976790ecff-staging.js"></script>
+<% if ENV['RAILS_ENV'] == 'production' %>
+  <script src="//assets.adobedtm.com/d1fb9c3202ec5d5bd54d6595ec32a7cc936ff6c4/satelliteLib-502ecfd71d113cf2e7653adc8810db976790ecff.js"></script>
+<% else %>
+  <script src="//assets.adobedtm.com/d1fb9c3202ec5d5bd54d6595ec32a7cc936ff6c4/satelliteLib-502ecfd71d113cf2e7653adc8810db976790ecff-staging.js"></script>
+<% end %>

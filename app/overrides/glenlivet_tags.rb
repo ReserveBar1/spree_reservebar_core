@@ -40,3 +40,16 @@ Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
                      :partial => "spree/other_tags/glenlivet/cart_footer",
                      :disabled => false)
 
+# Insert on Confirmation page, if there are Glenlivet products (header)
+Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
+                     :name => "floodlight_glenlivet_confirmation_header",
+                     :insert_top => "head",
+                     :partial => "spree/other_tags/glenlivet/confirmation_header",
+                     :disabled => false)
+
+# Insert on Confirmation page, if there are Glenlivet products (footer)
+Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
+                     :name => "floodlight_glenlivet_confirmation_footer",
+                     :insert_bottom => "body",
+                     :partial => "spree/other_tags/glenlivet/confirmation_footer",
+                     :disabled => false)

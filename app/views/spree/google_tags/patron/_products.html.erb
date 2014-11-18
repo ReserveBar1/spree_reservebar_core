@@ -1,0 +1,27 @@
+<% if controller.controller_name == "products" && controller.action_name == "show" %>
+  <% if @product.taxons.map(&:name).include? 'Patrón' %>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-52346511-8', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+    <script type="text/javascript">
+      $(function() {
+        $('#add-to-cart-button').click(function(){
+          ga('Send','Event','Add_To_Cart',"<%= @product.name.gsub(' ','_') %>",'Click');
+        });
+        $('#checkout-link').click(function(){
+          ga('Send','Event','See_Cart',"<%= @product.name.gsub(' ','_') %>",'Click');
+        });
+        $('#continue-shopping').click(function(){
+          ga('Send','Event','Continue_Shopping', "<%= @product.name.gsub(' ','_') %>", 'Click');
+        });
+      });
+    </script>
+  <% end %>
+<% end %>

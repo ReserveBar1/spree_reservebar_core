@@ -18,6 +18,9 @@
         $('#checkout-link').click(function(){
           ga('Send','Event','See_Cart',"<%= @product.name.gsub(' ','_') %>",'Click');
         });
+        $('#continue-shopping').click(function(){
+          ga('Send','Event','Continue_Shopping', "<%= @product.name.gsub(' ','_') %>", 'Click');
+        });
       });
     </script>
   <% end %>

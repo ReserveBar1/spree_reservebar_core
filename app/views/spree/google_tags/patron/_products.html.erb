@@ -15,6 +15,9 @@
         $('#add-to-cart-button').click(function(){
           ga('Send','Event','Add_To_Cart',"<%= @product.name.gsub(' ','_') %>",'Click');
         });
+        $('#checkout-link').click(function(){
+          ga('Send','Event','See_Cart',"<%= @product.name.gsub(' ','_') %>",'Click');
+        });
       });
     </script>
   <% end %>

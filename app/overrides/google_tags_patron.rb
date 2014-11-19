@@ -11,3 +11,10 @@ Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
                      :insert_bottom => "body",
                      :partial => "spree/google_tags/patron/products",
                      :disabled => false)
+
+# Insert on Cart page, if there are Patron products
+Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
+                     :name => "google_patron_cart",
+                     :insert_top => "body",
+                     :partial => "spree/google_tags/patron/cart",
+                     :disabled => false)

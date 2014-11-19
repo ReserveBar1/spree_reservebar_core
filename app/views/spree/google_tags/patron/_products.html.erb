@@ -12,6 +12,7 @@
     </script>
     <script type="text/javascript">
       $(function() {
+        _gaq.push(['_trackPageview', 'Product_Homepage View']);
         $('#add-to-cart-button').click(function(){
           _gaq.push('Send','Event','Add_To_Cart',"<%= @product.name.gsub(' ','_') %>",'Click');
         });

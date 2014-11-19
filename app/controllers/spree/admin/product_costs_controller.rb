@@ -33,8 +33,12 @@ module Spree
         if params[:file].blank?
           flash.notice = "Please select a file to upload"
         else
-          Spree::ProductCost.import(params[:file].tempfile)
-          flash.notice = "Your Retailer Costs have been updated"
+          import_errors = Spree::ProductCost.import(params[:file].tempfile)
+          if import_errors.empty?
+            flash.notice = "Your Retailer Costs have been updated"
+          else
+            flash[:error] = import_errors.html_safe
+          end
         end
 
         redirect_to admin_retailer_product_costs_path(params[:retailer_id])

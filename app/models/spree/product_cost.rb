@@ -21,7 +21,7 @@ module Spree
         unless h.values.uniq == [nil]
           begin
             retailer = Spree::Retailer.find_by_name(h["retailer_name"])
-            variant  = Spree::Variant.find_by_sku(h["sku"])
+            variant  = Spree::Variant.where(deleted_at: nil).find_by_sku(h["sku"])
             product_cost = Spree::ProductCost.find_by_retailer_id_and_variant_id(retailer.id, variant.id) if retailer.present? && variant.present?
 
             if product_cost.present?

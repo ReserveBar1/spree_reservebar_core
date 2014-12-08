@@ -1,0 +1,60 @@
+<% if controller.controller_name == "orders" && controller.action_name == "edit" %>
+  <%
+    product_owners = Array.new
+    @order.line_items.map { |i| product_owners << i.product.taxons.map(&:name) }
+    event_ids = []
+  %>
+  <% if product_owners.flatten.uniq.include? 'Jameson' %>
+    <%
+      @order.line_items.each do |item|
+        case item.product.name
+        when 'Jameson Rarest Vintage'
+          item.quantity.times do
+            event_ids << 6019303177961
+          end
+        when 'Jameson 18 Year Old Limited Reserve'
+          item.quantity.times do
+            event_ids << 6019303170961
+          end
+        when 'Jameson 12 Year Old Special Reserve'
+          item.quantity.times do
+            event_ids << 6019303147561
+          end
+        when 'Jameson Gold Reserve'
+          item.quantity.times do
+            event_ids << 6019303162761
+          end
+        when 'Jameson Black Barrel'
+          item.quantity.times do
+            event_ids << 6019303139761
+          end
+        when 'Jameson Irish Whiskey'
+          item.quantity.times do
+            event_ids << 6019196353361
+          end
+        end
+      end
+    %>
+    <script>(function() {
+      var _fbq = window._fbq || (window._fbq = []);
+      if (!_fbq.loaded) {
+        var fbds = document.createElement('script');
+        fbds.async = true;
+        fbds.src = '//connect.facebook.net/en_US/fbds.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(fbds, s);
+        _fbq.loaded = true;
+      }
+    })();
+    window._fbq = window._fbq || [];
+    <% event_ids.each do |event_id| %>
+      window._fbq.push(['track', '<%= event_id %>', {'value':'0.00','currency':'USD'}]);
+    <% end %>
+    </script>
+    <noscript>
+      <% event_ids.each do |event_id| %>
+        <img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?ev=<%= event_id %>&amp;cd[value]=0.00&amp;cd[currency]=USD&amp;noscript=1" />
+      <% end %>
+    </noscript>
+  <% end %>
+<% end %>

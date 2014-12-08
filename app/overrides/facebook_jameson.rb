@@ -4,3 +4,10 @@ Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
                      :insert_top => "body",
                      :partial => "spree/facebook_tags/jameson/brand",
                      :disabled => false)
+
+# Insert on Confirmation page, if there are Jameson products
+Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
+                     :name => "facebook_jameson_confirmation",
+                     :insert_top => "body",
+                     :partial => "spree/facebook_tags/jameson/confirmation",
+                     :disabled => false)

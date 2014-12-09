@@ -13,15 +13,15 @@
     <script>document.write('<s'+'cript language="JavaScript" src="http://jact.atdmt.com/jaction/Post_AgeVer_ReserveBar_ProdPage"></s'+'cript>')</script><noscript><iframe src="http://iact.atdmt.com/iaction/Post_AgeVer_ReserveBar_ProdPage" width="1" height="1" frameborder="0" scrolling="No" marginheight="0" marginwidth="0" topmargin="0" leftmargin="0"></iframe></noscript>
     <script type="text/javascript">
       $(function() {
-        _gaq.push(['_trackPageview', 'Product_Homepage View']);
+        ga('send', 'pageview', 'Product_Homepage View');
         $('#add-to-cart-button').click(function(){
-          _gaq.push('Send','Event','Add_To_Cart',"<%= @product.name.gsub(' ','_') %>",'Click');
+          ga('send','event','Add_To_Cart',"<%= @product.name.gsub(' ','_') %>",'Click');
         });
         $('#checkout-link').click(function(){
-          _gaq.push('Send','Event','See_Cart',"<%= @product.name.gsub(' ','_') %>",'Click');
+          ga('send','event','See_Cart',"<%= @product.name.gsub(' ','_') %>",'Click');
         });
         $('#continue-shopping').click(function(){
-          _gaq.push('Send','Event','Continue_Shopping', "<%= @product.name.gsub(' ','_') %>", 'Click');
+          ga('send','event','Continue_Shopping', "<%= @product.name.gsub(' ','_') %>", 'Click');
         });
       });
     </script>

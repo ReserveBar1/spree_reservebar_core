@@ -1,5 +1,9 @@
 <% if controller.controller_name == "pages" && controller.action_name == "show" %>
-<% if @page.path == '/products/veev-spirit' || @page.path == '/products/veev-spirit-flask-gift-set' %>
+  <% if @page.path == '/products/veev-spirit' || @page.path == '/products/veev-spirit-flask-gift-set' %>
+    <%= render partial: 'spree/floodlight_tags/veev/retarget_tag' %>
+  <% end %>
+<% elsif controller.controller_name == "products" && controller.action_name == "show" %>
+  <% if @product.permalink == "gilt-veev-spirit-flask-gift-set" %>
     <%= render partial: 'spree/floodlight_tags/veev/retarget_tag' %>
   <% end %>
 <% end %>

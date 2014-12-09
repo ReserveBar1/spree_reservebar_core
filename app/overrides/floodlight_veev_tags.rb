@@ -5,7 +5,7 @@ Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
                      :partial => "spree/floodlight_tags/veev/brand",
                      :disabled => false)
 
-# Insert on Glenmorangie product pages
+# Insert on VEEV product pages
 Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
                      :name => "floodlight_veev_products",
                      :insert_top => "body",

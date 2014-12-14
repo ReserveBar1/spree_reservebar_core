@@ -6,7 +6,7 @@ class ShippingReportMailer < ActionMailer::Base
     variant = Spree::Variant.where(deleted_at: nil).find_by_sku(sku)
     order_ids = Spree::LineItem.where(variant_id: variant.id).map(&:order_id)
     @unshipped_orders = Spree::Order.where(id: order_ids, state: 'complete',
-      shipment_state: 'pending').includes(:ship_address)
+      shipment_state: 'pending').includes(:ship_address, :gift)
 
     attachments["#{sku}_shipping_report.csv"] = { mime_type: 'text/csv',
       content: report_csv_file }
@@ -28,12 +28,16 @@ class ShippingReportMailer < ActionMailer::Base
       "Recipient City",
       "Recipient State",
       "Recipient Zipcode",
-      "Recipient Phone"
+      "Recipient Phone",
+      "Giftee Name",
+      "Giftee Email",
+      "Giftee Phone"
     ]
 
     CSV.generate do |csv|
       csv << column_names
       @unshipped_orders.each do |order|
+        gift = order.gift
         csv << [
           order.completed_at.strftime('%e %b %Y'),
           order.number,
@@ -44,7 +48,10 @@ class ShippingReportMailer < ActionMailer::Base
           order.ship_address.city,
           order.ship_address.state.abbr,
           order.ship_address.zipcode,
-          order.ship_address.phone
+          order.ship_address.phone,
+          (gift.present?) ? "#{gift.first_name} #{gift.last_name}": '',
+          (gift.present?) ? gift.email : '',
+          (gift.present?) ? gift.phone : ''
         ]
       end
     end

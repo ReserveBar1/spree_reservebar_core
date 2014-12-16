@@ -21,6 +21,7 @@ class ShippingReportMailer < ActionMailer::Base
     column_names = [
       "Completed At",
       "Order Number",
+      "Accepted At",
       "Purchaser Email",
       "Recipient Name",
       "Recipient Address1",
@@ -38,9 +39,11 @@ class ShippingReportMailer < ActionMailer::Base
       csv << column_names
       @unshipped_orders.each do |order|
         gift = order.gift
+        accepted_at = order.accepted_at
         csv << [
           order.completed_at.strftime('%e %b %Y'),
           order.number,
+          (accepted_at.present?) ? accepted_at.strftime('%e %b %Y') : '',
           order.email,
           "#{order.ship_address.firstname} #{order.ship_address.lastname}",
           order.ship_address.address1,

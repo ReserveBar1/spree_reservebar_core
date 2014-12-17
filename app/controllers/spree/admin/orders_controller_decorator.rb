@@ -81,6 +81,7 @@ Spree::Admin::OrdersController.class_eval do
   end
 
   def export
+    params.merge!(:retailer_id => @current_retailer.id) if @current_retailer
     Delayed::Job.enqueue ReportCreationJob.new(current_user.id, params)
     flash.notice = "Your report is being created. It will be emailed to you when it is ready."
     redirect_back_or_default(request.env["HTTP_REFERER"])

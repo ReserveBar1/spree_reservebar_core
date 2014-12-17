@@ -29,17 +29,19 @@ class ReportCreationJob < Struct.new(:current_user_id, :params)
       @orders = Spree::Order.metasearch(params['search']).includes(@includes)
     end
 
-    if params['type'] == 'order'
+    if params['retailer_id']
+      order_ids = @orders.select('spree_orders.id').joins("INNER JOIN spree_orders_retailers on spree_orders_retailers.order_id = spree_orders.id and spree_orders_retailers.retailer_id = #{params['retailer_id']}").map(&:id)
+    else
       order_ids = @orders.map(&:id)
+    end
+
+    if params['type'] == 'order'
       OrdersReportMailer.send_report(order_ids, current_user_id, params['search']).deliver
     elsif params['type'] == 'product'
-      order_ids = @orders.map(&:id)
       ProductSalesReportMailer.send_report(order_ids, current_user_id, params['search']).deliver
     elsif params['type'] == 'profit_and_loss'
-      order_ids = @orders.map(&:id)
       ProfitAndLossReportMailer.send_report(order_ids, current_user_id, params['search']).deliver
     elsif params['type'] == 'retailers'
-      order_ids = @orders.map(&:id)
       RetailersReportMailer.send_report(order_ids, current_user_id, params['search']).deliver
     elsif params['type'] == 'product_pricing'
       ProductPricingReportMailer.send_report(current_user_id).deliver

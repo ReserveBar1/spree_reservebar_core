@@ -4,8 +4,8 @@ class ProductPricingReportMailer < ActionMailer::Base
 
   default :from => "noreply@reservebar.com"
 
-  def send_report(user)
-    @current_user = user
+  def send_report(user_id)
+    @current_user = Spree::User.find user_id
 
     attachments["product_pricing_report.csv"] = { :mime_type => 'text/csv', :content => report_csv_file }
     mail(:to => @current_user.email, :reply_to => "noreply@reservebar.com", :subject => "Your product pricing report is ready.")

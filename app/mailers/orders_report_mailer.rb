@@ -4,9 +4,9 @@ class OrdersReportMailer < ActionMailer::Base
 
   default :from => "noreply@reservebar.com"
 
-  def send_report(orders, user, search_params)
-    @current_user = user
-    @orders = orders
+  def send_report(order_ids, user_id, search_params)
+    @current_user = Spree::User.find user_id
+    @orders = Spree::Order.where(id: order_ids)
     @orders.each do |order|
       order.build_profit_and_loss if order.profit_and_loss.nil?
     end

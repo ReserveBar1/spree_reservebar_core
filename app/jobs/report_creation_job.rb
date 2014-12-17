@@ -1,4 +1,4 @@
-class ReportCreationJob < Struct.new(:current_user, :params)
+class ReportCreationJob < Struct.new(:current_user_id, :params)
 
   def perform
     params['search'] ||= {}
@@ -30,15 +30,19 @@ class ReportCreationJob < Struct.new(:current_user, :params)
     end
 
     if params['type'] == 'order'
-      OrdersReportMailer.send_report(@orders, current_user, params['search']).deliver
+      order_ids = @orders.map(&:id)
+      OrdersReportMailer.send_report(order_ids, current_user_id, params['search']).deliver
     elsif params['type'] == 'product'
-      ProductSalesReportMailer.send_report(@orders, current_user, params['search']).deliver
+      order_ids = @orders.map(&:id)
+      ProductSalesReportMailer.send_report(order_ids, current_user_id, params['search']).deliver
     elsif params['type'] == 'profit_and_loss'
-      ProfitAndLossReportMailer.send_report(@orders, current_user, params['search']).deliver
+      order_ids = @orders.map(&:id)
+      ProfitAndLossReportMailer.send_report(order_ids, current_user_id, params['search']).deliver
     elsif params['type'] == 'retailers'
-      RetailersReportMailer.send_report(@orders, current_user, params['search']).deliver
+      order_ids = @orders.map(&:id)
+      RetailersReportMailer.send_report(order_ids, current_user_id, params['search']).deliver
     elsif params['type'] == 'product_pricing'
-      ProductPricingReportMailer.send_report(current_user).deliver
+      ProductPricingReportMailer.send_report(current_user_id).deliver
     end
   end
 

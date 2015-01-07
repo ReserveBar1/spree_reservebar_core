@@ -36,13 +36,13 @@ class ReportCreationJob < Struct.new(:current_user_id, :params)
     end
 
     if params['type'] == 'order'
-      OrdersReportMailer.send_report(order_ids, current_user_id, params['search']).deliver
+      OrdersReportMailer.send_report(order_ids, current_user_id).deliver
     elsif params['type'] == 'product'
-      ProductSalesReportMailer.send_report(order_ids, current_user_id, params['search']).deliver
+      ProductSalesReportMailer.send_report(order_ids, current_user_id).deliver
     elsif params['type'] == 'profit_and_loss'
-      ProfitAndLossReportMailer.send_report(order_ids, current_user_id, params['search']).deliver
+      ProfitAndLossReportMailer.send_report(order_ids, current_user_id).deliver
     elsif params['type'] == 'retailers'
-      RetailersReportMailer.send_report(order_ids, current_user_id, params['search']).deliver
+      RetailersReportMailer.send_report(order_ids, current_user_id).deliver
     elsif params['type'] == 'product_pricing'
       ProductPricingReportMailer.send_report(current_user_id).deliver
     end

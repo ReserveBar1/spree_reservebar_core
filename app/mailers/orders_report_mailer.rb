@@ -29,7 +29,8 @@ class OrdersReportMailer < ActionMailer::Base
       "Order Number",
       "Order Date",
       "Accepted Date",
-      "Product Name",
+      "Product Name(s)",
+      "Brand Name(s)",
       "Number of Bottles",
       "Website Product Price",
       "Total Bottle Price",
@@ -63,18 +64,20 @@ class OrdersReportMailer < ActionMailer::Base
         profit_and_loss = order.profit_and_loss
         retailer = order.retailer
 
-        names_array = line_items.map{|line_item|line_item.product.try(:name)}.compact
-        prices_array = line_items.map{|line_item|line_item.price}.compact
-        prices_array = prices_array.map { |p| number_to_currency(p) } if prices_array.present?
+        product_names = line_items.map{ |li| li.product.try(:name) }.compact
+        brand_names = line_items.map{ |li| li.product.brand.title }.compact
+        prices = line_items.map{ |li| li.price }.compact
+        prices = prices.map { |p| number_to_currency(p) } if prices.present?
         shipping_charge_uplift = order.shipping_method.calculator.preferred_uplift rescue 0.0
 
         csv << [
           order.number,
           (order.completed_at.nil? ? order.created_at : order.completed_at).to_date,
           order.accepted_at.nil? ? nil : order.accepted_at.to_date,
-          names_array.empty? ? nil : strip_tags(names_array.join('|')).gsub(/&quot;|,/, ''),
+          product_names.empty? ? nil : strip_tags(product_names.join('|')).gsub(/&quot;|,/, ''),
+          brand_names.empty? ? nil : strip_tags(brand_names.join('|')).gsub(/&quot;|,/, ''),
           order.number_of_bottles,
-          prices_array.empty? ? nil : prices_array.join('|'),
+          prices.empty? ? nil : prices.join('|'),
           number_to_currency(profit_and_loss.total_bottle_price),
           number_to_currency(profit_and_loss.gift_packaging_charge),
           number_to_currency(profit_and_loss.gift_packaging_cost),

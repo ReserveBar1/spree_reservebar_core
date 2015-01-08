@@ -41,7 +41,8 @@ class ProductSalesReportMailer < ActionMailer::Base
       "Promo",
       "Total promo discount($)",
       "Retailer",
-      "ProductCostForRetailer"
+      "ProductCostForRetailer",
+      "Is a gift?"
     ]
 
     CSV.generate do |csv|
@@ -71,7 +72,8 @@ class ProductSalesReportMailer < ActionMailer::Base
           order.adjustments.eligible.promotion.first.try(:label),
           number_to_currency(order.adjustments.eligible.promotion.first.try(:amount)),
           order.retailer.try(:name),
-          number_to_currency(line_item.product_cost_for_retailer)
+          number_to_currency(line_item.product_cost_for_retailer),
+          order.is_gift? ? 'Yes' : ''
         ]
         end
       end

@@ -49,7 +49,8 @@ class OrdersReportMailer < ActionMailer::Base
       "Shipment Status",
       "Retailer",
       "Ship-to State",
-      "Customer email address"
+      "Customer email address",
+      "Is a gift?"
     ]
 
     CSV.generate do |csv|
@@ -91,7 +92,8 @@ class OrdersReportMailer < ActionMailer::Base
           order.shipment_state,
           retailer ? retailer.name : '',
           order.ship_address ? order.ship_address.state.abbr : '',
-          order.email
+          order.email,
+          order.is_gift? ? 'Yes' : ''
         ]
       end
     end

@@ -31,6 +31,7 @@ class OrdersReportMailer < ActionMailer::Base
       "Accepted Date",
       "Product Name(s)",
       "Brand Name(s)",
+      "Brand Owner(s)",
       "Number of Bottles",
       "Website Product Price",
       "Total Bottle Price",
@@ -66,6 +67,7 @@ class OrdersReportMailer < ActionMailer::Base
 
         product_names = line_items.map{ |li| li.product.try(:name) }.compact
         brand_names = line_items.map{ |li| li.product.brand.title }.compact
+        brand_owner_names = line_items.map{ |li| li.product.brand.brand_owner.title }.compact
         prices = line_items.map{ |li| li.price }.compact
         prices = prices.map { |p| number_to_currency(p) } if prices.present?
         shipping_charge_uplift = order.shipping_method.calculator.preferred_uplift rescue 0.0
@@ -76,6 +78,7 @@ class OrdersReportMailer < ActionMailer::Base
           order.accepted_at.nil? ? nil : order.accepted_at.to_date,
           product_names.empty? ? nil : strip_tags(product_names.join('|')).gsub(/&quot;|,/, ''),
           brand_names.empty? ? nil : strip_tags(brand_names.join('|')).gsub(/&quot;|,/, ''),
+          brand_owner_names.empty? ? nil : strip_tags(brand_owner_names.join('|')).gsub(/&quot;|,/, ''),
           order.number_of_bottles,
           prices.empty? ? nil : prices.join('|'),
           number_to_currency(profit_and_loss.total_bottle_price),

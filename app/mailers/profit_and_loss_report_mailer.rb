@@ -4,7 +4,7 @@ class ProfitAndLossReportMailer < ActionMailer::Base
 
   default :from => "noreply@reservebar.com"
 
-  def send_report(order_ids, user_id, search_params)
+  def send_report(order_ids, user_id)
     @current_user = Spree::User.find user_id
     orders = Spree::Order.where(id: order_ids)
     @profit_and_losses = orders.each_with_object([]) do |order, ary|
@@ -14,10 +14,11 @@ class ProfitAndLossReportMailer < ActionMailer::Base
         ary << order.build_profit_and_loss
       end
     end
-    @search_params = search_params
 
-    attachments["profit_loss_report.csv"] = { :mime_type => 'text/csv', :content => report_csv_file }
-    mail(:to => @current_user.email, :reply_to => "noreply@reservebar.com", :subject => "Your profit/loss total report is ready.")
+    attachments["profit_loss_report.csv"] = { mime_type: 'text/csv',
+      content: report_csv_file.encode('WINDOWS-1252', :undef => :replace, replace: '') }
+    mail(to: @current_user.email, reply_to: "noreply@reservebar.com",
+      subject: "Your profit/loss total report is ready.")
   end
 
   private

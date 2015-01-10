@@ -9,10 +9,15 @@ class ProductSalesReportMailer < ActionMailer::Base
     @orders = Spree::Order.where(id: order_ids).includes(:line_items,
       :retailers, :ship_address)
 
-    attachments["product_sales_report.csv"] = { mime_type: 'text/csv',
-      content: report_csv_file.encode('WINDOWS-1252', :undef => :replace, replace: '') }
+    filename = "product_sales_report_#{Time.now.strftime('%Y%m%d%H%M')}.csv"
+    attachments[filename] = {
+      mime_type: 'text/csv',
+      content: report_csv_file.encode('WINDOWS-1252',
+        :undef => :replace, replace: '')
+    }
+
     mail(to: @current_user.email, reply_to: "noreply@reservebar.com",
-      subject: "Your product sales report is ready.")
+      subject: "Your Product Sales report is ready")
   end
 
   private

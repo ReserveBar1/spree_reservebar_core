@@ -12,10 +12,15 @@ class OrdersReportMailer < ActionMailer::Base
       order.build_profit_and_loss if order.profit_and_loss.nil?
     end
 
-    attachments["orders_report.csv"] = { mime_type: 'text/csv',
-      content: report_csv_file.encode('WINDOWS-1252', :undef => :replace, replace: '') }
+    filename = "orders_report_#{Time.now.strftime('%Y%m%d%H%M')}.csv"
+    attachments[filename] = {
+      mime_type: 'text/csv',
+      content: report_csv_file.encode('WINDOWS-1252',
+        :undef => :replace, replace: '')
+    }
+
     mail(to: @current_user.email, reply_to: "noreply@reservebar.com",
-      subject: "Your orders report is ready.")
+      subject: "Your Orders report is ready")
   end
 
   private

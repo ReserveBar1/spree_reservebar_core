@@ -4,30 +4,30 @@ class ProfitAndLoss < ActiveRecord::Base
   after_initialize :init
 
   def init
-    self.total_bottle_price = set_total_bottle_price
-    self.gift_packaging_charge = set_gift_packaging_charge
-    self.shipping_charge = set_shipping_charge
-    # self.shipping_margin = set_shipping_margin
-    self.state_fulfillment_fee = set_state_fulfillment_fee
-    self.sales_tax = set_sales_tax
-    self.gross_proceeds_before_promotion = set_gross_proceeds_before_promotion
+    self.total_bottle_price ||= set_total_bottle_price
+    self.gift_packaging_charge ||= set_gift_packaging_charge
+    self.shipping_charge ||= set_shipping_charge
+    # self.shipping_margin ||= set_shipping_margin
+    self.state_fulfillment_fee ||= set_state_fulfillment_fee
+    self.sales_tax ||= set_sales_tax
+    self.gross_proceeds_before_promotion ||= set_gross_proceeds_before_promotion
 
     self.retailer_bottle_price = set_retailer_bottle_price
-    self.corrugated_box_fee = set_corrugated_box_fee
-    self.credit_card_fees = set_credit_card_fees
-    self.net_retailer_disbursements = set_net_retailer_disbursements
+    self.corrugated_box_fee ||= set_corrugated_box_fee
+    self.credit_card_fees ||= set_credit_card_fees
+    self.net_retailer_disbursements ||= set_net_retailer_disbursements
 
-    self.gift_packaging_cost = set_gift_packaging_cost
-    self.corrugated_cost = set_corrugated_cost
-    self.total_packaging_costs = set_total_packaging_costs
+    self.gift_packaging_cost ||= set_gift_packaging_cost
+    self.corrugated_cost ||= set_corrugated_cost
+    self.total_packaging_costs ||= set_total_packaging_costs
 
-    self.shipping_costs = set_shipping_charge
+    self.shipping_costs ||= set_shipping_charge
 
-    self.total_disbursements = set_total_disbursements
+    self.total_disbursements ||= set_total_disbursements
 
-    self.net_revenues_before_promotion = set_net_revenues_before_promotion
-    self.promotions = set_promotions
-    self.net_revenues_after_promotion = set_net_revenues_after_promotion
+    self.net_revenues_before_promotion ||= set_net_revenues_before_promotion
+    self.promotions ||= set_promotions
+    self.net_revenues_after_promotion ||= set_net_revenues_after_promotion
   end
 
   private

@@ -85,7 +85,7 @@ class ProfitAndLoss < ActiveRecord::Base
   end
 
   def set_gift_packaging_cost
-    (gift_packaging_charge * 10) / 3
+    (gift_packaging_charge / 10) * 3
   end
 
   def set_corrugated_cost

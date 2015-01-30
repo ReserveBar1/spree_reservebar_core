@@ -35,8 +35,8 @@ class ProfitAndLossReportMailer < ActionMailer::Base
   def admin_report
     CSV.generate do |csv|
       csv << [ "Total Bottle Price"              , number_to_currency(@profit_and_losses.collect(&:total_bottle_price).sum) ]
-      csv << [ "Gift Packaging"                  , number_to_currency(@profit_and_losses.collect(&:gift_packaging_charge).sum) ]
-      csv << [ "Shipping"                        , number_to_currency(@profit_and_losses.collect(&:shipping_charge).sum) ]
+      csv << [ "Gift Packaging Price"                  , number_to_currency(@profit_and_losses.collect(&:gift_packaging_charge).sum) ]
+      csv << [ "Shipping Price"                        , number_to_currency(@profit_and_losses.collect(&:shipping_charge).sum) ]
       csv << [ "State Fulfillment Fee"           , number_to_currency(@profit_and_losses.collect(&:state_fulfillment_fee).sum) ]
       csv << [ "Sales Tax"                       , number_to_currency(@profit_and_losses.collect(&:sales_tax).sum) ]
       csv << [ "Gross Proceeds Before Promotion" , number_to_currency(@profit_and_losses.collect(&:gross_proceeds_before_promotion).sum) ]

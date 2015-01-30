@@ -10,24 +10,37 @@ class ProfitAndLoss < ActiveRecord::Base
     # self.shipping_margin ||= set_shipping_margin
     self.state_fulfillment_fee ||= set_state_fulfillment_fee
     self.sales_tax ||= set_sales_tax
-    self.gross_proceeds_before_promotion ||= set_gross_proceeds_before_promotion
-
     self.retailer_bottle_price = set_retailer_bottle_price
     self.corrugated_box_fee ||= set_corrugated_box_fee
     self.credit_card_fees ||= set_credit_card_fees
-    self.net_retailer_disbursements ||= set_net_retailer_disbursements
-
-    self.gift_packaging_cost ||= set_gift_packaging_cost
     self.corrugated_cost ||= set_corrugated_cost
     self.total_packaging_costs ||= set_total_packaging_costs
-
     self.shipping_costs ||= set_shipping_charge
-
-    self.total_disbursements ||= set_total_disbursements
-
-    self.net_revenues_before_promotion ||= set_net_revenues_before_promotion
     self.promotions ||= set_promotions
-    self.net_revenues_after_promotion ||= set_net_revenues_after_promotion
+  end
+
+  def net_retailer_disbursements 
+    retailer_bottle_price + sales_tax + corrugated_box_fee + credit_card_fees
+  end
+
+  def gross_proceeds_before_promotion
+    total_bottle_price + gift_packaging_charge + shipping_charge + state_fulfillment_fee + sales_tax
+  end
+
+  def total_disbursements
+    net_retailer_disbursements + total_packaging_costs + shipping_charge
+  end
+
+  def net_revenues_before_promotion
+    gross_proceeds_before_promotion - total_disbursements
+  end
+
+  def net_revenues_after_promotion
+    net_revenues_before_promotion - promotions
+  end
+
+  def gift_packaging_cost
+    (gift_packaging_charge / 10) * 3
   end
 
   private
@@ -56,15 +69,6 @@ class ProfitAndLoss < ActiveRecord::Base
     order.tax_total
   end
 
-  def set_gross_proceeds_before_promotion
-    sum = total_bottle_price +
-            gift_packaging_charge +
-            shipping_charge +
-            state_fulfillment_fee +
-            sales_tax
-    sum.to_f
-  end
-
   def set_retailer_bottle_price
     order.line_items.collect { |line_item| line_item.product_cost_for_retailer }.sum
   end
@@ -78,16 +82,6 @@ class ProfitAndLoss < ActiveRecord::Base
     credit_card_percentage * (retailer_bottle_price + sales_tax)
   end
 
-  def set_net_retailer_disbursements
-    net = retailer_bottle_price + sales_tax +
-            corrugated_box_fee - credit_card_fees
-    net.to_f
-  end
-
-  def set_gift_packaging_cost
-    (gift_packaging_charge / 10) * 3
-  end
-
   def set_corrugated_cost
     corrugated_cost_value
   end
@@ -96,20 +90,8 @@ class ProfitAndLoss < ActiveRecord::Base
     gift_packaging_charge + corrugated_cost
   end
 
-  def set_total_disbursements
-    net_retailer_disbursements + total_packaging_costs + shipping_charge
-  end
-
-  def set_net_revenues_before_promotion
-    gross_proceeds_before_promotion - total_disbursements
-  end
-
   def set_promotions
     order.adjustments.eligible.promotion.first.try(:amount) || 0.0
-  end
-
-  def set_net_revenues_after_promotion
-    net_revenues_before_promotion - promotions
   end
 
   def set_credit_card_percentage
@@ -142,9 +124,8 @@ class ProfitAndLoss < ActiveRecord::Base
     end
   end
 
-  def shipping_charge_uplift
-    order.shipping_method.calculator.preferred_uplift rescue 0.0
-  end
-
+  # def shipping_charge_uplift
+  #   order.shipping_method.calculator.preferred_uplift rescue 0.0
+  # end
 
 end

@@ -29,7 +29,10 @@ Spree::Admin::ProductsController.class_eval do
 
   def pricing
     @product = Spree::Product.find_by_permalink(params[:product_id])
-    @product_costs = @product.product_costs
+    variant = Spree::Variant.find_by_product_id(@product.id)
+    retailer_ids = Spree::Retailer.where(state: 'active').map(&:id)
+    @product_costs = Spree::ProductCost.where(variant_id: variant.id,
+      retailer_id: retailer_ids)
   end
 
   def pricing_export

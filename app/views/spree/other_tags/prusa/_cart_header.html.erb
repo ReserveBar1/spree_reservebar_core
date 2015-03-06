@@ -2,8 +2,9 @@
   <%
     product_owners = Array.new
     @order.line_items.map { |i| product_owners << i.product.taxons.map(&:name) }
+    prusa_brands = ['The Glenlivet']
   %>
-  <% if product_owners.flatten.uniq.include? 'The Glenlivet' %>
+  <% if (prusa_brands && product_owners.flatten.uniq).present? %>
     <%= render partial: 'spree/other_tags/prusa/header_tag' %>
   <% end %>
 <% end %>

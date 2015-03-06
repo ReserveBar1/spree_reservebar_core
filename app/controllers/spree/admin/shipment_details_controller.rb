@@ -80,7 +80,7 @@ class Spree::Admin::ShipmentDetailsController  < Spree::Admin::ResourceControlle
           :payment_type => payment_type,  
           :shipper_email => retailer.email.split(',').first.strip,  # Allows us to enter emails in retailer setup with comma separation, Fedex only accepts one email per request.
           :recipient_email => recipient_email, 
-          :alcohol => true, # shipment.order.contains_alcohol?, ## Patched on Feb 27, 2013, to account for wrong usage of shipping categories
+          :alcohol => params[:adult_sig] == 'true' ? true : false,
           :invoice_number => shipment.number, 
           :po_number => shipment.order.number,
           :image_type => ActiveShipping::DEFAULT_IMAGE_TYPE,

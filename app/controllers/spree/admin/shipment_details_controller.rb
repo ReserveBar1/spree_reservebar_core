@@ -34,8 +34,8 @@ class Spree::Admin::ShipmentDetailsController  < Spree::Admin::ResourceControlle
       
       # make request to fedex
       shipper = ActiveMerchant::Shipping::Location.new(
-          :name           => "ReserveBar.com", 
-          :company_name   => "ReserveBar", ##retailer.name,
+          :name           => "Hudson Jersey", 
+          :company_name   => "Hudson Jersey",
           :country        => retailer.physical_address.country.iso, 
           :state          => retailer.physical_address.state.abbr, 
           :city           => retailer.physical_address.city, 

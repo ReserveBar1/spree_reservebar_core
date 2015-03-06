@@ -1,5 +1,5 @@
 <% if controller.controller_name == "taxons" && controller.action_name == "show" %>
-  <% prusa_brands = ['The Glenlivet'] %>
+  <% prusa_brands = ['The Glenlivet', 'Chivas', 'Absolut', 'Malibu', 'Jameson'] %>
   <% if @taxon.children.empty? && prusa_brands.include?(@taxon.name) %>
     <%= render partial: 'spree/other_tags/prusa/footer_tag' %>
   <% end %>

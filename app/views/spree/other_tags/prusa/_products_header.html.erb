@@ -1,5 +1,5 @@
 <% if controller.controller_name == "products" && controller.action_name == "show" %>
   <% if @product.taxons.map(&:name).include? 'The Glenlivet' %>
-    <%= render partial: 'spree/other_tags/glenlivet/header_tag' %>
+    <%= render partial: 'spree/other_tags/prusa/header_tag' %>
   <% end %>
 <% end %>

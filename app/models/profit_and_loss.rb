@@ -20,7 +20,7 @@ class ProfitAndLoss < ActiveRecord::Base
   end
 
   def net_retailer_disbursements 
-    retailer_bottle_price + sales_tax + corrugated_box_fee + credit_card_fees
+    retailer_bottle_price + sales_tax + corrugated_box_fee - credit_card_fees
   end
 
   def gross_proceeds_before_promotion

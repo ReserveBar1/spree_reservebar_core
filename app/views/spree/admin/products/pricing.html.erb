@@ -2,6 +2,8 @@
 
 <%= render :partial => 'spree/admin/shared/product_tabs', :locals => {:current => "Retailer Pricing"} %>
 
+<h3>Master Price: <%= number_to_currency(@product.price) %>
+
 <h2>Retailer Pricing</h2>
 <p>The following table shows which Retailers currently offer this product and their associated costs to Reservebar.com</p>
 

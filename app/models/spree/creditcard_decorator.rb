@@ -11,7 +11,7 @@ Spree::Creditcard.class_eval do
   # Override to make sure we get rid of spaces before trying to get the type, fails otherwise
   # sets self.cc_type while we still have the card number
   def set_card_type
-    self.cc_type ||= CardDetector.type?(self.number.to_s.gsub(/\s/,''))
+    self.cc_type ||= Spree::Creditcard::CardDetector.type?(self.number.to_s.gsub(/\s/,''))
   end
   
   # Since we are only asking for the full name on card, but model has both, this always has an additional space

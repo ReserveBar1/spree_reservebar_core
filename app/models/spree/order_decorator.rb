@@ -69,7 +69,7 @@ Spree::Order.class_eval do
     before_transition :to => 'complete' do |order|
       begin
         order.process_payments!
-      rescue Core::GatewayError
+      rescue Spree::Core::GatewayError
         if Spree::Config[:allow_checkout_on_gateway_error]
           true
         else

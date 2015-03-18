@@ -1,0 +1,10 @@
+<% if controller.controller_name == "orders" && controller.action_name == "edit" %>
+  <%
+    product_owners = Array.new
+    @order.line_items.map { |i| product_owners << i.product.taxons.map(&:name) }
+    prusa_brands = ['The Glenlivet', 'Chivas Regal', 'Absolut', 'Malibu', 'Jameson', 'Absolut Elyx']
+  %>
+  <% if (prusa_brands && product_owners.flatten.uniq).present? %>
+    <%= render partial: 'spree/other_tags/prusa/header_tag' %>
+  <% end %>
+<% end %>

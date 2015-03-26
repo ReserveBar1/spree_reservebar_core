@@ -33,3 +33,12 @@ Deface::Override.new(
   partial: "spree/floodlight_tags/grand_marnier/address",
   disabled: false
 )
+
+# Insert on Confirmation page, if there are Grand Marnier products
+Deface::Override.new(
+  virtual_path: "spree/layouts/spree_application",
+  name: "floodlight_grand_marnier_confirmation",
+  insert_top: "body",
+  partial: "spree/floodlight_tags/grand_marnier/confirmation",
+  disabled: false
+)

@@ -1,0 +1,26 @@
+<% if controller.controller_name == "checkout" && controller.action_name == "edit" %>
+  <% if @order.state == 'address' %>
+    <%
+      product_owners = Array.new
+      @order.line_items.map { |i| product_owners << i.product.taxons.map(&:name) }
+    %>
+    <% if product_owners.flatten.uniq.include? 'Grand Marnier' %>
+      <% "<!--
+      Start of DoubleClick Floodlight Tag: Please do not remove
+      Activity name of this tag: ECM_BeginCheckout_2014-11-24_Step 3
+      URL of the webpage where the tag is expected to be placed: http://www.reservebar.com/begincheckout
+      This tag must be placed between the <body> and </body> tags, as close as possible to the opening tag.
+      Creation Date: 03/16/2015
+      -->".html_safe %>
+      <script type="text/javascript">
+      var axel = Math.random() + "";
+      var a = axel * 10000000000000;
+      document.write('<iframe src="https://4100393.fls.doubleclick.net/activityi;src=4100393;type=lml_e00;cat=ecm_b0;ord=1;num=' + a + '?" width="1" height="1" frameborder="0" style="display:none"></iframe>');
+      </script>
+      <noscript>
+      <iframe src="https://4100393.fls.doubleclick.net/activityi;src=4100393;type=lml_e00;cat=ecm_b0;ord=1;num=1?" width="1" height="1" frameborder="0" style="display:none"></iframe>
+      </noscript>
+      <% "<!-- End of DoubleClick Floodlight Tag: Please do not remove -->".html_safe %>
+    <% end %>
+  <% end %>
+<% end %>

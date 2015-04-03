@@ -47,12 +47,8 @@ Spree::Admin::OrdersController.class_eval do
   def edit
     unless @order.state == 'canceled'
       @current_retailer = @order.retailer
-      if @order.accepted_at.blank?
-        available_retailers = Spree::Retailer.where("id != ?", @current_retailer.id)
-      else
-        same_merch_account = "merchant_account = ? AND id != ?"
-        available_retailers = Spree::Retailer.where(same_merch_account, @current_retailer.merchant_account, @current_retailer.id)
-      end
+      same_merch_account = "bt_merchant_id = ? AND id != ?"
+      available_retailers = Spree::Retailer.where(same_merch_account, @current_retailer.bt_merchant_id, @current_retailer.id)
       @retailers = available_retailers.map { |r| [r.name, r.id] }
     end
     respond_with(@order)

@@ -2,7 +2,7 @@ class ProductSalesReportMailer < ActionMailer::Base
   include ActionView::Helpers::SanitizeHelper
   include ActionView::Helpers::NumberHelper
 
-  default from: "noreply@reservebar.com"
+  default :from => "noreply@reservebar.com"
 
   def send_report(order_ids, user_id)
     @current_user = Spree::User.find user_id
@@ -17,7 +17,7 @@ class ProductSalesReportMailer < ActionMailer::Base
     }
 
     mail(to: @current_user.email, reply_to: "noreply@reservebar.com",
-      subject: "Your Product Sales report is ready",
+      subject: "Your Product Sales report is ready")
   end
 
   private

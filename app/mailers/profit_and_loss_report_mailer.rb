@@ -6,7 +6,7 @@ class ProfitAndLossReportMailer < ActionMailer::Base
 
   def send_report(order_ids, user_id)
     @current_user = Spree::User.find user_id
-    orders = Spree::Order.where(id: order_ids)
+    orders = Spree::Order.accepted.where(id: order_ids)
     @profit_and_losses = orders.each_with_object([]) do |order, ary|
       if order.profit_and_loss.present?
         ary << order.profit_and_loss

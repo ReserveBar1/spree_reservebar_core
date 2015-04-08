@@ -12,6 +12,7 @@ Spree::Order.class_eval do
 
 	accepts_nested_attributes_for :gift
 
+  scope :accepted, where('accepted_at IS NOT NULL')
   scope :not_older_than_thirty_days,
     lambda {
       where("created_at > ?", Time.now - 30.days)

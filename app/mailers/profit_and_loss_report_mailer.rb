@@ -23,7 +23,8 @@ class ProfitAndLossReportMailer < ActionMailer::Base
     }
 
     mail(to: @current_user.email, reply_to: "noreply@reservebar.com",
-      subject: "Your Profit & Loss report is ready")
+      subject: "Your Profit & Loss report is ready",
+      body: "Please find your report attached.")
   end
 
   private

@@ -2,7 +2,7 @@ class ProfitAndLossReportMailer < ActionMailer::Base
   include ActionView::Helpers::SanitizeHelper
   include ActionView::Helpers::NumberHelper
 
-  default :from => "noreply@reservebar.com"
+  default from: "noreply@reservebar.com"
 
   def send_report(order_ids, user_id)
     @current_user = Spree::User.find user_id

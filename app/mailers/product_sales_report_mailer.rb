@@ -30,7 +30,6 @@ class ProductSalesReportMailer < ActionMailer::Base
   def admin_report
     column_names = [
       "OrderNumber",
-      "Order details link",
       "Customer email address",
       "Ship-to State",
       "Product name",
@@ -44,13 +43,20 @@ class ProductSalesReportMailer < ActionMailer::Base
       "OrderState",
       "PaymentState",
       "ShipmentState",
-      "Product price",
-      "GiftPackagingCost(not paid to retailer)",
-      "RB margin (Product price - product cost)",
+      "Website Product Price",
+      "Fulfillment Fee",
+      "Shipping Surcharge",
+      "Corrugated Box Fee",
+      "Net Shipping Surcharge",
+      "Retailer Product Cost",
+      "ReserveBar Margin",
+      "Gift Packaging Price to Customer",
+      "Gift Packaging Cost",
+      "Gift Packaging Margin",
+      "Total Margin",
       "Promo",
       "Total promo discount($)",
       "Retailer",
-      "ProductCostForRetailer",
       "Is a gift?"
     ]
 
@@ -59,32 +65,60 @@ class ProductSalesReportMailer < ActionMailer::Base
 
       @orders.each do |order|
         line_items = order.line_items
-        line_items.each do |line_item|
-        csv << [
-          order.number,
-          spree.order_url(order, :protocol => 'https'),
-          order.email,
-          order.ship_address.state.abbr,
-          line_item.product.nil? ? nil : strip_tags(line_item.product.name).gsub(/&quot;|,/, ''),
-          line_item.product.nil? ? nil : line_item.product.partner.try(:name),
-          line_item.product.nil? ? nil : line_item.product.brand.title,
-          line_item.product.nil? ? nil : line_item.product.brand.brand_owner.title,
-          line_item.quantity,
-          (line_items.size > 1 ? "Yes" : "No"),
-          (@show_only_completed ? order.completed_at : order.created_at).to_date,
-          order.accepted_at.nil? ? nil : order.accepted_at.to_date,
-          order.present? ? order.state : nil,
-          order.payment_state,
-          order.shipment_state,
-          number_to_currency(line_item.price),
-          number_to_currency(line_item.adjustments.eligible.gift_packaging.map(&:amount).sum),
-          number_to_currency(line_item.margin_for_site),
-          order.adjustments.eligible.promotion.first.try(:label),
-          number_to_currency(order.adjustments.eligible.promotion.first.try(:amount)),
-          order.retailer.try(:name),
-          number_to_currency(line_item.product_cost_for_retailer),
-          order.is_gift? ? 'Yes' : ''
-        ]
+
+        # Corrugated Box fee based on Retailers
+        retailer_name = order.retailer.name 
+        if retailer_name == 'Sunset Corners'
+          corrugated_box_fee = 5
+        elsif retailer_name == 'Mel and Rose Wine'
+          corrugated_box_fee = line_items.count < 3 ? 3 : 6
+        else
+          corrugated_box_fee = 3
+        end
+        corrugated_box_fee_per_li = corrugated_box_fee / line_items.count
+
+        fulfillment_fee_per_li = order.fulfillment_fee / line_items.count
+
+        line_items.each do |li|
+          net_shipping_surcharge = li.shipping_surcharge * li.quantity - corrugated_box_fee_per_li
+          rb_margin = (li.price + fulfillment_fee_per_li) * li.quantity + net_shipping_surcharge - li.product_cost_for_retailer
+
+          # already takes quantity into account
+          gift_packaging_price = li.adjustments.eligible.gift_packaging.map(&:amount).sum
+          gift_packaging_cost = (gift_packaging_price / 10) * Spree::CompanyCost.find_by_name("Gift Packaging: Suede Bag").value.to_f
+          gift_packaging_margin = gift_packaging_price - gift_packaging_cost
+
+          csv << [
+            order.number,
+            order.email,
+            order.ship_address.state.abbr,
+            li.product.nil? ? nil : strip_tags(li.product.name).gsub(/&quot;|,/, ''),
+            li.product.nil? ? nil : li.product.partner.try(:name),
+            li.product.nil? ? nil : li.product.try(:brand).try(:title),
+            li.product.nil? ? nil : li.product.try(:brand).try(:brand_owner).try(:title),
+            li.quantity,
+            (line_items.size > 1 ? "Yes" : "No"),
+            (@show_only_completed ? order.completed_at : order.created_at).to_date,
+            order.accepted_at.nil? ? nil : order.accepted_at.to_date,
+            order.present? ? order.state : nil,
+            order.payment_state,
+            order.shipment_state,
+            number_to_currency(li.price),
+            number_to_currency(fulfillment_fee_per_li),
+            number_to_currency(li.shipping_surcharge),
+            number_to_currency(corrugated_box_fee_per_li),
+            number_to_currency(net_shipping_surcharge),
+            number_to_currency(li.product_cost_for_retailer),
+            number_to_currency(rb_margin),
+            number_to_currency(gift_packaging_price),
+            number_to_currency(gift_packaging_cost),
+            number_to_currency(gift_packaging_margin),
+            number_to_currency(rb_margin + gift_packaging_margin),
+            order.adjustments.eligible.promotion.first.try(:label),
+            number_to_currency(order.adjustments.eligible.promotion.first.try(:amount)),
+            order.retailer.try(:name),
+            order.is_gift? ? 'Yes' : ''
+          ]
         end
       end
     end

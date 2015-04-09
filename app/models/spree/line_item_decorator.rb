@@ -1,11 +1,5 @@
 Spree::LineItem.class_eval do
 
-  # calculate amount for corporate (TODO: this may need to be revised for reporting to be the same as the profit)
-  def margin_for_site
-    product_costs = variant.product_costs.where(:retailer_id => order.retailer_id)
-    (product_costs.empty? ? price : (price - product_costs.first.cost_price)) * quantity
-  end
-
   def update_costs
     return if variant.blank?
 

@@ -2,11 +2,11 @@ class ProfitAndLossReportMailer < ActionMailer::Base
   include ActionView::Helpers::SanitizeHelper
   include ActionView::Helpers::NumberHelper
 
-  default :from => "noreply@reservebar.com"
+  default from: "noreply@reservebar.com"
 
   def send_report(order_ids, user_id)
     @current_user = Spree::User.find user_id
-    orders = Spree::Order.where(id: order_ids)
+    orders = Spree::Order.accepted.where(id: order_ids)
     @profit_and_losses = orders.each_with_object([]) do |order, ary|
       if order.profit_and_loss.present?
         ary << order.profit_and_loss
@@ -23,7 +23,8 @@ class ProfitAndLossReportMailer < ActionMailer::Base
     }
 
     mail(to: @current_user.email, reply_to: "noreply@reservebar.com",
-      subject: "Your Profit & Loss report is ready")
+      subject: "Your Profit & Loss report is ready",
+      body: "Please find your report attached.")
   end
 
   private

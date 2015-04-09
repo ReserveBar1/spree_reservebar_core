@@ -1,6 +1,10 @@
 Spree::Admin::ReportsController.class_eval do
 
   Spree::Admin::ReportsController::AVAILABLE_REPORTS.merge!(
+    product_weight: { 
+      name: 'Product Weights', 
+      description: 'All products (with relevant info) and their weights'
+    },
     shipping_guinness: { 
       name: 'Guinness 1759 Shipping Summary', 
       description: 'Shipping Report for completed orders with Guinness 1759'
@@ -19,6 +23,16 @@ Spree::Admin::ReportsController.class_eval do
     params.merge!(:type => "product_pricing")
     Delayed::Job.enqueue ReportCreationJob.new(current_user.id, params)
     flash.notice = "Your report is being created. It will be emailed to you when it is ready."
+    redirect_back_or_default(request.env["HTTP_REFERER"])
+  end
+
+  def product_weight
+    begin
+      Delayed::Job.enqueue ProductWeightReportJob.new(current_user.id)
+      flash.notice = "Your product weight report is being created. It will be emailed to you when it is ready."
+    rescue
+      flash[:error] = "Something went wrong with scheduling your report"
+    end
     redirect_back_or_default(request.env["HTTP_REFERER"])
   end
 

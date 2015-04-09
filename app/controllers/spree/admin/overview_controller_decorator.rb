@@ -1,6 +1,6 @@
 Spree::Admin::OverviewController.class_eval do
-	before_filter :load_retailer, :only => [:index]
-	
+  before_filter :load_retailer, :only => [:index]
+
   def index
     @show_dashboard = show_dashboard
     return unless @show_dashboard
@@ -20,34 +20,34 @@ Spree::Admin::OverviewController.class_eval do
     @best_selling_taxons = best_selling_taxons
 
     @pie_colors = [ "#0093DA", "#FF3500", "#92DB00", "#1AB3FF", "#FFB800"]
-    
+
     #@retailer = @current_retailer
   end
-  
+
   def get_retailer_data
-  	if params[:retailer_id] && !params[:retailer_id].empty?
-  		session[:current_retailer_id] = params[:retailer_id]
-  	else
-  		session[:current_retailer_id] = nil
-  	end
+    if params[:retailer_id] && !params[:retailer_id].empty?
+      session[:current_retailer_id] = params[:retailer_id]
+    else
+      session[:current_retailer_id] = nil
+    end
 
     redirect_to "/admin"
   end
 
   private
-  
-	def load_retailer
-    if current_user.has_role?("admin")
-    	if session[:current_retailer_id]
-    		@current_retailer = Spree::Retailer.find(session[:current_retailer_id])
-    	end
-    elsif current_user.has_role?("retailer")
-		  @current_retailer = current_user.retailer
+
+  def load_retailer
+    if current_user.present? and current_user.has_role?("admin")
+      if session[:current_retailer_id]
+        @current_retailer = Spree::Retailer.find(session[:current_retailer_id])
+      end
+    elsif current_user.present? and current_user.has_role?("retailer")
+      @current_retailer = current_user.retailer
     end
     
-	  if @current_retailer
-	  	@orders = @current_retailer.orders
-	  end
+    if @current_retailer
+      @orders = @current_retailer.orders
+    end
   end
   
   def show_dashboard
@@ -58,18 +58,18 @@ Spree::Admin::OverviewController.class_eval do
 
     if params[:value] == "Count"
       if @current_retailer
-      	orders = @orders.select(:created_at).where(conditions(params))
+        orders = @orders.select(:created_at).where(conditions(params))
       else
-      	orders = Spree::Order.select(:created_at).where(conditions(params))
+        orders = Spree::Order.select(:created_at).where(conditions(params))
       end
       orders = orders.group_by { |o| o.created_at.to_date }
       fill_empty_entries(orders, params)
       orders.keys.sort.map {|key| [key.strftime('%Y-%m-%d'), orders[key].size ]}
     else
       if @current_retailer
-      	orders = @orders.select([:created_at, :total]).where(conditions(params))
+        orders = @orders.select([:created_at, :total]).where(conditions(params))
       else
-      	orders = Spree::Order.select([:created_at, :total]).where(conditions(params))
+        orders = Spree::Order.select([:created_at, :total]).where(conditions(params))
       end
       orders = orders.group_by { |o| o.created_at.to_date }
       fill_empty_entries(orders, params)
@@ -92,12 +92,12 @@ Spree::Admin::OverviewController.class_eval do
   def orders_credit_total(params)
     @current_retailer ? @orders.sum(:adjustment_total, :conditions => conditions(params)) : Spree::Order.sum(:credit_total, :conditions => conditions(params))
   end
-  
+
   def best_selling_variants
     if @current_retailer
-    	li = Spree::LineItem.includes(:order).where(["spree_orders.state = 'complete' and spree_orders.id in (?)", @current_retailer.order_ids]).sum(:quantity, :group => :variant_id, :limit => 5)
+      li = Spree::LineItem.includes(:order).where(["spree_orders.state = 'complete' and spree_orders.id in (?)", @current_retailer.order_ids]).sum(:quantity, :group => :variant_id, :limit => 5)
     else
-    	li = Spree::LineItem.includes(:order).where("spree_orders.state = 'complete'").sum(:quantity, :group => :variant_id, :limit => 5)
+      li = Spree::LineItem.includes(:order).where("spree_orders.state = 'complete'").sum(:quantity, :group => :variant_id, :limit => 5)
     end
     variants = li.map do |v|
       variant = Spree::Variant.find(v[0])
@@ -108,11 +108,11 @@ Spree::Admin::OverviewController.class_eval do
 
   def top_grossing_variants
     if @current_retailer
-    	quantity = Spree::LineItem.includes(:order).where(["spree_orders.state = 'complete' and spree_orders.id in (?)", @current_retailer.order_ids]).sum(:quantity, :group => :variant_id, :limit => 5)
-		  prices = Spree::LineItem.includes(:order).where(["spree_orders.state = 'complete' and spree_orders.id in (?)", @current_retailer.order_ids]).sum(:price, :group => :variant_id, :limit => 5)
+      quantity = Spree::LineItem.includes(:order).where(["spree_orders.state = 'complete' and spree_orders.id in (?)", @current_retailer.order_ids]).sum(:quantity, :group => :variant_id, :limit => 5)
+      prices = Spree::LineItem.includes(:order).where(["spree_orders.state = 'complete' and spree_orders.id in (?)", @current_retailer.order_ids]).sum(:price, :group => :variant_id, :limit => 5)
     else
-		  quantity = Spree::LineItem.includes(:order).where("spree_orders.state = 'complete'").sum(:quantity, :group => :variant_id, :limit => 5)
-		  prices = Spree::LineItem.includes(:order).where("spree_orders.state = 'complete'").sum(:price, :group => :variant_id, :limit => 5)
+      quantity = Spree::LineItem.includes(:order).where("spree_orders.state = 'complete'").sum(:quantity, :group => :variant_id, :limit => 5)
+      prices = Spree::LineItem.includes(:order).where("spree_orders.state = 'complete'").sum(:price, :group => :variant_id, :limit => 5)
     end
     variants = quantity.map do |v|
       variant = Spree::Variant.find(v[0])
@@ -132,9 +132,9 @@ Spree::Admin::OverviewController.class_eval do
 
   def last_five_orders
     if @current_retailer
-    	orders = @orders.includes(:line_items).where("completed_at IS NOT NULL").order("completed_at DESC").limit(5)
+      orders = @orders.includes(:line_items).where("completed_at IS NOT NULL").order("completed_at DESC").limit(5)
     else
-    	orders = Spree::Order.includes(:line_items).where("completed_at IS NOT NULL").order("completed_at DESC").limit(5)
+      orders = Spree::Order.includes(:line_items).where("completed_at IS NOT NULL").order("completed_at DESC").limit(5)
     end
     orders.map do |o|
       qty = o.line_items.inject(0) {|sum,li| sum + li.quantity}
@@ -146,9 +146,9 @@ Spree::Admin::OverviewController.class_eval do
 
   def biggest_spenders
     if @current_retailer
-    	spenders = @orders.sum(:total, :group => :user_id, :limit => 5, :order => "sum(total) desc", :conditions => "completed_at is not null and user_id is not null")
+      spenders = @orders.sum(:total, :group => :user_id, :limit => 5, :order => "sum(total) desc", :conditions => "completed_at is not null and user_id is not null")
     else
-    	spenders = Spree::Order.sum(:total, :group => :user_id, :limit => 5, :order => "sum(total) desc", :conditions => "completed_at is not null and user_id is not null")
+      spenders = Spree::Order.sum(:total, :group => :user_id, :limit => 5, :order => "sum(total) desc", :conditions => "completed_at is not null and user_id is not null")
     end
     spenders = spenders.map do |o|
       orders = Spree::User.find(o[0]).orders

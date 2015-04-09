@@ -30,35 +30,39 @@ Spree::LineItem.class_eval do
 
   end
 
+  # 20150409: Jason Knebel
+  # We are no longer calculating shipping surcharges based on line items.
+  # They are now being set for each retailer.
+
   # Calculate any shipping surcharges for a line item,based on the global shipping surcharges for the product
   # and the retailer specific surcharges. Retailer specific takes precedence over global
-  def shipping_surcharge
-    # can only calculate retailer specific surcharge if we know the retailer
-    if self.order.retailer_id
-      surcharge = retailer_shipping_surcharge
-    end
-    # old global surcharge:
-    if surcharge == 0.0
-      surcharge = global_product_shipping_surcharge
-    end
+  # def shipping_surcharge
+  #   # can only calculate retailer specific surcharge if we know the retailer
+  #   if self.order.retailer_id
+  #     surcharge = retailer_shipping_surcharge
+  #   end
+  #   # old global surcharge:
+  #   if surcharge == 0.0
+  #     surcharge = global_product_shipping_surcharge
+  #   end
 
-    if surcharge == nil
-      surcharge = 0.0
-    end
-    surcharge
-  end
+  #   if surcharge == nil
+  #     surcharge = 0.0
+  #   end
+  #   surcharge
+  # end
 
-  def global_product_shipping_surcharge
-    (variant.product.shipping_surcharge * quantity) if variant.product.present?
-  end
+  # def global_product_shipping_surcharge
+  #   (variant.product.shipping_surcharge * quantity) if variant.product.present?
+  # end
 
-  def retailer_shipping_surcharge
-    begin
-      return variant.product_costs.where(:retailer_id => self.order.retailer_id).first.shipping_surcharge * quantity
-    rescue
-      return 0.0
-    end
-  end
+  # def retailer_shipping_surcharge
+  #   begin
+  #     return variant.product_costs.where(:retailer_id => self.order.retailer_id).first.shipping_surcharge * quantity
+  #   rescue
+  #     return 0.0
+  #   end
+  # end
 
   # calculate the fulfillment fee for this line item through the product_costs.fulfillment fee times qty
   # If there is a fee defined for this retailer and sku, it is used.

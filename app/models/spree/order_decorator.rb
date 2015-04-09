@@ -1,17 +1,18 @@
 Spree::Order.class_eval do
-	attr_accessible :is_legal_age, :is_gift, :gift_attributes, :unread, :viewed_at, :admin_notes
-	attr_accessor :is_gift
+  attr_accessible :is_legal_age, :is_gift, :gift_attributes, :unread, :viewed_at, :admin_notes
+  attr_accessor :is_gift
 
-	attr_accessible :has_accepted_terms
-	attr_accessor :has_accepted_terms
+  attr_accessible :has_accepted_terms
+  attr_accessor :has_accepted_terms
 
-	has_and_belongs_to_many :retailers, :join_table => :spree_orders_retailers
-	belongs_to :gift
+  has_and_belongs_to_many :retailers, :join_table => :spree_orders_retailers
+  belongs_to :gift
 
   has_one :profit_and_loss, :dependent => :destroy
 
-	accepts_nested_attributes_for :gift
+  accepts_nested_attributes_for :gift
 
+  scope :accepted, where('accepted_at IS NOT NULL')
   scope :not_older_than_thirty_days,
     lambda {
       where("created_at > ?", Time.now - 30.days)
@@ -24,13 +25,13 @@ Spree::Order.class_eval do
 
   search_methods :non_accepted_hours
 
-	# Scope to find all orders that have not been accepted by retailers in a given time frame
-	scope :not_accepted_hours,
+  # Scope to find all orders that have not been accepted by retailers in a given time frame
+  scope :not_accepted_hours,
     lambda {|number_of_hours|
       where(["spree_orders.accepted_at is ? and spree_orders.updated_at < ? and spree_orders.state = ?", nil, Time.now - number_of_hours.hours, "complete"])
     }
 
-	search_methods :not_accepted_hours
+  search_methods :not_accepted_hours
 
   # KN: the lines below (before the state_machine is defined) are pulled from the current version of spree
   # and allow us to redefine the state machine inside this order decorator.
@@ -103,22 +104,27 @@ Spree::Order.class_eval do
     end
   end
 
-	# Calculate the shipping_surcharges for the order, based on lline items
-	def shipping_surcharge
-	  line_items.inject(0.0) {|charge, line_item| charge = charge + (line_item.quantity * line_item.shipping_surcharge)}
+  # 20150409: Jason Knebel
+  # We are no longer calculating shipping surcharges based on line items.
+  # They are now being set for each retailer.
+  
+  def shipping_surcharge
+    # Calculate the shipping_surcharges for the order, based on line items
+    # line_items.inject(0.0) {|charge, line_item| charge = charge + (line_item.quantity * line_item.shipping_surcharge)}
+    retailer.shipping_surcharge
   end
 
-  def global_product_shipping_surcharge
-	  line_items.inject(0.0) {|charge, line_item| charge = charge + (line_item.quantity * line_item.global_product_shipping_surcharge)}
-  end
+  # def global_product_shipping_surcharge
+   #  line_items.inject(0.0) {|charge, line_item| charge = charge + (line_item.quantity * line_item.global_product_shipping_surcharge)}
+  # end
 
-  def retailer_shipping_surcharge
-	  line_items.inject(0.0) {|charge, line_item| charge = charge + (line_item.quantity * line_item.retailer_shipping_surcharge)}
-  end
+  # def retailer_shipping_surcharge
+   #  line_items.inject(0.0) {|charge, line_item| charge = charge + (line_item.quantity * line_item.retailer_shipping_surcharge)}
+  # end
 
   # calculate the fulfillment_fee based on the line items
   def fulfillment_fee
-	  line_items.inject(0.0) {|charge, line_item| charge = charge + (line_item.fulfillment_fee)}
+    line_items.inject(0.0) {|charge, line_item| charge = charge + (line_item.fulfillment_fee)}
   end
 
   def create_fulfillment_fee!
@@ -141,13 +147,13 @@ Spree::Order.class_eval do
     adjustments.eligible.where(:label => 'Additional State Fulfillment Fee').first.amount rescue 0.0
   end
 
-	# Pseudo states that embedd special logic for reservebar.com
-	# uses packed_at column to allow the retailer to indicate that he pas packed the item and it is ready for pick up
-	# we'll do state transition such that retailer hits 'ready for pick up' , which changes packed_at, and then fede scanning changes to shipped
-	def extended_state
-	  if self.state == 'complete'
-  	  if !self.accepted_at
-  	    'submitted'
+  # Pseudo states that embedd special logic for reservebar.com
+  # uses packed_at column to allow the retailer to indicate that he pas packed the item and it is ready for pick up
+  # we'll do state transition such that retailer hits 'ready for pick up' , which changes packed_at, and then fede scanning changes to shipped
+  def extended_state
+    if self.state == 'complete'
+      if !self.accepted_at
+        'submitted'
       elsif self.accepted_at && (self.packed_at == nil) && self.shipment_state != 'shipped'
         'accepted'
       elsif self.packed_at && (self.shipment_state != 'shipped' && self.shipment_state != 'delivered')
@@ -163,9 +169,9 @@ Spree::Order.class_eval do
   end
 
 
-	# Override the address used for calculating taxes.
-	# Reservebar.com uses the retailer's physial address, rather then the ship_address to determine taxes
-	# Returns the relevant zone (if any) to be used for taxation purposes.  Uses default tax zone
+  # Override the address used for calculating taxes.
+  # Reservebar.com uses the retailer's physial address, rather then the ship_address to determine taxes
+  # Returns the relevant zone (if any) to be used for taxation purposes.  Uses default tax zone
   # unless there is a specific match
   def tax_zone
     if Spree::Config[:tax_using_retailer_address]
@@ -185,8 +191,8 @@ Spree::Order.class_eval do
     Spree::OrderMailer.giftee_notify_email(self).deliver unless (self.gift.email.blank? || Spree::MailLog.has_email_been_sent_already?(self, 'Order::giftee_notify_email'))
   end
 
-	def retailer
-	  self.retailers.last
+  def retailer
+    self.retailers.last
   end
 
   def retailer=(retailer)
@@ -195,26 +201,26 @@ Spree::Order.class_eval do
     update_line_item_costs
   end
 
-	def retailer_id
-		retailer.id if retailer
-	end
+  def retailer_id
+    retailer.id if retailer
+  end
 
-	def validate_legal_drinking_age?
-		is_legal_age
-	end
+  def validate_legal_drinking_age?
+    is_legal_age
+  end
 
 
-	def is_gift
-		is_gift? ? true : false
-	end
+  def is_gift
+    is_gift? ? true : false
+  end
 
-	def is_gift?
-		gift.present?
-	end
+  def is_gift?
+    gift.present?
+  end
 
-	# get all shipping categories for an order, used to find a retailer that can fulfil this order.
-	def shipping_categories
-	  self.line_items.collect {|l| l.product.shipping_category_id}.uniq
+  # get all shipping categories for an order, used to find a retailer that can fulfil this order.
+  def shipping_categories
+    self.line_items.collect {|l| l.product.shipping_category_id}.uniq
   end
 
   # returns true, if the order only has products in the wine category
@@ -314,7 +320,5 @@ Spree::Order.class_eval do
       self.payment_state = 'credit_owed'
     end
   end
-
-
 
 end

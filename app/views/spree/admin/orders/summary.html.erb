@@ -18,7 +18,7 @@
     <h3 id="order_number" data-hook><%= "#{t(:order)} ##{@order.number} " %></h3>
     <h5 id="order_status" data-hook><%= "#{t(:status)}: #{t("order_state.#{@order.extended_state}")}" %></h5>
 	<br class="clear" />
-	<div style="margin-left:10px;">Order Date: <%= @order.completed_at.strftime("%d/%M/%y %I:%M%p") %></div>
+	<div style="margin-left:10px;">Order Completed Date: <%= @order.completed_at.strftime("%d/%M/%y %I:%M%p") if order.completed? %></div>
     <br class="clear" /><p></p>
 	<%= button_link_to(I18n.t("packaging_slip.print"), "/admin/invoice/#{@order.number}/packaging_slip.pdf" , :target => "_blank", :style => "margin-left:10px;") %>
 	<br class="clear" /><p></p>

@@ -160,7 +160,7 @@ Spree::Order.class_eval do
         'ready_for_pick_up'
       elsif self.shipment_state == 'shipped'
         'shipped'
-      elsif self.shipment.state == 'delivered'
+      elsif self.shipment_state == 'delivered'
         'delivered'
       end
     else

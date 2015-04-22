@@ -1,0 +1,28 @@
+<%
+  path = request.path_info
+  case path
+  when '/t/type/custom-engraved/johnnie-walker'
+    code = 35509
+  # when '/t/type/custom-engraved/hennessy'
+  #   code = 35510
+  # when '/products/hennessy-250-collectors-blend-custom-engraved-bottle'
+  #   code = 35511
+  # when '/products/hennessy-x-dot-o'
+  #   code = 35512
+  # when '/products/hennessy-xo-custom-engraved-bottle'
+  #   code = 35513
+  # when '/products/hennessy-paradis-1'
+  #   code = 35514
+  # when '/products/hennessy-paradis-custom-engraved-bottle'
+  #   code = 35515
+  when '/t/type/spirits/single-malts/the-glenlivet'
+    code = 35516
+  when '/t/type/champagne/dom-perignon'
+    code = 35517
+  when '/t/type/spirits/vodka/hangar-1'
+    code = 35518
+  when '/t/type/spirits/tequila/patron'
+    code = 35519
+  end
+%>
+<script src='https://secfld.vmmpxl.com/?bkt=<%= code %>' type='text/javascript'></script>

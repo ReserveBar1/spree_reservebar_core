@@ -37,4 +37,6 @@
     code = 35519
   end
 %>
-<script src='https://secfld.vmmpxl.com/?bkt=<%= code %>' type='text/javascript'></script>
+<% if code.present? %>
+  <script src='https://secfld.vmmpxl.com/?bkt=<%= code %>' type='text/javascript'></script>
+<% end %>

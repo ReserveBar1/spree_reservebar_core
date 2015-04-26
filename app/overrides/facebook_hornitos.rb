@@ -19,3 +19,10 @@ Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
                      :partial => "spree/facebook_tags/hornitos/cart",
                      :disabled => false)
 
+# Insert on Registration page, if there are Hornitos products in order
+Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
+                     :name => "facebook_hornitos_registration",
+                     :insert_top => "body",
+                     :partial => "spree/facebook_tags/hornitos/registration",
+                     :disabled => false)
+

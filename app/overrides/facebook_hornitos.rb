@@ -26,3 +26,10 @@ Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
                      :partial => "spree/facebook_tags/hornitos/registration",
                      :disabled => false)
 
+# Insert on Address page, if there are Hornitos products
+Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
+                     :name => "facebook_hornitos_address",
+                     :insert_top => "body",
+                     :partial => "spree/facebook_tags/hornitos/address",
+                     :disabled => false)
+

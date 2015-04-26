@@ -1,0 +1,9 @@
+<% if controller.controller_name == "checkout" && controller.action_name == "registration" && @order.present? %>
+  <%
+    product_owners = Array.new
+    @order.line_items.map { |i| product_owners << i.product.taxons.map(&:name) }
+  %>
+  <% if product_owners.flatten.uniq.include? "Hornitos®" %>
+    <%= render 'spree/facebook_tags/hornitos/facebook_pixel' %>
+  <% end %>
+<% end %>

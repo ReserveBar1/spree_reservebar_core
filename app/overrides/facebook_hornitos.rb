@@ -33,3 +33,9 @@ Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
                      :partial => "spree/facebook_tags/hornitos/address",
                      :disabled => false)
 
+# Insert on Confirmation page, if there are Hornitos products
+Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
+                     :name => "facebook_hornitos_confirmation",
+                     :insert_top => "body",
+                     :partial => "spree/facebook_tags/hornitos/confirmation",
+                     :disabled => false)

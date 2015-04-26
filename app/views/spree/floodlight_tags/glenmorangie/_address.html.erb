@@ -4,7 +4,7 @@
       product_owners = Array.new
       @order.line_items.map { |i| product_owners << i.product.taxons.map(&:name) }
     %>
-    <% if product_owners.flatten.uniq.include? 'Glenmorangie' %>2
+    <% if product_owners.flatten.uniq.include? 'Glenmorangie' %>
       <%= "<!--
       Start of DoubleClick Floodlight Tag: Please do not remove
       Activity name of this tag: ECM_ BeginCheckout_Step2

@@ -1,6 +1,10 @@
 <%
   path = request.path_info
   case path
+  when '/'
+    code = 35294
+  when '/t/type/gifts/gifts-by-occasion'
+    code = 35298
   when '/t/type/custom-engraved/johnnie-walker'
     code = 35509
   when '/t/type/custom-engraved/hennessy'

@@ -1,0 +1,18 @@
+<% if controller.controller_name == "checkout" && controller.action_name == "edit" %>
+  <% if @order.state == 'address' %>
+    <%
+      order_permalinks = []
+      order_brands = []
+
+      @order.line_items.map { |i| order_permalinks << i.product.permalink }
+      @order.line_items.map { |i| order_brands << i.product.taxons.map(&:name) }
+
+      if (order_permalinks.flatten.uniq & VARICK_PERMALINKS).present? || (order_brands.flatten.uniq & VARICK_BRANDS).present?
+        address_code = 35296
+      end
+    %>
+    <% if address_code.present? %>
+      <script src='https://secfld.vmmpxl.com/?bkt=<%= address_code %>' type='text/javascript'></script>
+    <% end %>
+  <% end %>
+<% end %>

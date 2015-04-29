@@ -27,7 +27,16 @@ VARICK_BRANDS = [
   'Patrón'
 ]
 
-# Insert on Cart page, if there are Glenmorangie products
+# New Varick Retargeting Pixel Map (21 Apr 2015)
+Deface::Override.new(
+  virtual_path: "spree/layouts/spree_application",
+  name: "varick_pixel_map",
+  insert_top: "body",
+  partial: "spree/other_tags/varick_pixels/pixel_map",
+  disabled: false
+)
+
+# Insert on Cart page, if there are Varick targeted products
 Deface::Override.new(
   virtual_path: "spree/layouts/spree_application",
   name: "varick_pixel_map_cart",
@@ -36,11 +45,11 @@ Deface::Override.new(
   disabled: false
 )
 
-# New Varick Retargeting Pixel Map (21 Apr 2015)
+# Insert on Address page, if there are Varick targeted products
 Deface::Override.new(
   virtual_path: "spree/layouts/spree_application",
-  name: "varick_pixel_map",
+  name: "varick_pixel_map_address",
   insert_top: "body",
-  partial: "spree/other_tags/varick_pixels/pixel_map",
+  partial: "spree/other_tags/varick_pixels/address",
   disabled: false
 )

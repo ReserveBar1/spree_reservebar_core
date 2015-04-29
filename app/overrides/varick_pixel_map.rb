@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 VARICK_PERMALINKS = [
   'johnnie-walker-blue-custom-engraved-bottle',
   'johnnie-walker-blue-label-brooks-brothers',
@@ -16,6 +18,13 @@ VARICK_PERMALINKS = [
   'richard-hennessy-custom-engraved-bottle',
   'johnnie-walker-blue-label',
   'guinness-1759'
+]
+
+VARICK_BRANDS = [
+  'The Glenlivet',
+  'Dom Pérignon',
+  'Hangar 1',
+  'Patrón'
 ]
 
 # Insert on Cart page, if there are Glenmorangie products

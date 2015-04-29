@@ -1,0 +1,9 @@
+<% if controller.controller_name == "orders" && controller.action_name == "edit" %>
+  <%
+    order_permalinks = []
+    @order.line_items.map { |i| order_permalinks << i.product.permalink }
+    if (order_permalinks.flatten.uniq & VARICK_PERMALINKS).present?
+      code = 35295
+    end
+  %>
+<% end %>

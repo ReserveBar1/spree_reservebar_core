@@ -2,59 +2,59 @@
   path = request.path_info
   case path
   when '/'
-    code = 35294
+    path_code = 35294
   when '/t/type/gifts/gifts-by-occasion'
-    code = 35298
+    path_code = 35298
   when '/t/type/custom-engraved/johnnie-walker'
-    code = 35509
+    path_code = 35509
   when '/products/johnnie-walker-blue-custom-engraved-bottle'
-    code = 36242
+    path_code = 36242
   when '/products/johnnie-walker-blue-label-brooks-brothers'
-    code = 36243
+    path_code = 36243
   when '/t/type/spirits/cognac/hennessy'
-    code = 36244
+    path_code = 36244
   when '/t/type/custom-engraved/hennessy'
-    code = 35510
+    path_code = 35510
   when '/products/hennessy-250'
-    code = 35511
+    path_code = 35511
   when '/products/hennessy-250-collectors-blend-custom-engraved-bottle'
-    code = 35753
+    path_code = 35753
   when '/products/hennessy-vs'
-    code = 35754
+    path_code = 35754
   when '/products/hennessy-black'
-    code = 35755
+    path_code = 35755
   when '/products/hennessy-privilege'
-    code = 35756
+    path_code = 35756
   when '/products/hennessy-x-dot-o'
-    code = 35512
+    path_code = 35512
   when '/products/hennessy-xo-custom-engraved-bottle'
-    code = 35513
+    path_code = 35513
   when '/products/hennessy-paradis-1'
-    code = 35514
+    path_code = 35514
   when '/products/hennessy-paradis-custom-engraved-bottle'
-    code = 35515
+    path_code = 35515
   when '/products/hennessy-paradis-imperial'
-    code = 35757
+    path_code = 35757
   when '/products/hennessy-paradis-imperial-custom-engraved-bottle'
-    code = 35758
+    path_code = 35758
   when '/products/hennessy-richard-hennessy'
-    code = 35760
+    path_code = 35760
   when '/products/richard-hennessy-custom-engraved-bottle'
-    code = 35761
+    path_code = 35761
   when '/t/type/spirits/single-malts/the-glenlivet'
-    code = 35516
+    path_code = 35516
   when '/t/type/champagne/dom-perignon'
-    code = 35517
+    path_code = 35517
   when '/t/type/spirits/vodka/hangar-1'
-    code = 35518
+    path_code = 35518
   when '/t/type/spirits/tequila/patron'
-    code = 35519
+    path_code = 35519
   when '/products/johnnie-walker-blue-label'
-    code = 36197
+    path_code = 36197
   when '/products/guinness-1759'
-    code = 36198
+    path_code = 36198
   end
 %>
-<% if code.present? %>
-  <script src='https://secfld.vmmpxl.com/?bkt=<%= code %>' type='text/javascript'></script>
+<% if path_code.present? %>
+  <script src='https://secfld.vmmpxl.com/?bkt=<%= path_code %>' type='text/javascript'></script>
 <% end %>

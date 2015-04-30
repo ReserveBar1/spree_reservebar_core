@@ -1,0 +1,23 @@
+<% if controller.controller_name == "orders" && controller.action_name == "show" %>
+  <% if flash[:commerce_tracking] %>
+    <%
+      include ActionView::Helpers::NumberHelper
+      product_names = []
+      product_skus = []
+      quantities = []
+      @order.line_items.each do |li|
+        if (VARICK_BRANDS & li.product.taxons.map(&:name)).present? || VARICK_PERMALINKS.include?(li.product.permalink)
+          product_names << li.product.name.gsub(' ','+').gsub("'","")
+          product_skus << li.product.sku
+          quantities << li.quantity
+        end
+      end
+      product_names = product_names.join('|')
+      product_skus = product_skus.join('|')
+      quantities = quantities.join('|')
+    %>
+    <% unless product_names.empty? %>
+      <script src='https://secfld.vmmpxl.com/?bkt=35297&var1=<%= product_names %>&var2=<%= product_skus %>&var3=<%= quantities %>&var4=<%= number_to_currency(@order.total) %>&var5=<%= Time.now.strftime('%Y-%m-%d') %>&var6=<%= @order.bill_address.zipcode %>' type='text/javascript'></script>
+    <% end %>
+  <% end %>
+<% end %>

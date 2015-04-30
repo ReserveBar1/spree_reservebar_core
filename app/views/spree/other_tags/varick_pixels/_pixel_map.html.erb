@@ -1,0 +1,60 @@
+<%
+  path = request.path_info
+  case path
+  when '/'
+    path_code = 35294
+  when '/t/type/gifts/gifts-by-occasion'
+    path_code = 35298
+  when '/t/type/custom-engraved/johnnie-walker'
+    path_code = 35509
+  when '/products/johnnie-walker-blue-custom-engraved-bottle'
+    path_code = 36242
+  when '/products/johnnie-walker-blue-label-brooks-brothers'
+    path_code = 36243
+  when '/t/type/spirits/cognac/hennessy'
+    path_code = 36244
+  when '/t/type/custom-engraved/hennessy'
+    path_code = 35510
+  when '/products/hennessy-250'
+    path_code = 35511
+  when '/products/hennessy-250-collectors-blend-custom-engraved-bottle'
+    path_code = 35753
+  when '/products/hennessy-vs'
+    path_code = 35754
+  when '/products/hennessy-black'
+    path_code = 35755
+  when '/products/hennessy-privilege'
+    path_code = 35756
+  when '/products/hennessy-x-dot-o'
+    path_code = 35512
+  when '/products/hennessy-xo-custom-engraved-bottle'
+    path_code = 35513
+  when '/products/hennessy-paradis-1'
+    path_code = 35514
+  when '/products/hennessy-paradis-custom-engraved-bottle'
+    path_code = 35515
+  when '/products/hennessy-paradis-imperial'
+    path_code = 35757
+  when '/products/hennessy-paradis-imperial-custom-engraved-bottle'
+    path_code = 35758
+  when '/products/hennessy-richard-hennessy'
+    path_code = 35760
+  when '/products/richard-hennessy-custom-engraved-bottle'
+    path_code = 35761
+  when '/t/type/spirits/single-malts/the-glenlivet'
+    path_code = 35516
+  when '/t/type/champagne/dom-perignon'
+    path_code = 35517
+  when '/t/type/spirits/vodka/hangar-1'
+    path_code = 35518
+  when '/t/type/spirits/tequila/patron'
+    path_code = 35519
+  when '/products/johnnie-walker-blue-label'
+    path_code = 36197
+  when '/products/guinness-1759'
+    path_code = 36198
+  end
+%>
+<% if path_code.present? %>
+  <script src='https://secfld.vmmpxl.com/?bkt=<%= path_code %>' type='text/javascript'></script>
+<% end %>

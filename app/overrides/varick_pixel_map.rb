@@ -53,3 +53,12 @@ Deface::Override.new(
   partial: "spree/other_tags/varick_pixels/address",
   disabled: false
 )
+
+# Insert on Confirmation page, if there are Varick targeted products
+Deface::Override.new(
+  virtual_path: "spree/layouts/spree_application",
+  name: "varick_pixel_map_confirmation",
+  insert_top: "body",
+  partial: "spree/other_tags/varick_pixels/confirmation",
+  disabled: false
+)

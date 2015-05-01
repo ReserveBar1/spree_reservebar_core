@@ -100,7 +100,6 @@ Spree::Order.class_eval do
     after_transition :to => 'complete' do |order, transition|
       order.gift_notification if order.is_gift?
       Spree::OrderMailer.retailer_submitted_email(order).deliver if (order.retailer && !Spree::MailLog.has_email_been_sent_already?(order, 'Order::retailer_submitted_email') )
-      order.create_profit_and_loss
     end
   end
 

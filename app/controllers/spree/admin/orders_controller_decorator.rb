@@ -101,6 +101,7 @@ Spree::Admin::OrdersController.class_eval do
       flash["notice"] = 'This order has been canceled - do not process it!'
     elsif @order.accepted_at.blank? && (@current_retailer && @current_retailer.id == @order.retailer_id)
       @order.update_attribute(:accepted_at, Time.now)
+      @order.create_profit_and_loss
 
       # If the order only has one payment on it (all order here should have only a single payment)
       # and the total order amount is lower than the payment amount, due to adjustments made after the order was submitted

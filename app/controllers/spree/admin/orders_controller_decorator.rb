@@ -45,10 +45,9 @@ Spree::Admin::OrdersController.class_eval do
   end
 
   def edit
-    unless @order.state == 'canceled'
+    unless @order.state == 'canceled' || @order.accepted_at.present?
       @current_retailer = @order.retailer
-      same_merch_account = "bt_merchant_id = ? AND id != ?"
-      available_retailers = Spree::Retailer.where(same_merch_account, @current_retailer.bt_merchant_id, @current_retailer.id)
+      available_retailers = Spree::Retailer.active.where('id != ?', @current_retailer.id)
       @retailers = available_retailers.map { |r| [r.name, r.id] }
     end
     respond_with(@order)
@@ -63,6 +62,29 @@ Spree::Admin::OrdersController.class_eval do
         @order.retailer = new_retailer
         Spree::OrderMailer.retailer_removed_email(@order, old_retailer).deliver if (old_retailer)
         Spree::OrderMailer.retailer_submitted_email(@order).deliver if (@order.retailer)
+        begin
+          # void existing payment
+          payment = @order.payment
+          original_cc = payment.payment_source
+          old_gateway = old_retailer.payment_method
+          if old_gateway.type == 'Spree::Gateway::BraintreeGateway'
+            old_gateway.set_provider(
+              old_retailer.bt_merchant_id, 
+              old_retailer.bt_public_key,
+              old_retailer.bt_private_key
+            )
+          end
+          result = old_gateway.void(payment.response_code)
+          if result.success?
+            payment.void
+            # authorize new payment under new retailer
+          else
+            raise "Could not Void payment #{payment.response_code}"
+          end
+        rescue
+          flash[:error] = 'Retailer updated. Emails sent to the old and new retailer. BUT SOMETHING WENT WRONG WITH PAYMENTS'
+          redirect_to edit_admin_order_path(@order) and return
+        end
       rescue
         @order.retailer = old_retailer
         flash[:error] = 'Something went wrong changing the retailer, likely with sending the emails. Please check the logs.'
@@ -72,7 +94,7 @@ Spree::Admin::OrdersController.class_eval do
       redirect_to admin_order_path(@order)
     else
       flash[:error] = 'Please select a retailer'
-      redirect_to edit_admin_order_path(@order)
+      redirect_to edit_admin_order_path(@order) and return
     end
   end
 

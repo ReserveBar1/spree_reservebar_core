@@ -6,9 +6,11 @@
       @order.line_items.map{ |i| brand_owners << i.product.brand.brand_owner.title }
       if brand_owners.flatten.uniq.include? target_brand_owner
         value = 0
+        quantity = 0
         @order.line_items.each do |li|
           if li.product.brand.brand_owner.title == target_brand_owner
             value += li.price.to_f
+            quantity += li.quantity
           end
         end
       end
@@ -30,6 +32,15 @@
       window._fbq.push(['track', '6027953353937', {'value': '<%= value %>','currency':'USD'}]);
       </script>
       <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?ev=6027953353937&amp;cd[value]=<%= value %>&amp;cd[currency]=USD&amp;noscript=1" /></noscript>
+
+      <!-- Twitter Conversion Code for SX Checkouts -->
+      <script src="//platform.twitter.com/oct.js" type="text/javascript"></script>
+      <script type="text/javascript">
+      twttr.conversion.trackPid('l6079', { tw_sale_amount: <%= value %>, tw_order_quantity: <%= quantity %> });</script>
+      <noscript>
+      <img height="1" width="1" style="display:none;" alt="" src="https://analytics.twitter.com/i/adsct?txn_id=l6079&p_id=Twitter&tw_sale_amount=0&tw_order_quantity=0" />
+      <img height="1" width="1" style="display:none;" alt="" src="//t.co/i/adsct?txn_id=l6079&p_id=Twitter&tw_sale_amount=<%= value %>&tw_order_quantity=<%= quantity %>" />
+      </noscript>
     <% end %>
   <% end %>
 <% end %>

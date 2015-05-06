@@ -59,38 +59,28 @@ Spree::Admin::OrdersController.class_eval do
 
     if new_retailer.present?
       begin
-        @order.retailer = new_retailer
-        Spree::OrderMailer.retailer_removed_email(@order, old_retailer).deliver if (old_retailer)
-        Spree::OrderMailer.retailer_submitted_email(@order).deliver if (@order.retailer)
         begin
+          if @order.payments.count > 1
+            flash[:error] = 'Orders with more than one payment cannot be changed between retailers automatically. Please contact technical support.'
+            redirect_to edit_admin_order_path(@order) and return
+          end
           # void existing payment
           payment = @order.payment
           original_cc = payment.payment_source
-          old_gateway = old_retailer.payment_method
-          if old_gateway.type == 'Spree::Gateway::BraintreeGateway'
-            old_gateway.set_provider(
-              old_retailer.bt_merchant_id, 
-              old_retailer.bt_public_key,
-              old_retailer.bt_private_key
-            )
-          end
-          result = old_gateway.void(payment.response_code)
-          if result.success?
-            payment.void
-            # authorize new payment under new retailer
-          else
-            raise "Could not Void payment #{payment.response_code}"
-          end
+          original_cc.void(payment)
         rescue
           flash[:error] = 'Retailer updated. Emails sent to the old and new retailer. BUT SOMETHING WENT WRONG WITH PAYMENTS'
           redirect_to edit_admin_order_path(@order) and return
         end
+        @order.retailer = new_retailer
+        Spree::OrderMailer.retailer_removed_email(@order, old_retailer).deliver if (old_retailer)
+        Spree::OrderMailer.retailer_submitted_email(@order).deliver if (@order.retailer)
       rescue
         @order.retailer = old_retailer
         flash[:error] = 'Something went wrong changing the retailer, likely with sending the emails. Please check the logs.'
         redirect_to edit_admin_order_path(@order) and return
       end
-      flash[:notice] = 'Retailer updated. Emails sent to the old and new retailer.'
+      flash[:notice] = 'Retailer updated. Emails sent to the old and new retailer. Please create payment for new retailer.'
       redirect_to admin_order_path(@order)
     else
       flash[:error] = 'Please select a retailer'

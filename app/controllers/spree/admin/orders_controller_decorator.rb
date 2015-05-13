@@ -1,5 +1,4 @@
 Spree::Admin::OrdersController.class_eval do
-
   before_filter :load_retailer
   after_filter :sync_unread, :only => [:show, :summary]
 
@@ -59,22 +58,28 @@ Spree::Admin::OrdersController.class_eval do
 
     if new_retailer.present?
       begin
-        begin
-          if @order.payments.count > 1
-            flash[:error] = 'Orders with more than one payment cannot be changed between retailers automatically. Please contact technical support.'
+        if old_retailer.bt_merchant_id != new_retailer.bt_merchant_id
+          begin
+            if @order.payments.count > 1
+              flash[:error] = 'Orders with more than one payment cannot be changed between retailers with different merchant accounts automatically. Please contact technical support.'
+              redirect_to edit_admin_order_path(@order) and return
+            end
+            # void existing payment
+            payment = @order.payment
+            original_cc = payment.payment_source
+            original_cc.void(payment)
+
+            # find credit card on new merchant account
+            # authorize on new merchant account
+            #   order total must be the same
+          rescue
+            flash[:error] = 'Retailer updated. Emails sent to the old and new retailer. BUT SOMETHING WENT WRONG WITH PAYMENTS'
             redirect_to edit_admin_order_path(@order) and return
           end
-          # void existing payment
-          payment = @order.payment
-          original_cc = payment.payment_source
-          original_cc.void(payment)
-        rescue
-          flash[:error] = 'Retailer updated. Emails sent to the old and new retailer. BUT SOMETHING WENT WRONG WITH PAYMENTS'
-          redirect_to edit_admin_order_path(@order) and return
         end
         @order.retailer = new_retailer
-        Spree::OrderMailer.retailer_removed_email(@order, old_retailer).deliver if (old_retailer)
-        Spree::OrderMailer.retailer_submitted_email(@order).deliver if (@order.retailer)
+        Spree::OrderMailer.retailer_removed_email(@order, old_retailer).deliver if old_retailer
+        Spree::OrderMailer.retailer_submitted_email(@order).deliver if @order.retailer
       rescue
         @order.retailer = old_retailer
         flash[:error] = 'Something went wrong changing the retailer, likely with sending the emails. Please check the logs.'
@@ -190,7 +195,6 @@ Spree::Admin::OrdersController.class_eval do
   def summary
   end
 
-
   private
 
   def load_retailer
@@ -213,5 +217,4 @@ Spree::Admin::OrdersController.class_eval do
     new_logger.info(exception.message)
     new_logger.info("\n\n===== End Exception  =====\n\n")
   end
-
 end

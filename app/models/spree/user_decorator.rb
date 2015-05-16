@@ -38,9 +38,15 @@ Spree::User.class_eval do
 		retailer.id if retailer
 	end
 	
-	# Find all credit cards that are usable on a retailer's CIM gateway, expect the deleted ones.
+	# Find all credit cards that are usable on a retailer's gateway,
+  # exept the deleted ones.
 	def creditcards_for_retailer(retailer)
-	  creditcards.not_deleted.where(:retailer_id => retailer.id)
+    gateway = retailer.payment_method
+    if gateway.type == 'Spree::Gateway::BraintreeGateway'
+  	  creditcards.not_deleted.where(bt_merchant_id: retailer.bt_merchant_id)
+    else
+      creditcards.not_deleted.where(:retailer_id => retailer.id)
+    end
   end
   
   # Find the gateway_customer_profile_id for this user and retailer

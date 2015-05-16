@@ -1,5 +1,4 @@
 Spree::Admin::OrdersController.class_eval do
-
   before_filter :load_retailer
   after_filter :sync_unread, :only => [:show, :summary]
 
@@ -45,14 +44,9 @@ Spree::Admin::OrdersController.class_eval do
   end
 
   def edit
-    unless @order.state == 'canceled'
+    unless @order.state == 'canceled' || @order.accepted_at.present?
       @current_retailer = @order.retailer
-      if @order.accepted_at.blank?
-        available_retailers = Spree::Retailer.where("id != ?", @current_retailer.id)
-      else
-        same_merch_account = "merchant_account = ? AND id != ?"
-        available_retailers = Spree::Retailer.where(same_merch_account, @current_retailer.merchant_account, @current_retailer.id)
-      end
+      available_retailers = Spree::Retailer.active.where('id != ?', @current_retailer.id)
       @retailers = available_retailers.map { |r| [r.name, r.id] }
     end
     respond_with(@order)
@@ -64,19 +58,49 @@ Spree::Admin::OrdersController.class_eval do
 
     if new_retailer.present?
       begin
-        @order.retailer = new_retailer
-        Spree::OrderMailer.retailer_removed_email(@order, old_retailer).deliver if (old_retailer)
-        Spree::OrderMailer.retailer_submitted_email(@order).deliver if (@order.retailer)
+        if old_retailer.bt_merchant_id != new_retailer.bt_merchant_id
+          begin
+            if @order.payments.count > 1
+              flash[:error] = 'Orders with more than one payment cannot be changed between retailers with different merchant accounts automatically. Please contact technical support.'
+              redirect_to edit_admin_order_path(@order) and return
+            end
+            # void existing payment
+            payment = @order.payment
+            new_payment = payment.dup
+            original_cc = payment.payment_source
+            original_cc.void(payment)
+
+            new_payment.response_code = nil
+            new_payment.source_id = nil
+
+            # find credit card on new merchant account
+            new_cc = Spree::Creditcard.where(gateway_customer_profile_id: original_cc.gateway_customer_profile_id, last_digits: original_cc.last_digits, cc_type: original_cc.cc_type, first_name: original_cc.first_name, last_name: original_cc.last_name, month: original_cc.month, year: original_cc.year, bt_merchant_id: new_retailer.bt_merchant_id).first
+            new_payment.source_id = new_cc.id
+            new_payment.save
+
+            @order.retailer = new_retailer
+
+            # authorize on new merchant account
+            new_cc.authorize(new_payment.amount, new_payment)
+            new_payment.save
+          rescue
+            flash[:error] = 'Retailer not updated. Something went wrong with payments.'
+            redirect_to edit_admin_order_path(@order) and return
+          end
+        else
+          @order.retailer = new_retailer
+        end
+        Spree::OrderMailer.retailer_removed_email(@order, old_retailer).deliver if old_retailer
+        Spree::OrderMailer.retailer_submitted_email(@order).deliver if @order.retailer
       rescue
-        @order.retailer = old_retailer
-        flash[:error] = 'Something went wrong changing the retailer, likely with sending the emails. Please check the logs.'
+        flash[:error] = 'Something went wrong with changing the retailer. It is likely the emails just did not sent. Please confirm the changed retailer and payments.'
         redirect_to edit_admin_order_path(@order) and return
       end
       flash[:notice] = 'Retailer updated. Emails sent to the old and new retailer.'
       redirect_to admin_order_path(@order)
     else
       flash[:error] = 'Please select a retailer'
-      redirect_to edit_admin_order_path(@order)
+      redirect_to edit_admin_order_path(@order) and return
     end
   end
 
@@ -105,6 +129,7 @@ Spree::Admin::OrdersController.class_eval do
       flash["notice"] = 'This order has been canceled - do not process it!'
     elsif @order.accepted_at.blank? && (@current_retailer && @current_retailer.id == @order.retailer_id)
       @order.update_attribute(:accepted_at, Time.now)
+      @order.create_profit_and_loss
 
       # If the order only has one payment on it (all order here should have only a single payment)
       # and the total order amount is lower than the payment amount, due to adjustments made after the order was submitted
@@ -181,7 +206,6 @@ Spree::Admin::OrdersController.class_eval do
   def summary
   end
 
-
   private
 
   def load_retailer
@@ -204,5 +228,4 @@ Spree::Admin::OrdersController.class_eval do
     new_logger.info(exception.message)
     new_logger.info("\n\n===== End Exception  =====\n\n")
   end
-
 end

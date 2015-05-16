@@ -118,7 +118,9 @@ Spree::Creditcard.class_eval do
     record_log payment, response
 
     if response.success?
-      payment.response_code = response.authorization
+      unless payment_gateway.type == 'Spree::Gateway::BraintreeGateway'
+        payment.response_code = response.authorization
+      end
       payment.complete
     else
       payment.failure

@@ -1,0 +1,12 @@
+<% if controller.controller_name == "products" && controller.action_name == "show" %>
+  <% brand = @product.brand %>
+  <% if brand.try(:brand_owner).try(:title) == 'Proximo' %>
+    <script>
+      dataLayer = [{
+        'u2': '<%= brand.title %>'
+        'u3': '<%= @product.name %>'
+      }];
+    </script>
+    <%= render 'spree/google_tags/proximo/google_tag' %>
+  <% end %>
+<% end %>

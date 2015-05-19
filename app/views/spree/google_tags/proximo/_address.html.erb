@@ -1,0 +1,30 @@
+<% if controller.controller_name == "checkout" && controller.action_name == "edit" %>
+  <% if @order.state == 'address' %>
+    <%
+      brand_names = []
+      product_names = []
+      quantities = []
+      total_cost = 0
+
+      @order.line_items.each do |li|
+        if li.product.try(:brand).try(:brand_owner).try(:title) == 'Proximo'
+          brand_names << li.product.brand.title
+          product_names << li.product.name.gsub("'","")
+          quantities << li.quantity
+          total_cost += li.price * li.quantity
+        end
+      end
+    %>
+    <% if product_names.present? %>
+      <script>
+        dataLayer = [{
+          'u2': "<%= brand_names.join('|') %>"
+          'u3': "<%= product_names.join('|') %>"
+          'u4': "<%= quantities.join('|') %>"
+          'u5': "<%= number_to_currency(total_cost) %>"
+        }];
+      </script>
+      <%= render 'spree/google_tags/proximo/google_tag' %>
+    <% end %>
+  <% end %>
+<% end %>

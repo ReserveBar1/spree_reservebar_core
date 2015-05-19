@@ -1,0 +1,16 @@
+<% if controller.controller_name == "taxons" && controller.action_name == "show" %>
+    <%
+      brand_ids = @taxon.products.map(&:brand_id).uniq
+      brand_titles = Spree::Brand.where(id: brand_ids).map(&:title).uniq
+      brand_owner_ids = Spree::Brand.where(id: brand_ids).map(&:brand_owner_id).uniq
+      brand_owner_titles = Spree::BrandOwner.where(id: brand_owner_ids).map(&:title).uniq
+    %>
+  <% if @taxon.children.empty? && brand_owner_titles.include?('Proximo') %>
+    <script>
+      dataLayer = [{
+        'u2': "<%= brand_titles.join('|') %>"
+      }];
+    </script>
+    <%= render 'spree/google_tags/proximo/google_tag' %>
+  <% end %>
+<% end %>

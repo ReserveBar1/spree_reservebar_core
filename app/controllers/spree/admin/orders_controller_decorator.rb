@@ -44,9 +44,12 @@ Spree::Admin::OrdersController.class_eval do
   end
 
   def edit
-    unless @order.state == 'canceled' || @order.accepted_at.present?
+    unless @order.state == 'canceled'
       @current_retailer = @order.retailer
-      available_retailers = Spree::Retailer.active.where('id != ?', @current_retailer.id)
+      available_retailers = Spree::Retailer.active.where("id != ?", @current_retailer.id)
+      unless @order.accepted_at.blank?
+        available_retailers = available_retailers.where(bt_merchant_id: @current_retailer.bt_merchant_id)
+      end
       @retailers = available_retailers.map { |r| [r.name, r.id] }
     end
     respond_with(@order)

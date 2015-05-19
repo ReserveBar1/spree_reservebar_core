@@ -17,10 +17,10 @@
   <% if product_names.present? %>
     <script>
       dataLayer = [{
-        'u2': "<%= brand_names.join('|') %>"
-        'u3': "<%= product_names.join('|') %>"
-        'u4': "<%= quantities.join('|') %>"
-        'u5': "<%= number_to_currency(total_cost) %>"
+        'BrandFamily': "<%= brand_names.join('|') %>"
+        'Product': "<%= product_names.join('|') %>"
+        'Quantity': "<%= quantities.join('|') %>"
+        'TotalCost': "<%= number_to_currency(total_cost) %>"
       }];
     </script>
     <%= render 'spree/google_tags/proximo/google_tag' %>

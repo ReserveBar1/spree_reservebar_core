@@ -3,8 +3,8 @@
   <% if brand.try(:brand_owner).try(:title) == 'Proximo' %>
     <script>
       dataLayer = [{
-        'u2': '<%= brand.title %>'
-        'u3': '<%= @product.name %>'
+        'BrandFamily': '<%= brand.title %>'
+        'Product': '<%= @product.name %>'
       }];
     </script>
     <%= render 'spree/google_tags/proximo/google_tag' %>

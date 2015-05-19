@@ -8,7 +8,7 @@
   <% if @taxon.children.empty? && brand_owner_titles.include?('Proximo') %>
     <script>
       dataLayer = [{
-        'u2': "<%= brand_titles.join('|') %>"
+        'BrandFamily': "<%= brand_titles.join('|') %>"
       }];
     </script>
     <%= render 'spree/google_tags/proximo/google_tag' %>

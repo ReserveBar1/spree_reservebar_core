@@ -15,7 +15,7 @@
         end
       end
     %>
-    <% unless value == 0 %>
+    <% if value.present? && value != 0 %>
       <!-- Facebook Conversion Code for SX Checkouts -->
       <script>(function() {
         var _fbq = window._fbq || (window._fbq = []);

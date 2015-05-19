@@ -11,3 +11,10 @@ Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
                      :insert_top => "body",
                      :partial => "spree/google_tags/proximo/products",
                      :disabled => false)
+
+# Insert on Cart page, if there are Proximo products
+Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
+                     :name => "google_proximo_cart",
+                     :insert_top => "body",
+                     :partial => "spree/google_tags/proximo/cart",
+                     :disabled => false)

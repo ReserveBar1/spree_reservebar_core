@@ -3,7 +3,7 @@
   <% if brand.try(:brand_owner).try(:title) == 'Proximo' %>
     <script>
       dataLayer = [{
-        'BrandFamily': '<%= brand.title %>'
+        'BrandFamily': '<%= brand.title %>',
         'Product': '<%= @product.name %>'
       }];
     </script>

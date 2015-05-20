@@ -18,9 +18,9 @@
     <% if product_names.present? %>
       <script>
         dataLayer = [{
-          'BrandFamily': "<%= brand_names.join('|') %>"
-          'Product': "<%= product_names.join('|') %>"
-          'Quantity': "<%= quantities.join('|') %>"
+          'BrandFamily': "<%= brand_names.join('|') %>",
+          'Product': "<%= product_names.join('|') %>",
+          'Quantity': "<%= quantities.join('|') %>",
           'TotalCost': "<%= number_to_currency(total_cost) %>"
         }];
       </script>

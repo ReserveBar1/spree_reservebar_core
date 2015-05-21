@@ -153,7 +153,7 @@
 		              <td align="left" valign="top" style="font-size: 15px; text-align:left; font-family: georgia,serif;"><strong>Order #: </strong><%= @order.number %></td>
 		              </tr>
 		            <tr style="font-family: georgia,serif;">
-		              <td width="100%" valign="top" height="36px" style="font:Georgia, 'Times New Roman', Times, serif; font-size:15px; text-align:left"><strong><span _moz_dirty="" style="font-family: georgia,serif;">Shipping Method</span>: </strong><span _moz_dirty="" style="font-family: georgia,serif;"><%= @order.shipping_method.name %></span></td>
+		              <td width="100%" valign="top" height="36px" style="font:Georgia, 'Times New Roman', Times, serif; font-size:15px; text-align:left"><strong><span _moz_dirty="" style="font-family: georgia,serif;">Shipping Method</span>: </strong><span _moz_dirty="" style="font-family: georgia,serif;"><%= @order.shipping_method.try(:name) %></span></td>
 	                </tr>
 	            </tbody></table></td>
 	          </tr>

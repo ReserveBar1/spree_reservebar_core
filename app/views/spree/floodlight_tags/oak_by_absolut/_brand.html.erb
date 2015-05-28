@@ -1,0 +1,20 @@
+<% if controller.controller_name == "taxons" && controller.action_name == "show" %>
+  <% if @taxon.children.empty? && @taxon.name == 'Absolut' %>
+    <%= "<!--
+    Start of DoubleClick Floodlight Tag: Please do not remove
+    Activity name of this tag: Reserve Bar Absolut Product Page
+    URL of the webpage where the tag is expected to be placed: http://www.reservebar.com/t/type/spirits/vodka/absolut
+    This tag must be placed between the <body> and </body> tags, as close as possible to the opening tag.
+    Creation Date: 05/19/2015
+    -->".html_safe %>
+    <script type="text/javascript">
+    var axel = Math.random() + "";
+    var a = axel * 10000000000000;
+    document.write('<iframe src="https://4533689.fls.doubleclick.net/activityi;src=4533689;type=absol000;cat=reser0;ord=' + a + '?" width="1" height="1" frameborder="0" style="display:none"></iframe>');
+    </script>
+    <noscript>
+    <iframe src="https://4533689.fls.doubleclick.net/activityi;src=4533689;type=absol000;cat=reser0;ord=1?" width="1" height="1" frameborder="0" style="display:none"></iframe>
+    </noscript>
+    <%= "<!-- End of DoubleClick Floodlight Tag: Please do not remove -->".html_safe %>
+  <% end %>
+<% end %>

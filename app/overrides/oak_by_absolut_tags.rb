@@ -6,3 +6,11 @@ Deface::Override.new(
   partial: "spree/floodlight_tags/oak_by_absolut/brand",
   disabled: false
 )
+
+Deface::Override.new(
+  virtual_path: "spree/layouts/spree_application",
+  name: "facebook_oak_by_absolut_brand",
+  insert_top: "head",
+  partial: "spree/facebook_tags/oak_by_absolut/brand",
+  disabled: false
+)

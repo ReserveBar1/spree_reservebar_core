@@ -64,3 +64,20 @@ Deface::Override.new(
   partial: "spree/facebook_tags/oak_by_absolut/address",
   disabled: false
 )
+
+# Insert on Confirmation page, if there are OAK by Absolut products
+Deface::Override.new(
+  virtual_path: "spree/layouts/spree_application",
+  name: "floodlight_oak_by_absolut_confirmation",
+  insert_top: "body",
+  partial: "spree/floodlight_tags/oak_by_absolut/confirmation",
+  disabled: false
+)
+
+Deface::Override.new(
+  virtual_path: "spree/layouts/spree_application",
+  name: "facebook_oak_by_absolut_confirmation",
+  insert_top: "head",
+  partial: "spree/facebook_tags/oak_by_absolut/confirmation",
+  disabled: false
+)

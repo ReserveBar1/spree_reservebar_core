@@ -1,0 +1,30 @@
+<% if controller.controller_name == "orders" && controller.action_name == "show" %>
+  <% if flash[:commerce_tracking] %>
+    <% if @order.line_items.map(&:product).map(&:permalink).uniq.include? 'oak-by-absolut' %>
+      <%
+        price = 0
+        @order.line_items.each do |li|
+          if li.product.permalink.include? 'oak-by-absolut'
+            price = li.price * li.quantity
+          end
+        end
+      %>
+      <%= "<!-- Facebook Conversion Code for Absolut_Oak_Reserve Bar_Confirmation Page_Pixel -->".html_safe %>
+      <script>(function() {
+        var _fbq = window._fbq || (window._fbq = []);
+        if (!_fbq.loaded) {
+          var fbds = document.createElement('script');
+          fbds.async = true;
+          fbds.src = '//connect.facebook.net/en_US/fbds.js';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(fbds, s);
+          _fbq.loaded = true;
+        }
+      })();
+      window._fbq = window._fbq || [];
+      window._fbq.push(['track', '6025435622161', {'value':'<%= number_to_currency(price) %>','currency':'USD'}]);
+      </script>
+      <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?ev=6025435622161&amp;cd[value]=0.00&amp;cd[currency]=USD&amp;noscript=1" /></noscript>
+    <% end %>
+  <% end %>
+<% end %>

@@ -133,7 +133,7 @@
 			<tr>
 				<td colspan=3>
 					<div style="border:1px solid #888;padding:6px;">
-						<b>This item requires custom engraving for all Johnnie Walker Blue Engraved bottles</b>
+						<b>This item requires custom engraving for all <%= item.variant.product.name %> bottles</b>
 						<% customization_data = JSON.parse(item.preferred_customization) %>
 						<% customization_data.each do |key,value| %>
 							<div><%= "#{key.humanize}: " %><span style="<%= style_text %>"><%= "#{value}" %></span></div>

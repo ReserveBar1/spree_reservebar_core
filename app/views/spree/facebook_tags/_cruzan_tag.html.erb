@@ -1,0 +1,65 @@
+<%
+  if controller.controller_name == 'taxons' && controller.action_name == 'show'
+    if @taxon.children.empty? && @taxon.name == 'Cruzan'
+      cruzan_facebook = true
+    end
+  elsif controller.controller_name == 'products' && controller.action_name == 'show'
+    if @product.taxons.map(&:name).include? 'Cruzan'
+      case @product.permalink
+      when 'cruzan-aged-light-rum'
+        cruzan_facebook = true
+      when 'cruzan-aged-dark-rum'
+        cruzan_facebook = true
+      when 'cruzan-single-barrel-rum'
+        cruzan_facebook = true
+      when 'cruzan-estate-diamond-dark-rum'
+        cruzan_facebook = true
+      when 'cruzan-estate-diamond-light-rum'
+        cruzan_facebook = true
+      when 'cruzan-black-strap-rum'
+        cruzan_facebook = true
+      when 'cruzan-coconut-rum'
+        cruzan_facebook = true
+      when 'cruzan-mango-rum'
+        cruzan_facebook = true
+      when 'cruzan-black-cherry-rum'
+        cruzan_facebook = true
+      when 'cruzan-pineapple-rum'
+        cruzan_facebook = true
+      when 'cruzan-vanilla-rum'
+        cruzan_facebook = true
+      when 'cruzan-blueberry-lemonade-rum'
+        cruzan_facebook = true
+      end
+    end
+  elsif controller.controller_name == 'orders' && controller.action_name == 'edit'
+    product_owners = []
+    @order.line_items.map {|i| product_owners << i.product.taxons.map(&:name)}
+    cruzan_facebook = true if product_owners.flatten.uniq.include? 'Cruzan'
+  elsif controller.controller_name == 'checkout' && controller.action_name == 'edit'
+    if @order.state == 'address'
+      product_owners = []
+      @order.line_items.map { |i| product_owners << i.product.taxons.map(&:name) }
+      cruzan_facebook = true if product_owners.flatten.uniq.include? 'Cruzan'
+    end
+  end
+%>
+
+<% if cruzan_facebook == true %>
+  <script>(function() {
+    var _fbq = window._fbq || (window._fbq = []);
+    if (!_fbq.loaded) {
+      var fbds = document.createElement('script');
+      fbds.async = true;
+      fbds.src = '//connect.facebook.net/en_US/fbds.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(fbds, s);
+      _fbq.loaded = true;
+    }
+    _fbq.push(['addPixelId', '381974598664853']);
+  })();
+  window._fbq = window._fbq || [];
+  window._fbq.push(['track', 'PixelInitialized', {}]);
+  </script>
+  <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?id=381974598664853&amp;ev=PixelInitialized" /></noscript>
+<% end %>

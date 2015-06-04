@@ -102,12 +102,15 @@
       // test if param is set on url on not set on form, then set form value to url value
       if ( ($("[name='customization[data][new][line1]']").value == null) && (params['field1'] != null) ) {
         $("[name='customization[data][new][line1]']").val(params['field1'].toUpperCase());
+        $("#preview1").html(params['field1'].toUpperCase());
       }
       if ( ($("[name='customization[data][new][line2]']").value == null) && (params['field2'] != null) ) {
         $("[name='customization[data][new][line2]']").val(params['field2'].toUpperCase());
+        $("#preview2").html(params['field2'].toUpperCase());
       }
       if ( ($("[name='customization[data][new][line3]']").value == null) && (params['field3'] != null) ) {
         $("[name='customization[data][new][line3]']").val(params['field3'].toUpperCase());
+        $("#preview3").html(params['field3'].toUpperCase());
       }
     });
   </script>

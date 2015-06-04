@@ -32,6 +32,10 @@
         cruzan_code = 'reser009'
       end
     end
+  elsif controller.controller_name == 'orders' && controller.action_name == 'edit'
+    product_owners = []
+    @order.line_items.map {|i| product_owners << i.product.taxons.map(&:name)}
+    cruzan_code = 'reser00a' if product_owners.flatten.uniq.include? 'Cruzan'
   end
 %>
 

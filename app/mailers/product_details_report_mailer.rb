@@ -1,10 +1,10 @@
-class ProductWeightReportMailer < ActionMailer::Base
+class ProductDetailsReportMailer < ActionMailer::Base
   default from: 'noreply@reservebar.com'
 
   def send_report(user_id)
     user = Spree::User.find user_id
 
-    filename = "prod_weight_report_#{Time.now.strftime('%Y%m%d%H%M')}.csv"
+    filename = "prod_details_report_#{Time.now.strftime('%Y%m%d%H%M')}.csv"
     attachments[filename] = {
       mime_type: 'text/csv',
       content: report_csv_file.encode('WINDOWS-1252',
@@ -12,7 +12,7 @@ class ProductWeightReportMailer < ActionMailer::Base
     }
 
     mail(to: user.email, reply_to: 'noreply@reservebar.com',
-      subject: 'Your Product Weight report is ready',
+      subject: 'Your Product Details report is ready',
       body: 'Please find your report attached.')
   end
 

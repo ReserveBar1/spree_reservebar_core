@@ -2,9 +2,9 @@ Spree::Admin::ReportsController.class_eval do
   before_filter :verify_admin
 
   Spree::Admin::ReportsController::AVAILABLE_REPORTS.merge!(
-    product_weight: { 
-      name: 'Product Weights', 
-      description: 'All products (with relevant info) and their weights'
+    product_details: { 
+      name: 'Product Details', 
+      description: 'All products with details'
     },
     shipping_guinness: { 
       name: 'Guinness 1759 Shipping Summary', 
@@ -27,10 +27,10 @@ Spree::Admin::ReportsController.class_eval do
     redirect_back_or_default(request.env["HTTP_REFERER"])
   end
 
-  def product_weight
+  def product_details
     begin
-      Delayed::Job.enqueue ProductWeightReportJob.new(current_user.id)
-      flash.notice = "Your product weight report is being created. It will be emailed to you when it is ready."
+      Delayed::Job.enqueue ProductDetailsReportJob.new(current_user.id)
+      flash.notice = "Your product details report is being created. It will be emailed to you when it is ready."
     rescue
       flash[:error] = "Something went wrong with scheduling your report"
     end

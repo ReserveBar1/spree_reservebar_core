@@ -108,7 +108,7 @@ Spree::Core::Engine.routes.prepend do
         post :product_pricing
         get :product_group_pricing
         post :product_group_pricing
-        get :product_weight
+        get :product_details
         get :shipping_guinness
         get :shipping_veu_clic_clutch
         get :shipping_veu_clic_travel_case

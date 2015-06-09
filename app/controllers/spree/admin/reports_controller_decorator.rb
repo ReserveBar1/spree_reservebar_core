@@ -1,4 +1,5 @@
 Spree::Admin::ReportsController.class_eval do
+  before_filter :verify_admin
 
   Spree::Admin::ReportsController::AVAILABLE_REPORTS.merge!(
     product_weight: { 
@@ -69,6 +70,15 @@ Spree::Admin::ReportsController.class_eval do
       flash[:error] = "Something went wrong with scheduling your report"
     end
     redirect_back_or_default(request.env["HTTP_REFERER"])
+  end
+
+  private
+
+  def verify_admin
+    unless current_user.present? && current_user.has_role?("admin")
+      flash[:error] = "You do not have the proper credentials to access this report."
+      redirect_back_or_default(request.env["HTTP_REFERER"])
+    end
   end
 
 end

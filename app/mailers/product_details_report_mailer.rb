@@ -3,8 +3,10 @@ class ProductDetailsReportMailer < ActionMailer::Base
 
   def send_report(user_id)
     user = Spree::User.find user_id
+    @variants = Spree::Variant.where(deleted_at: nil).includes(:product,
+      { product: :brand }, { product: { brand: :brand_owner } })
 
-    filename = "prod_details_report_#{Time.now.strftime('%Y%m%d%H%M')}.csv"
+    filename = "product_details_report_#{Time.now.strftime('%Y%m%d%H%M')}.csv"
     attachments[filename] = {
       mime_type: 'text/csv',
       content: report_csv_file.encode('WINDOWS-1252',
@@ -25,7 +27,7 @@ class ProductDetailsReportMailer < ActionMailer::Base
     CSV.generate do |csv|
       csv << column_names
 
-      Spree::Variant.all.each do |var|
+      @variants.each do |var|
         csv << [
           var.product.try(:brand).try(:brand_owner).try(:title),
           var.product.try(:brand).try(:title),

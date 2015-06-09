@@ -42,6 +42,12 @@
       @order.line_items.map { |i| product_owners << i.product.taxons.map(&:name) }
       cruzan_facebook = true if product_owners.flatten.uniq.include? 'Cruzan'
     end
+  elsif controller.controller_name == 'orders' && controller.action_name == 'show'
+    if flash[:commerce_tracking]
+      product_owners = []
+      @order.line_items.map { |i| product_owners << i.product.taxons.map(&:name) }
+      cruzan_facebook = true if product_owners.flatten.uniq.include? 'Cruzan'
+    end
   end
 %>
 

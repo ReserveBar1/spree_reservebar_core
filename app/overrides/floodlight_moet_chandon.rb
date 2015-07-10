@@ -15,3 +15,12 @@ Deface::Override.new(
   partial: "spree/floodlight_tags/moet_chandon/products",
   disabled: false
 )
+
+# Insert on Cart page, if there are Moet Chandon products
+Deface::Override.new(
+  virtual_path: "spree/layouts/spree_application",
+  name: "floodlight_moet_chandon_cart",
+  insert_top: "body",
+  partial: "spree/floodlight_tags/moet_chandon/cart",
+  disabled: false
+)

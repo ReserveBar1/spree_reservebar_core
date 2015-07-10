@@ -6,3 +6,12 @@ Deface::Override.new(
   partial: "spree/floodlight_tags/moet_chandon/brand",
   disabled: false
 )
+
+# Insert on Moet Chandon product pages
+Deface::Override.new(
+  virtual_path: "spree/layouts/spree_application",
+  name: "floodlight_moet_chandon_products",
+  insert_top: "body",
+  partial: "spree/floodlight_tags/moet_chandon/products",
+  disabled: false
+)

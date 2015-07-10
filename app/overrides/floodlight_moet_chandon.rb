@@ -33,3 +33,12 @@ Deface::Override.new(
   partial: "spree/floodlight_tags/moet_chandon/address",
   disabled: false
 )
+
+# Insert on Confirmation page, if there are Moet Chandon products
+Deface::Override.new(
+  virtual_path: "spree/layouts/spree_application",
+  name: "floodlight_moet_chandon_confirmation",
+  insert_top: "body",
+  partial: "spree/floodlight_tags/moet_chandon/confirmation",
+  disabled: false
+)

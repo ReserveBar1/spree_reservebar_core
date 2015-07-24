@@ -16,6 +16,15 @@ Deface::Override.new(
   disabled: false
 )
 
+# Insert on Grand Marnier ALL product pages
+Deface::Override.new(
+  virtual_path: "spree/layouts/spree_application",
+  name: "floodlight_grand_marnier_all_products",
+  insert_top: "body",
+  partial: "spree/floodlight_tags/grand_marnier/all_products",
+  disabled: false
+)
+
 # Insert on Cart page, if there are Grand Marnier products
 Deface::Override.new(
   virtual_path: "spree/layouts/spree_application",

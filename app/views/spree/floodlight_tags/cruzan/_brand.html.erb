@@ -1,0 +1,13 @@
+<% if controller.controller_name == "taxons" && controller.action_name == "show" %>
+  <% if @taxon.children.empty? && @taxon.name == 'Cruzan' %>
+    <%= "<!--
+    Start of DoubleClick Floodlight Tag: Please do not remove
+    Activity name of this tag: Cruzan_Sales_Brand
+    URL of the webpage where the tag is expected to be placed: http://www.reservebar.com/t/type/spirits/rum/cruzan
+    This tag must be placed between the <body> and </body> tags, as close as possible to the opening tag.
+    Creation Date: 07/20/2015
+    -->".html_safe %>
+    <img src="https://ad.doubleclick.net/ddm/activity/src=1798209;type=cruza000;cat=cruza0;qty=1;cost=[Revenue];u1=[Revenue];u2=[Product Title];u3=[Quantity];u4=[Product ID];ord=[OrderID]?" width="1" height="1" alt=""/>
+    <%= "<!-- End of DoubleClick Floodlight Tag: Please do not remove -->".html_safe %>
+  <% end %>
+<% end %>

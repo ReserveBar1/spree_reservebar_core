@@ -1,0 +1,13 @@
+<% if controller.controller_name == "products" && controller.action_name == "show" %>
+  <% if @product.taxons.map(&:name).include? 'Cruzan' %>
+    <%= "<!--
+    Start of DoubleClick Floodlight Tag: Please do not remove
+    Activity name of this tag: Cruzan_Sales_Product
+    URL of the webpage where the tag is expected to be placed: http://www.reservebar.com/products/cruzan-aged-light-rum
+    This tag must be placed between the <body> and </body> tags, as close as possible to the opening tag.
+    Creation Date: 07/20/2015
+    -->".html_safe %>
+    <img src="https://ad.doubleclick.net/ddm/activity/src=1798209;type=cruza000;cat=cruza00;qty=1;cost=[Revenue];u1=[Revenue];u2=<%= @product.permalink %>;u3=[Quantity];u4=[Product ID];ord=[OrderID]?" width="1" height="1" alt=""/>
+    <%= "<!-- End of DoubleClick Floodlight Tag: Please do not remove -->".html_safe %>
+  <% end %>
+<% end %>

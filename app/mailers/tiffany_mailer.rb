@@ -3,7 +3,7 @@ class TiffanyMailer < ActionMailer::Base
 
   def send_email(data)
     mail(
-      to: 'jknebel@reservebar.com, lpereira@reservebar.com',
+      to: 'nflanagan@reservebar.com, slesser@reservebar.com',
       subject: "Tiffany Email Submitted",
       body: data
     )

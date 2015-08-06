@@ -4,4 +4,13 @@ Spree::UsersController.class_eval do
   def show
     @orders = @user.orders.complete.order("spree_orders.created_at desc")
   end
+
+  # Used to send an email for the Tiffany's form
+  def tiffany_email
+    params.delete :controller
+    params.delete :action
+    TiffanyMailer.send_email(params.to_s).deliver
+    redirect_to '/tiffany-champagne-concierge-service-request-submitted'
+  end
+
 end

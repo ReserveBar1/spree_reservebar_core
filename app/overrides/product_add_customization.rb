@@ -6,16 +6,6 @@ Deface::Override.new(:virtual_path => "spree/products/_cart_form",
                      :partial => "spree/products/customization",
                      :disabled => false)
 
-# Show on cart page with line item
-Deface::Override.new(:virtual_path => "spree/orders/_line_item",
-                     :name => "cart_add_customization",
-                     :original => 'f5a5a7d758eef5d9361c3cf3014e0a4d036d33f0',
-                     :insert_bottom => "[data-hook='cart_item_description']",
-                     :partial => "spree/orders/customization_cart",
-                     :sequence => {:after => "cart_remove_item_description"},
-                     :disabled => false)
-
-
 # Show on order confirmation page with line item
 Deface::Override.new(:virtual_path => "spree/shared/_order_details",
                      :name => "cart_add_customization",

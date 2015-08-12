@@ -1,0 +1,62 @@
+<tr class="<%= cycle('', 'alt') %> line-item">
+  <td data-hook="cart_item_image">
+    <% if variant.images.length == 0 %>
+      <%= link_to small_image(variant.product), variant.product %>
+    <% else %>
+      <%= link_to image_tag(variant.images.first.attachment.url(:small)), variant.product %>
+    <% end %>
+  </td>
+  <td data-hook="cart_item_description">
+    <h4><%= link_to sanitize(variant.product.name, :tags => %w(sup)), product_path(variant.product) %></h4>
+    <%= variant.options_text %>
+    <% if @order.insufficient_stock_lines.include? line_item %>
+      <span class="out-of-stock">
+        <%= variant.in_stock? ? t(:insufficient_stock, :on_hand => variant.on_hand) : t(:out_of_stock) %><br />
+      </span>
+    <% end %>
+    <% if line_item.preferred_customization %>
+      <div>
+        <b>Your Engraving: </b><small>(please hit 'Update' if you change it)</small>
+        <% customization_data = JSON.parse(line_item.preferred_customization) %>
+        <input type=hidden name="customization[type]" value="jwb_engraving" />
+        <div class='engraving-text'>
+          <% customization_data.each do |key,value| %>
+            <% if key.last.to_i <= line_item.product.engraving_line_limit %>
+              <input type=text class='required' name='customization[data][<%= line_item.id -%>][<%= key -%>]' placeholder="<%= key.humanize -%>" value="<%= value -%>" onchange="validateEngraving_<%= line_item.id %>(this);" onkeyup="validateEngraving_<%= line_item.id %>(this);" style="font-size:11px;text-align:center;display:block;" />
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+      <%= javascript_tag do %>
+        var engravingGuard = false;
+        validateEngraving_<%= line_item.id %> = function(element) {
+          var value = element.value;
+          value = value.substring(0, <%= line_item.product.engraving_char_limit %>);
+          <% if line_item.product.engraving_uppercase == true %>
+            value = value.toUpperCase();
+          <% end %>
+          element.value = value;
+          if (engravingGuard == false) {
+            $('#checkout-link').click(function(e) {
+              e.preventDefault();
+              alert('Please update cart to save your changes to the engraving before proceeding to checkout.');
+            });
+            engravingGuard = true;
+          }
+        }
+      <% end %>
+    <% end %>
+  </td>
+  <td data-hook="cart_item_price">
+    <%= number_to_currency line_item.price %>
+  </td>
+  <td data-hook="cart_item_quantity">
+    <%= item_form.number_field :quantity, :min => 0, :class => "line_item_quantity", :size => 5 %>
+  </td>
+  <td data-hook="cart_item_total">
+    <%= number_to_currency(line_item.price * line_item.quantity) unless line_item.quantity.nil? %>
+  </td>
+  <td data-hook="cart_item_delete">
+    <%= link_to image_tag('icons/delete.png'), '#', :class => 'delete', :id => "delete_#{dom_id(line_item)}" %>
+  </td>
+</tr>

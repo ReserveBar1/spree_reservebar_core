@@ -100,6 +100,15 @@ Spree::CheckoutController.class_eval do
   end
 
   def before_address
+    @order.line_items.each do |li|
+      if li.preferred_customization.present?
+        if JSON.parse(li.preferred_customization).values.inject(:+).blank?
+          flash[:notice] = "Please enter a message for your engraved bottle(s).".html_safe
+          redirect_to cart_path and return
+        end
+      end
+    end
+
     @order.bill_address ||= Spree::Address.default
     @order.ship_address ||= Spree::Address.default
     @order.gift.destroy if request.put? && @order.gift

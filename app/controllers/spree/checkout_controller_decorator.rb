@@ -71,8 +71,12 @@ Spree::CheckoutController.class_eval do
     current_order.products.map(&:state_blacklist).each {|s| blacklist << s.split(',') unless s.nil?}
     # If any products are blacklisted in the user's state
     if blacklist.flatten.include?(current_order.ship_address.state.abbr)
-      flash[:notice] = "Thank you for attempting to make a purchase through ReserveBar. We appreciate your business; unfortunately, we cannot accept your order because the item you have ordered is not distributed by the brand in the state in which you have requested delivery. If you would like to choose another product, we invite you to continue shopping.  
-      Please sign up for an <a href='/account'>email notification</a> of when the brand has expanded distribution to additional states. We apologize for the inconvenience and thank you again for gifting with ReserveBar.".html_safe
+      if current_order.products.map(&:permalink).include?('ardbeg-supernova-2015')
+        flash[:notice] = "Unfortunately, we are not able to fulfill your pre-order of Supernova 2015. As stated on the product page, Ardbeg 2015 is available as a limited edition in extremely limited quantities, and it has sold out. We apologize that we have not been able to satisfy your request. As a token of our appreciation, we are providing you a promo code - ARDBEG2015 - that will be good for 15% off your next purchase of any Ardbeg product on ReserveBar.com (promo code expires 12/31/15).".html_safe
+      else
+        flash[:notice] = "Thank you for attempting to make a purchase through ReserveBar. We appreciate your business; unfortunately, we cannot accept your order because the item you have ordered is not distributed by the brand in the state in which you have requested delivery. If you would like to choose another product, we invite you to continue shopping.  
+        Please sign up for an <a href='/account'>email notification</a> of when the brand has expanded distribution to additional states. We apologize for the inconvenience and thank you again for gifting with ReserveBar.".html_safe
+      end
       redirect_to cart_path
     end
 
@@ -121,11 +125,11 @@ Spree::CheckoutController.class_eval do
     session[:order_id] = nil
   end
 
-	protected
+  protected
   
   def set_gift_params
     return unless params[:order] && params[:state] == "address"
-		
+    
     if params[:order][:is_gift].to_i == 0
       params[:order].delete(:gift_attributes)
     end
@@ -133,15 +137,23 @@ Spree::CheckoutController.class_eval do
 
   # called if user attempts to place order in state where we don't ship alcohol to
   def rescue_from_no_retailer_ships_to_state_error
-    flash[:notice] = "Thank you for attempting to make a purchase with ReserveBar. We appreciate your business; unfortunately we cannot accept your order. The reason for this is ReserveBar cannot currently deliver to your intended state due to that state's regulations.  
-    Please sign up for an <a href='/account'>email notification</a> for when states are added to our offering, and you will receive a discount coupon for future purchase.<br />In the meantime, if you have other gifting needs for delivery in other states, we invite you to continue shopping. Delivery information is provided on every product detail page (just under the 'Add to Cart' button). You can also review our delivery map at <a href='/delivery'>www.reservebar.com/delivery</a>. We apologize for the inconvenience and thank you again for gifting with ReserveBar.".html_safe
+    if current_order.products.map(&:permalink).include?('ardbeg-supernova-2015')
+      flash[:notice] = "Unfortunately, we are not able to fulfill your pre-order of Supernova 2015. As stated on the product page, Ardbeg 2015 is available as a limited edition in extremely limited quantities, and it has sold out. We apologize that we have not been able to satisfy your request. As a token of our appreciation, we are providing you a promo code - ARDBEG2015 - that will be good for 15% off your next purchase of any Ardbeg product on ReserveBar.com (promo code expires 12/31/15).".html_safe
+    else
+      flash[:notice] = "Thank you for attempting to make a purchase with ReserveBar. We appreciate your business; unfortunately we cannot accept your order. The reason for this is ReserveBar cannot currently deliver to your intended state due to that state's regulations.  
+      Please sign up for an <a href='/account'>email notification</a> for when states are added to our offering, and you will receive a discount coupon for future purchase.<br />In the meantime, if you have other gifting needs for delivery in other states, we invite you to continue shopping. Delivery information is provided on every product detail page (just under the 'Add to Cart' button). You can also review our delivery map at <a href='/delivery'>www.reservebar.com/delivery</a>. We apologize for the inconvenience and thank you again for gifting with ReserveBar.".html_safe
+    end
     redirect_to cart_path
   end
 
   # called if user attempts to place order in a county where we do not ship
   def rescue_from_no_retailer_ships_to_county_error
-    flash[:notice] = "Thank you for attempting to make a purchase with ReserveBar. We appreciate your business; unfortunately, due to regulations in the state, which vary county by county, we cannot deliver to the county where you intend to have the order delivered.  Please sign up for an <a href='/account'>email notification</a> for when counties are added to our offering, and you will receive a discount coupon for future purchase.  
-    <br />In the meantime, if you have other gifting needs for delivery in other counties or states, we invite you to continue shopping. Delivery information is provided on every product detail page (just under the 'Add to Cart' button). You can also review our <a href='/pages/delivery'>delivery map</a>. We apologize for the inconvenience and thank you again for gifting with ReserveBar.".html_safe
+    if current_order.products.map(&:permalink).include?('ardbeg-supernova-2015')
+      flash[:notice] = "Unfortunately, we are not able to fulfill your pre-order of Supernova 2015. As stated on the product page, Ardbeg 2015 is available as a limited edition in extremely limited quantities, and it has sold out. We apologize that we have not been able to satisfy your request. As a token of our appreciation, we are providing you a promo code - ARDBEG2015 - that will be good for 15% off your next purchase of any Ardbeg product on ReserveBar.com (promo code expires 12/31/15).".html_safe
+    else
+      flash[:notice] = "Thank you for attempting to make a purchase with ReserveBar. We appreciate your business; unfortunately, due to regulations in the state, which vary county by county, we cannot deliver to the county where you intend to have the order delivered.  Please sign up for an <a href='/account'>email notification</a> for when counties are added to our offering, and you will receive a discount coupon for future purchase.  
+      <br />In the meantime, if you have other gifting needs for delivery in other counties or states, we invite you to continue shopping. Delivery information is provided on every product detail page (just under the 'Add to Cart' button). You can also review our <a href='/pages/delivery'>delivery map</a>. We apologize for the inconvenience and thank you again for gifting with ReserveBar.".html_safe
+    end
     redirect_to cart_path
   end
 

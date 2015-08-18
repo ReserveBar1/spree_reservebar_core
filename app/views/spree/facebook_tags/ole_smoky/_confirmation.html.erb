@@ -1,10 +1,14 @@
 <% if controller.controller_name == "orders" && controller.action_name == "show" %>
   <% if flash[:commerce_tracking] %>
     <%
-      product_owners = Array.new
-      @order.line_items.map { |i| product_owners << i.product.taxons.map(&:name) }
+      revenue = 0
+      @order.line_items.each do |li|
+        if li.product.taxons.map(&:name).include? 'Ole Smoky'
+          revenue += li.price * li.quantity
+        end
+      end
     %>
-    <% if product_owners.flatten.uniq.include? 'Ole Smoky' %>
+    <% unless product_names.empty? %>
       <!-- Facebook Conversion Code for Registrations - Ole Smoky Moonshine -->
       <script>(function() {
         var _fbq = window._fbq || (window._fbq = []);
@@ -18,9 +22,9 @@
         }
         })();
         window._fbq = window._fbq || [];
-        window._fbq.push(['track', '6033051949613', {'value':'<%= @order.subtotal %>','currency':'USD'}]);
+        window._fbq.push(['track', '6033051949613', {'value':'<%= revenue %>','currency':'USD'}]);
       </script>
-      <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?ev=6033051949613&amp;cd[value]=<%= @order.subtotal %>&amp;cd[currency]=USD&amp;noscript=1" /></noscript>
+      <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?ev=6033051949613&amp;cd[value]=<%= revenue %>&amp;cd[currency]=USD&amp;noscript=1" /></noscript>
     <% end %>
   <% end %>
 <% end %>

@@ -56,7 +56,7 @@ Spree::OrdersController.class_eval do
     def ardbeg_bottle_limit_exceeded
       respond_to do |format|
         format.html {
-          flash[:notice] = "<p>Thank you for trying to add products to your shopping cart. We appreciate your business; however,  we currently cannot accept an order that contains more than 2 bottles of Ardbeg Supernova 2015.</p>".html_safe
+          flash[:notice] = "<p>Thank you for trying to add products to your shopping cart. We appreciate your business; however,  we currently cannot accept an order that contains more than 1 bottles of Ardbeg Supernova 2015.</p>".html_safe
           redirect_to cart_path
         }
         format.js {
@@ -96,17 +96,18 @@ Spree::OrdersController.class_eval do
 
   def check_ardbeg_bottle_number_limit
     @order = current_order(true)
+    max_bottles = 1
 
     # bottle limit check for Ardbeg Supernova 2015
     if @order.line_items.map(&:product).map(&:permalink).include?('ardbeg-supernova-2015')
       @order.line_items.each do |li|
         if li.product.permalink == 'ardbeg-supernova-2015'
-          if li.quantity > 2
+          if li.quantity > max_bottles
             raise Exceptions::ArdbegBottleLimitPerOrderExceededError
           elsif params[:order] && params[:order][:line_items_attributes]
             params[:order][:line_items_attributes].each do |index, attributes|
-              if attributes['id'].to_i == li.id and attributes['quantity'].to_i > 2
-                li.update_attributes(quantity: 2)
+              if attributes['id'].to_i == li.id and attributes['quantity'].to_i > max_bottles
+                li.update_attributes(quantity: max_bottles)
                 raise Exceptions::ArdbegBottleLimitPerOrderExceededError
               end
             end

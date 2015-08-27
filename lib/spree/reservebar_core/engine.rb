@@ -1,3 +1,7 @@
+require 'spree_core'
+require 'spree_auth'
+require 'spree/api'
+require 'spree/promo'
 module Spree
   module ReservebarCore
     class Engine < Rails::Engine

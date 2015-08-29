@@ -18,6 +18,6 @@ end
 
 desc "Generates a dummy app for testing"
 task :test_app do
-  ENV['LIB_NAME'] = 'spree/api'
+  ENV['LIB_NAME'] = 'spree_reservebar_core'
   Rake::Task['common:test_app'].invoke
 end

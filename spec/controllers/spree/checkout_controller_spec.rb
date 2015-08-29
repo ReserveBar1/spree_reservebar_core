@@ -1,11 +1,35 @@
 require 'spec_helper'
 
 describe Spree::CheckoutController do
-  let(:order) { mock_model(Spree::Order, :checkout_allowed? => true, :completed? => false, :update_attributes => true, :payment? => false, :insufficient_stock_lines => [], :coupon_code => nil).as_null_object }
+  let(:address) { Factory(:address) }
+  let(:state) { Factory(:state) }
+  let(:shipping_category) { Factory(:shipping_category, :name => 'Spirits') }
+  let(:order) { Factory(:order, :ship_address => address, :bill_address => address) }
+  let(:line_item) { Factory(:line_item, :order_id => order.id) }
+  let(:payment_method) { Factory(:payment_method) }
+  let!(:retailer) do
+    Spree::Retailer.create(:name => 'Retailer1', :state => 'active',
+                           :payment_method => payment_method,
+                           :ships_spirits_to => address.state.abbr,
+                           :email => 'retailer@test.com', :phone => '1234567890')
+  end
 
   before do
+    line_item.product.shipping_category = shipping_category
+    order.line_items << line_item
     controller.stub :current_order => order, :current_user => Factory(:user)
+    controller.stub :check_authorization
     Factory(:country)
+  end
+
+
+  context 'Retailer' do
+    it 'Sets a retailer before the delivery step' do
+      order.state = 'address'
+      post :update, {:state => "delivery"}
+      order.retailer.should == retailer
+      #order.state.should == 'delivery'
+    end
   end
 
   context "#edit" do
@@ -17,7 +41,7 @@ describe Spree::CheckoutController do
     end
 
     it "should redirect to the cart path if current_order is nil" do
-      controller.stub!(:current_order).and_return(nil)
+      controller.stub(:current_order).and_return(nil)
       get :edit, { :state => "delivery" }
       response.should redirect_to(spree.cart_path)
     end
@@ -33,10 +57,6 @@ describe Spree::CheckoutController do
   context "#update" do
 
     context "save successful" do
-      before do
-        order.stub(:update_attribute).and_return true
-        order.should_receive(:update_attributes).and_return true
-      end
 
       it "should assign order" do
         order.stub :state => "address"
@@ -44,19 +64,19 @@ describe Spree::CheckoutController do
         assigns[:order].should_not be_nil
       end
 
-      it "should change to requested state" do
-        order.stub :state => "address"
-        order.should_receive(:state=).with('confirm')
-        post :update, {:state => "confirm"}
-      end
 
       context "with next state" do
-        before { order.stub :next => true }
 
         it "should advance the state" do
-          order.stub :state => "address"
-          order.should_receive(:next).and_return true
+          order.state = "address"
           post :update, {:state => "delivery"}
+          order.state.should == 'delivery'
+        end
+
+        it 'should skip the confirm step' do
+          order.stub :state => "payment"
+          order.should_receive(:next).and_return true
+          post :update, {:state => "complete"}
         end
       end
     end
@@ -76,7 +96,7 @@ describe Spree::CheckoutController do
     end
 
     context "when current_order is nil" do
-      before { controller.stub! :current_order => nil }
+      before { controller.stub :current_order => nil }
       it "should not change the state if order is completed" do
         order.should_not_receive(:update_attribute)
         post :update, {:state => "confirm"}

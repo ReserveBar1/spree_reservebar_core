@@ -3,8 +3,11 @@ require 'spec_helper'
 describe Spree::CheckoutController do
   let(:address) { Factory(:address) }
   let(:state) { Factory(:state) }
+  let(:shipping_method) { Factory(:shipping_method) }
   let(:shipping_category) { Factory(:shipping_category, :name => 'Spirits') }
-  let(:order) { Factory(:order, :ship_address => address, :bill_address => address) }
+  let(:order) do
+    Factory(:order)
+  end
   let(:line_item) { Factory(:line_item, :order_id => order.id) }
   let(:payment_method) { Factory(:payment_method) }
   let!(:retailer) do
@@ -26,9 +29,14 @@ describe Spree::CheckoutController do
   context 'Retailer' do
     it 'Sets a retailer before the delivery step' do
       order.state = 'address'
-      post :update, {:state => "delivery"}
+      order.save!
+      post :update, {id: order.to_param,
+                     order: { bill_address_attributes: address_params ,
+                              :ship_address_attributes => address_params },
+                     state: 'delivery'
+                    }
+      order.state.should == 'delivery'
       order.retailer.should == retailer
-      #order.state.should == 'delivery'
     end
   end
 
@@ -63,7 +71,6 @@ describe Spree::CheckoutController do
         post :update, {:state => "confirm"}
         assigns[:order].should_not be_nil
       end
-
 
       context "with next state" do
 
@@ -140,6 +147,16 @@ describe Spree::CheckoutController do
 
     end
 
+  end
+
+  def address_params
+    { firstname: address.firstname,
+      lastname: address.lastname,
+      address1: address.address1,
+      city: address.city,
+      zipcode: address.zipcode,
+      phone: address.phone,
+      state_id: address.state.id }
   end
 
 end

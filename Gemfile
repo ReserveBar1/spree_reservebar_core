@@ -10,7 +10,8 @@ gem 'active_shipping', :git => 'git://github.com/ReserveBar1/active_shipping.git
 # gem 'active_shipping', :path => '/Users/jason/code/reservebar/active_shipping'·
 # #
 gem 'spree_active_shipping', :git => 'git://github.com/ReserveBar1/spree_active_shipping.git'
-#  # # gem 'spree_active_shipping', :path => '/Users/jason/code/reservebar/spree_active_shipping'·
+#  # # gem 'spree_active_shipping', :path => '/Users/jason/code/reservebar/spree_active_shipping
+gem 'spree_reservebar_reuse_credit_card', :git => 'git://github.com/ReserveBar1/spree_reservebar_reuse_credit_card.git'
 gem 'spree_essential_blog', :git => 'git://github.com/citrus/spree_essential_blog.git', :branch => '1.0.x'
 gem 'spree_gift_packaging', :git => 'git://github.com/ReserveBar1/spree_gift_packaging.git'
 gem 'spree_related_products', :git => 'git://github.com/spree/spree_related_products.git', :branch => '1-0-stable'

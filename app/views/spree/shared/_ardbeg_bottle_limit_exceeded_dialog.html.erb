@@ -1,0 +1,30 @@
+<style>
+  #ardbeg-bottle-limit-exceeded-dialog .ui-icon {display:inline;}
+  #ardbeg-bottle-limit-exceeded-dialog a.button {color:#fff;}
+</style>
+
+<script>
+$(function() {
+  // a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+  $( "#dialog:ui-dialog" ).dialog( "destroy" );
+  
+  $("#ardbeg-bottle-limit-exceeded-dialog").dialog({
+    autoOpen: false,
+    height: 'auto',
+    width: '80%',
+    maxWidth: 500,
+    modal: true,
+    title: "",
+    open: function(event, ui){ 
+           fluidDialog(); // needed when autoOpen is set to true in this codepen
+        },
+        fluid: true
+  });
+
+});
+</script>
+<div id="ardbeg-bottle-limit-exceeded-dialog" style="display:none;">
+  <div>
+    <p>Thank you for trying to add products to your shopping cart. We appreciate your business; however,  we currently cannot accept an order that contains more than 1 bottle of Ardbeg Supernova 2015.</p>
+  </div>
+</div>

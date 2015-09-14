@@ -406,6 +406,3 @@ DEPENDENCIES
   sqlite3
   tax_cloud (= 0.2.0)
   uglifier
-
-BUNDLED WITH
-   1.10.6

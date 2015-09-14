@@ -61,6 +61,41 @@ Spree::CheckoutController.class_eval do
     end
   end
 
+  # Before we proceed to the delivery step we need to make a selection for the retailer based on the 
+  # Shipping address selected earlier and the order contents
+  # The retailer selector will return false if we cannot ship to the state.
+  # Need to handle that some way or other.
+  def before_delivery
+
+    blacklist = Array.new
+    current_order.products.map(&:state_blacklist).each {|s| blacklist << s.split(',') unless s.nil?}
+    # If any products are blacklisted in the user's state
+    if blacklist.flatten.include?(current_order.ship_address.state.abbr)
+      if current_order.products.map(&:permalink).include?('ardbeg-supernova-2015')
+        flash[:notice] = t('exception.ardbeg_supernova_not_deliverable').html_safe
+      else
+        flash[:notice] = t('exception.product_not_deliverable').html_safe
+      end
+      redirect_to cart_path
+    end
+
+    if Spree::Config[:use_county_based_routing]
+      retailer = Spree::ReservebarCore::RetailerSelectorProfit.select(current_order)
+    else
+      retailer = Spree::ReservebarCore::RetailerSelector.select(current_order)
+    end
+    # And save the association between order and retailer
+    if retailer.id != current_order.retailer_id
+      current_order.retailer = retailer
+      # Create the fulfillment fee adjustment for the order, now that we know the retailer:
+      current_order.create_fulfillment_fee!
+      # Somehow this got lost along the way, force it here, where the retailer (and therefore the tax rate) is known
+      # If the retailer is changed, we need to recreate the tax charge
+      current_order.create_tax_charge!
+      ## Reload the current order, the tax charge does not show up on the first page load
+      @order.reload
+    end
+  end
 
   def before_payment
     current_order.payments.destroy_all if request.put?
@@ -102,7 +137,7 @@ Spree::CheckoutController.class_eval do
   # called if user attempts to place order in state where we don't ship alcohol to
   def rescue_from_no_retailer_ships_to_state_error
     if current_order.products.map(&:permalink).include?('ardbeg-supernova-2015')
-      flash[:notice] = t('exception.ardbeg_supernova')
+      flash[:notice] = t('exception.ardbeg_supernova_not_deliverable').html_safe
     else
       flash[:notice] = "Thank you for attempting to make a purchase with ReserveBar. We appreciate your business; unfortunately we cannot accept your order. The reason for this is ReserveBar cannot currently deliver to your intended state due to that state's regulations.  
       Please sign up for an <a href='/account'>email notification</a> for when states are added to our offering, and you will receive a discount coupon for future purchase.<br />In the meantime, if you have other gifting needs for delivery in other states, we invite you to continue shopping. Delivery information is provided on every product detail page (just under the 'Add to Cart' button). You can also review our delivery map at <a href='/delivery'>www.reservebar.com/delivery</a>. We apologize for the inconvenience and thank you again for gifting with ReserveBar.".html_safe
@@ -113,7 +148,7 @@ Spree::CheckoutController.class_eval do
   # called if user attempts to place order in a county where we do not ship
   def rescue_from_no_retailer_ships_to_county_error
     if current_order.products.map(&:permalink).include?('ardbeg-supernova-2015')
-      flash[:notice] = t('exception.ardbeg_supernova') 
+      flash[:notice] = t('exception.ardbeg_supernova_not_deliverable').html_safe 
     else
       flash[:notice] = "Thank you for attempting to make a purchase with ReserveBar. We appreciate your business; unfortunately, due to regulations in the state, which vary county by county, we cannot deliver to the county where you intend to have the order delivered.  Please sign up for an <a href='/account'>email notification</a> for when counties are added to our offering, and you will receive a discount coupon for future purchase.  
       <br />In the meantime, if you have other gifting needs for delivery in other counties or states, we invite you to continue shopping. Delivery information is provided on every product detail page (just under the 'Add to Cart' button). You can also review our <a href='/pages/delivery'>delivery map</a>. We apologize for the inconvenience and thank you again for gifting with ReserveBar.".html_safe

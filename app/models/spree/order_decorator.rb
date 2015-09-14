@@ -81,7 +81,6 @@ Spree::Order.class_eval do
 
     before_transition :to => ['delivery'] do |order|
       order.shipments.each { |s| s.destroy unless s.shipping_method.available_to_order?(order) }
-      order.set_retailer
     end
 
     after_transition :to => 'complete', :do => :finalize!
@@ -266,40 +265,6 @@ Spree::Order.class_eval do
 
   def update_line_item_costs
     line_items.each { |line_item| line_item.update_costs }
-  end
-
-  # Set retailer based on shipping address and the order contents
-  # The retailer selector will return false if we cannot ship to the state.
-  # Need to handle that some way or other.
-  def set_retailer
-    blacklist = Array.new
-    products.map(&:state_blacklist).each {|s| blacklist << s.split(',') unless s.nil?}
-    # If any products are blacklisted in the user's state
-    if blacklist.flatten.include?(ship_address.state.abbr)
-      if products.map(&:permalink).include?('ardbeg-supernova-2015')
-        flash[:notice] = t('exception.ardbeg_supernova')
-      else
-        flash[:notice] =  t('exception.blacklist')
-      end
-      redirect_to cart_path
-    end
-
-    if Spree::Config[:use_county_based_routing]
-      order_retailer = Spree::ReservebarCore::RetailerSelectorProfit.select(self)
-    else
-      order_retailer = Spree::ReservebarCore::RetailerSelector.select(self)
-    end
-    # And save the association between order and order_retailer
-    if order_retailer.id != retailer_id
-      self.retailer = order_retailer
-      # Create the fulfillment fee adjustment for the order, now that we know the order_retailer:
-      create_fulfillment_fee!
-      # Somehow this got lost along the way, force it here, where the order_retailer (and therefore the tax rate) is known
-      # If the order_retailer is changed, we need to recreate the tax charge
-      create_tax_charge!
-      ## Reload the current order, the tax charge does not show up on the first page load
-      #reload
-    end
   end
 
   private

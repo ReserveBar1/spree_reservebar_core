@@ -6,7 +6,7 @@
       product_names = []
       @order.line_items.each do |li|
         if li.product.taxons.map(&:name).include? 'Grand Marnier'
-          prices += li.price
+          revenue += li.price.to_f
           quantities << li.quantity
           product_names << li.product.name.gsub(' ','+').gsub("'","")
         end
@@ -22,7 +22,7 @@
       This tag must be placed between the <body> and </body> tags, as close as possible to the opening tag.
       Creation Date: 03/16/2015
       -->".html_safe %>
-      <iframe src="https://4100393.fls.doubleclick.net/activityi;src=4100393;type=lml_c00;cat=ecm_r0;qty=1;cost=<%= number_to_currency(prices) %>;u4=<%= product_names %>;u5=<%= quantities %>;u6=<%= number_to_currency(prices) %>;u7=<%= @order.number %>;u8=<%= @order.ship_address.city.gsub(' ','+') %>;u9=<%= @order.ship_address.state.abbr %>;ord=<%= @order.number %>?" width="1" height="1" frameborder="0" style="display:none"></iframe>
+      <iframe src="https://4100393.fls.doubleclick.net/activityi;src=4100393;type=lml_c00;cat=ecm_r0;qty=1;cost=<%= revenue %>;u4=<%= product_names %>;u5=<%= quantities %>;u6=<%= revenue %>;u7=<%= @order.number %>;u8=<%= @order.ship_address.city.gsub(' ','+') %>;u9=<%= @order.ship_address.state.abbr %>;ord=<%= @order.number %>?" width="1" height="1" frameborder="0" style="display:none"></iframe>
       <% "<!-- End of DoubleClick Floodlight Tag: Please do not remove -->".html_safe %>
     <% end %>
   <% end %>

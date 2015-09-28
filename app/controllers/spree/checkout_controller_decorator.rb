@@ -61,12 +61,7 @@ Spree::CheckoutController.class_eval do
     end
   end
 
-  # Before we proceed to the delivery step we need to make a selection for the retailer based on the 
-  # Shipping address selected earlier and the order contents
-  # The retailer selector will return false if we cannot ship to the state.
-  # Need to handle that some way or other.
   def before_delivery
-
     blacklist = Array.new
     current_order.products.map(&:state_blacklist).each {|s| blacklist << s.split(',') unless s.nil?}
     # If any products are blacklisted in the user's state
@@ -77,23 +72,6 @@ Spree::CheckoutController.class_eval do
         flash[:notice] = t('exception.product_not_deliverable').html_safe
       end
       redirect_to cart_path
-    end
-
-    if Spree::Config[:use_county_based_routing]
-      retailer = Spree::ReservebarCore::RetailerSelectorProfit.select(current_order)
-    else
-      retailer = Spree::ReservebarCore::RetailerSelector.select(current_order)
-    end
-    # And save the association between order and retailer
-    if retailer.id != current_order.retailer_id
-      current_order.retailer = retailer
-      # Create the fulfillment fee adjustment for the order, now that we know the retailer:
-      current_order.create_fulfillment_fee!
-      # Somehow this got lost along the way, force it here, where the retailer (and therefore the tax rate) is known
-      # If the retailer is changed, we need to recreate the tax charge
-      current_order.create_tax_charge!
-      ## Reload the current order, the tax charge does not show up on the first page load
-      @order.reload
     end
   end
 

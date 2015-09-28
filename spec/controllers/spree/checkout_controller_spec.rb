@@ -28,13 +28,19 @@ describe Spree::CheckoutController do
 
   context 'Retailer' do
     it 'Sets a retailer before the delivery step' do
+      shipping_method.calculator.stub(available?: true)
+      shipping_method.stub(available?: true)
+      Spree::ShippingMethod.stub(all_available: [shipping_method])
+
       order.ship_address = address
-      order.state = 'delivery'
+      order.state = 'address'
       order.save!
       post :update, id: order.to_param,
-                    order: { shipping_method_id: shipping_method.id }
+                    order: { bill_address_attributes: address_params,
+                             ship_address_attributes: address_params,
+                             is_legal_age: true }
 
-      order.state.should eq 'payment'
+      order.state.should eq 'delivery'
       order.retailer.should eq retailer
     end
 

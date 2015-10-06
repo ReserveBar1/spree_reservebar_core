@@ -1,3 +1,12 @@
+# Insert on Absolut Electrik custom pages
+Deface::Override.new(
+  virtual_path: "spree/layouts/spree_application",
+  name: "facebook_absolut_electrik_custom_pages",
+  insert_top: "head",
+  partial: "spree/facebook_tags/absolut_electrik/custom_pages",
+  disabled: false
+)
+
 # Insert on Absolut Electrik product pages
 Deface::Override.new(
   virtual_path: "spree/layouts/spree_application",

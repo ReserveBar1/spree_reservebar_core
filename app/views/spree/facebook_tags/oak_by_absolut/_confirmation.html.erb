@@ -5,7 +5,7 @@
         price = 0
         @order.line_items.each do |li|
           if li.product.permalink.include? 'oak-by-absolut'
-            price = li.price * li.quantity
+            price = li.price.to_f * li.quantity
           end
         end
       %>
@@ -22,7 +22,7 @@
         }
       })();
       window._fbq = window._fbq || [];
-      window._fbq.push(['track', '6030670541761', {'value':'<%= number_to_currency(price) %>','currency':'USD'}]);
+      window._fbq.push(['track', '6030670541761', {'value':'<%= price %>','currency':'USD'}]);
       </script>
       <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?ev=6030670541761&amp;cd[value]=0.00&amp;cd[currency]=USD&amp;noscript=1" /></noscript>
     <% end %>

@@ -5,7 +5,7 @@
         price = 0
         @order.line_items.each do |li|
           if li.product.permalink.include? 'absolut-electrik'
-            price = li.price.to_f * li.quantity
+            price += li.price.to_f * li.quantity
           end
         end
       %>

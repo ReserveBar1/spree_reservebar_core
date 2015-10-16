@@ -9,6 +9,9 @@ Spree::Core::Engine.routes.prepend do
 
   post '/tiffany-email', to: 'users#tiffany_email'
 
+  # AdRoll feed
+  match '/feed' => 'products#adroll_feed', defaults: { format: 'text' }
+
   # route to allow applying a coupon during checkout via Ajax
   match '/checkout/apply_coupon/:state' => 'checkout#apply_coupon', :as => :apply_coupon_checkout
 

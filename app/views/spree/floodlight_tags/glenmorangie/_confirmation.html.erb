@@ -11,7 +11,7 @@
           product_names << li.product.name.gsub(' ','+').gsub("'","")
         end
       end
-      quantities = quantities.sum
+      quantities = quantities.join('|')
       product_names = product_names.join('|')
     %>
     <% unless product_names.empty? %>

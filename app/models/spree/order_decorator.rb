@@ -100,7 +100,7 @@ Spree::Order.class_eval do
     # we had called order.finalize! here, which was then executed twice....
     after_transition :to => 'complete' do |order, transition|
       order.gift_notification if order.is_gift?
-      Spree::OrderMailer.retailer_submitted_email(order).deliver if (order.retailer && !Spree::MailLog.has_email_been_sent_already?(order, 'Order::retailer_submitted_email') )
+      Spree::OrderMailer.delay.retailer_submitted_email(order) if (order.retailer && !Spree::MailLog.has_email_been_sent_already?(order, 'Order::retailer_submitted_email') )
     end
   end
 
@@ -188,7 +188,7 @@ Spree::Order.class_eval do
 
 
   def gift_notification
-    Spree::OrderMailer.giftee_notify_email(self).deliver unless (self.gift.email.blank? || Spree::MailLog.has_email_been_sent_already?(self, 'Order::giftee_notify_email'))
+    Spree::OrderMailer.delay.giftee_notify_email(self) unless (self.gift.email.blank? || Spree::MailLog.has_email_been_sent_already?(self, 'Order::giftee_notify_email'))
   end
 
   def retailer
@@ -288,6 +288,23 @@ Spree::Order.class_eval do
       ## Reload the current order, the tax charge does not show up on the first page load
       #reload
     end
+  end
+
+
+  # Finalizes an in progress order after checkout is complete.
+  # Called after transition to complete state when payments will have been processed
+  def finalize!
+    update_attribute(:completed_at, Time.now)
+    Spree::InventoryUnit.assign_opening_inventory(self)
+    # lock any optional adjustments (coupon promotions, etc.)
+    adjustments.optional.each { |adjustment| adjustment.update_attribute('locked', true) }
+    Spree::OrderMailer.delay.confirm_email(self)
+
+    self.state_events.create({
+      :previous_state => 'cart',
+      :next_state     => 'complete',
+      :name           => 'order' ,
+      :user_id        => (Spree::User.respond_to?(:current) && Spree::User.current.try(:id)) || self.user_id                       })
   end
 
   private

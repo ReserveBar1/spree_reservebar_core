@@ -1,0 +1,31 @@
+<% if controller.controller_name == "orders" && controller.action_name == "show" %>
+  <% if flash[:commerce_tracking] %>
+    <% 
+      product_names = []
+      @order.line_items.each do |li|
+        if li.product.taxons.map(&:name).include? 'Aberlour'
+          product_names << li.product.name.gsub(' ','+').gsub("'","")
+        end
+      end
+      product_names = product_names.join('|')
+    %>
+    <% unless product_names.empty? %>
+      <%= "<!-- Google Code for Aberlour Sales from RB Conversion Page -->".html_safe %>
+      <script type="text/javascript">
+        /* <![CDATA[ */
+        var google_conversion_id = 965649998;
+        var google_conversion_language = "en";
+        var google_conversion_format = "3";
+        var google_conversion_color = "ffffff";
+        var google_conversion_label = "s0a-CKHzs2AQzsy6zAM"; var google_conversion_value = 1.00; var google_conversion_currency = "USD"; var google_remarketing_only = false;
+        /* ]]> */
+      </script>
+      <script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script>
+      <noscript>
+        <div style="display:inline;">
+          <img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/965649998/?value=1.00&amp;currency_code=USD&amp;label=s0a-CKHzs2AQzsy6zAM&amp;guid=ON&amp;script=0"/>
+        </div>
+      </noscript>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,5 +1,5 @@
 <% if controller.controller_name == "orders" && controller.action_name == "edit" %>
-  <% if @order.line_items.map(&:product).map(&:permalink).uniq && ['absolut-electrik-blue-1l', 'absolut-electrik-blue-750ml', 'absolut-electrik-silver-750ml', 'absolut-electrik-silver-1l'] %>
+  <% if @order.line_items.map(&:product).map(&:permalink).any?{ |p| p['absolut-electrik']} %>
     <%
       price = 0
       @order.line_items.each do |li|
@@ -26,5 +26,3 @@
     <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?ev=6030670878761&amp;cd[value]=0.00&amp;cd[currency]=USD&amp;noscript=1" /></noscript>
   <% end %>
 <% end %>
-
-

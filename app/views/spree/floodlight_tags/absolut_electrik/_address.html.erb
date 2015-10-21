@@ -1,6 +1,6 @@
 <% if controller.controller_name == "checkout" && controller.action_name == "edit" %>
   <% if @order.state == 'address' %>
-    <% if @order.line_items.map(&:product).map(&:permalink).uniq && ['absolut-electrik-blue-1l', 'absolut-electrik-blue-750ml', 'absolut-electrik-silver-750ml', 'absolut-electrik-silver-1l'] %>
+    <% if @order.line_items.map(&:product).map(&:permalink).any?{ |p| p['absolut-electrik']} %>
       <%= "<!--
       Start of DoubleClick Floodlight Tag: Please do not remove
       Activity name of this tag: Nights 2.0 - Reserve Bar Electrik Checkout Page

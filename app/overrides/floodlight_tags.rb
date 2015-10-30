@@ -31,7 +31,7 @@ Deface::Override.new(:virtual_path => "spree/orders/show",
 	                   :name => "floodlight_order_summary",
 	                   :insert_before => "#order",
 	                   :partial => "spree/floodlight_tags/orders_show",
-	                   :disabled => false)
+	                   :disabled => true)
 
 # Insert on checkout/registration page 
 Deface::Override.new(:virtual_path => "spree/checkout/registration",
@@ -45,4 +45,4 @@ Deface::Override.new(:virtual_path => "spree/taxons/show",
 	                   :name => "floodlight_taxon_show",
 	                   :insert_before => ".taxon-title",
 	                   :partial => "spree/floodlight_tags/taxon_show",
-	                   :disabled => false)
+	                   :disabled => true)

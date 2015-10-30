@@ -4,5 +4,5 @@ Deface::Override.new(
   name: "h250_remarketing_tag",
   insert_bottom: "body",
   partial: "spree/other_tags/h250_remarketing_tag",
-  disabled: false
+  disabled: true
 )

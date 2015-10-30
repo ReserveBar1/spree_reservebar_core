@@ -1,0 +1,25 @@
+<% if controller.controller_name == "orders" && controller.action_name == "show" %>
+  <% if flash[:commerce_tracking] %>
+    <% if @order.line_items.map(&:product).map(&:permalink).uniq.include? 'absolut-spark' %>
+      <%= "<!-- Google Code for Sales from ReserveBar Conversion Page -->".html_safe %>
+      <script type="text/javascript">
+        /* <![CDATA[ */
+        var google_conversion_id = 976422206;
+        var google_conversion_language = "en";
+        var google_conversion_format = "3";
+        var google_conversion_color = "ffffff";
+        var google_conversion_label = "fXzkCLP5vV8QvorM0QM";
+        var google_conversion_value = 1.00;
+        var google_conversion_currency = "USD";
+        var google_remarketing_only = false;
+        /* ]]> */
+      </script>
+      <script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script>
+      <noscript>
+        <div style="display:inline;">
+          <img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/976422206/?value=1.00&amp;currency_code=USD&amp;label=fXzkCLP5vV8QvorM0QM&amp;guid=ON&amp;script=0"/>
+        </div>
+      </noscript>
+    <% end %>
+  <% end %>
+<% end %>

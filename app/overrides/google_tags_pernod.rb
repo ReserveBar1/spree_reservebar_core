@@ -16,6 +16,15 @@ Deface::Override.new(
   disabled: false
 )
 
+# Insert on Confirmation page, if there are Absolut Spark products
+Deface::Override.new(
+  virtual_path: "spree/layouts/spree_application",
+  name: "google_absolut_spark_confirmation",
+  insert_top: "body",
+  partial: "spree/google_tags/absolut_spark/confirmation",
+  disabled: false
+)
+
 # Insert on Confirmation page, if there are OAK by Absolut products
 Deface::Override.new(
   virtual_path: "spree/layouts/spree_application",

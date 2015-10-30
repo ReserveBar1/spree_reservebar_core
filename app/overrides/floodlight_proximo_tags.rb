@@ -10,7 +10,7 @@ Deface::Override.new(:virtual_path => "spree/layouts/spree_application",
                      :name => "floodlight_proximo_dobel_product",
                      :insert_top => "body",
                      :partial => "spree/floodlight_tags/proximo/dobel_product",
-                     :disabled => false)
+                     :disabled => true)
 
 # Insert on Jose Cuervo® Reserva de la Familia® product page
 Deface::Override.new(:virtual_path => "spree/layouts/spree_application",

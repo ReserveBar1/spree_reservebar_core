@@ -4,7 +4,7 @@ Deface::Override.new(
   name: "floodlight_absolut_electrik_products",
   insert_top: "body",
   partial: "spree/floodlight_tags/absolut_electrik/products",
-  disabled: false
+  disabled: true
 )
 
 # Insert on Cart page, if there are Absolut Electrik products
@@ -13,7 +13,7 @@ Deface::Override.new(
   name: "floodlight_absolut_electrik_cart",
   insert_top: "body",
   partial: "spree/floodlight_tags/absolut_electrik/cart",
-  disabled: false
+  disabled: true
 )
 
 # Insert on Address page, if there are Absolut Electrik products
@@ -22,7 +22,7 @@ Deface::Override.new(
   name: "floodlight_absolut_electrik_address",
   insert_top: "body",
   partial: "spree/floodlight_tags/absolut_electrik/address",
-  disabled: false
+  disabled: true
 )
 
 # Insert on Confirmation page, if there are Absolut Electrik products

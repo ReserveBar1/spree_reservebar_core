@@ -4,5 +4,5 @@ Deface::Override.new(
   name: "social_sx_liquors_confirmation",
   insert_top: "body",
   partial: "spree/other_tags/sx_liquors_social_tags",
-  disabled: false
+  disabled: true
 )

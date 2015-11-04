@@ -1,3 +1,5 @@
+# Purpose: All limiting the available ship methods by retailer, e.g. one retailer only uses Fedex, another only UPS, a third uses local delvivery and Fedex, etc.
+# The old style zone based selection does not work, since we have many retailers shippig to the same location
 class RetailersShippingMethods < ActiveRecord::Migration
   def up
     create_table :spree_retailers_shipping_methods, :id => false do |t|

@@ -1,0 +1,30 @@
+<% if controller.controller_name == "orders" && controller.action_name == "show" %>
+  <% if flash[:commerce_tracking] %>
+    <%
+      revenue = 0
+      @order.line_items.each do |li|
+        if li.product.taxons.map(&:name).include? 'Ole Smoky'
+          revenue += li.price * li.quantity
+        end
+      end
+    %>
+    <% unless revenue == 0 %>
+      <!-- Facebook Conversion Code for Registrations - Ole Smoky Moonshine -->
+      <script>(function() {
+        var _fbq = window._fbq || (window._fbq = []);
+        if (!_fbq.loaded) {
+        var fbds = document.createElement('script');
+        fbds.async = true;
+        fbds.src = '//connect.facebook.net/en_US/fbds.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(fbds, s);
+        _fbq.loaded = true;
+        }
+        })();
+        window._fbq = window._fbq || [];
+        window._fbq.push(['track', '6033051949613', {'value':'<%= revenue %>','currency':'USD'}]);
+      </script>
+      <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?ev=6033051949613&amp;cd[value]=<%= revenue %>&amp;cd[currency]=USD&amp;noscript=1" /></noscript>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,43 @@
+source 'http://rubygems.org'
+
+gem 'json'
+gem 'sqlite3'
+gem 'rails', '3.1.1'
+gem 'rubyzip', '0.9.9'
+gem 'tax_cloud', '0.2.0'
+gem 'spree_gateway', :git => 'git://github.com/spree/spree_gateway.git', :branch => '1-1-stable'
+gem 'active_shipping', :git => 'git://github.com/ReserveBar1/active_shipping.git'
+gem 'spree_active_shipping', :git => 'git://github.com/ReserveBar1/spree_active_shipping.git'
+gem 'spree_reservebar_reuse_credit_card', :git => 'git://github.com/ReserveBar1/spree_reservebar_reuse_credit_card.git'
+gem 'spree_essential_blog', :git => 'git://github.com/citrus/spree_essential_blog.git', :branch => '1.0.x'
+gem 'spree_gift_packaging', :git => 'git://github.com/ReserveBar1/spree_gift_packaging.git'
+gem 'spree_related_products', :git => 'git://github.com/spree/spree_related_products.git', :branch => '1-0-stable'
+gem 'spree_sendgrid', :git => 'git://github.com/ReserveBar1/spree_sendgrid.git'
+
+
+# Gems used only for assets and not required
+# in production environments by default.
+group :assets do
+  gem 'sass-rails', "~> 3.1.4"
+  gem 'coffee-rails', "~> 3.1.1"
+  gem 'uglifier'
+end
+
+group :test do
+  gem 'guard'
+  gem 'guard-rspec', '~> 0.5.0'
+  gem 'rspec-rails', '~> 2.14.0'
+  gem 'factory_girl_rails', '~> 1.5.0'
+  gem 'pry-debugger'
+
+  gem 'simplecov'
+
+  gem 'ffaker', '~> 1.12.0'
+  gem 'shoulda-matchers', '~> 1.0.0'
+  gem 'capybara', '1.1.4'
+  gem 'selenium-webdriver', '2.16.0'
+  gem 'database_cleaner', '0.7.1'
+  gem 'launchy'
+end
+
+gemspec

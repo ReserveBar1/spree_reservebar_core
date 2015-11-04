@@ -1,0 +1,28 @@
+<% if controller.controller_name == "orders" && controller.action_name == "edit" %>
+  <% if @order.line_items.map(&:product).map(&:permalink).any?{ |p| p['absolut-electrik']} %>
+    <%
+      price = 0
+      @order.line_items.each do |li|
+        if li.product.permalink.include? 'absolut-electrik'
+          price = li.price.to_f * li.quantity
+        end
+      end
+    %>
+    <%= "<!-- Facebook Conversion Code for Absolut_Electrik Bottle_Reserve Bar_Shopping Cart Page (add to cart) -->".html_safe %>
+    <script>(function() {
+    var _fbq = window._fbq || (window._fbq = []);
+    if (!_fbq.loaded) {
+    var fbds = document.createElement('script');
+    fbds.async = true;
+    fbds.src = '//connect.facebook.net/en_US/fbds.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(fbds, s);
+    _fbq.loaded = true;
+    }
+    })();
+    window._fbq = window._fbq || [];
+    window._fbq.push(['track', '6030670878761', {'value':'<%= price %>','currency':'USD'}]);
+    </script>
+    <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?ev=6030670878761&amp;cd[value]=0.00&amp;cd[currency]=USD&amp;noscript=1" /></noscript>
+  <% end %>
+<% end %>

@@ -103,7 +103,16 @@
 	          </tr>
 		      <tr>
 		        <td width="33%" valign="top" style="font: 11px Georgia, 'Times New Roman', Times, serif; font-weight:normal; text-align:left; padding-right:10px"><%= @order.bill_address %></td>
-		        <td width="33%" valign="top" style="font: 11px Georgia, 'Times New Roman', Times, serif; font-weight:normal; text-align:left; padding-left:10px; padding-right:10px"><%= @order.ship_address %></td>
+		        <td width="33%" valign="top" style="font: 11px Georgia, 'Times New Roman', Times, serif; font-weight:normal; text-align:left; padding-left:10px; padding-right:10px">
+			        <span style='display:inline-block;vertical-align:top;'>
+				        <%= "#{@order.ship_address.try(:firstname)} #{@order.ship_address.try(:lastname)}" %><br />
+				        <% if @order.ship_address.company.present? %><%= "#{@order.ship_address.company}" %><br /><% end %>
+				        <%= "#{@order.ship_address.try(:address1)}" %><br />
+				        <% if @order.ship_address.address2.present? %><%= "#{@order.ship_address.address2}" %><br /><% end %>
+				        <%= "#{@order.ship_address.try(:city)}, #{@order.ship_address.try(:state).try(:abbr)} #{@order.ship_address.try(:zipcode)}" %><br />
+				        <%= "#{@order.ship_address.try(:country).try(:name)}" %>
+			        </span>
+		        </td>
 		        <td width="33%" valign="top" style="font: 11px Georgia, 'Times New Roman', Times, serif; font-weight:normal; text-align:left; padding-left:10px">
 		        	<% if gift = @order.gift %>
 		        	<b><%= t('gift.recipient') %></b>: <%= gift.recipient %><br />

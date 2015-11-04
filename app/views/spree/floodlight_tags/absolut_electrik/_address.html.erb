@@ -1,0 +1,22 @@
+<% if controller.controller_name == "checkout" && controller.action_name == "edit" %>
+  <% if @order.state == 'address' %>
+    <% if @order.line_items.map(&:product).map(&:permalink).any?{ |p| p['absolut-electrik']} %>
+      <%= "<!--
+      Start of DoubleClick Floodlight Tag: Please do not remove
+      Activity name of this tag: Nights 2.0 - Reserve Bar Electrik Checkout Page
+      URL of the webpage where the tag is expected to be placed: https://www.reservebar.com/checkout
+      This tag must be placed between the <body> and </body> tags, as close as possible to the opening tag.
+      Creation Date: 10/07/2015
+      -->".html_safe %>
+      <script type="text/javascript">
+      var axel = Math.random() + "";
+      var a = axel * 10000000000000;
+      document.write('<iframe src="https://4533689.fls.doubleclick.net/activityi;src=4533689;type=absol004;cat=night000;ord=' + a + '?" width="1" height="1" frameborder="0" style="display:none"></iframe>');
+      </script>
+      <noscript>
+      <iframe src="https://4533689.fls.doubleclick.net/activityi;src=4533689;type=absol004;cat=night000;ord=1?" width="1" height="1" frameborder="0" style="display:none"></iframe>
+      </noscript>
+      <%= "<!-- End of DoubleClick Floodlight Tag: Please do not remove -->".html_safe %>
+    <% end %>
+  <% end %>
+<% end %>

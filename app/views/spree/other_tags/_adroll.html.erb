@@ -1,0 +1,12 @@
+<%
+  if controller.controller_name == "pages" && controller.action_name == "show"
+    @product = Spree::Product.find_by_permalink(@page.path.split('/').last)
+  end
+%>
+
+<% if @product.present? %>
+  <!-- ADROLL PRODUCT SKU -->
+  <script>
+    adroll_custom_data = {"product_id": "<%= @product.sku %>"};
+  </script>
+<% end %>

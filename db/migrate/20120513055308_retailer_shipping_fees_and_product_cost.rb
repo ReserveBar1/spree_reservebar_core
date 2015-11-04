@@ -7,6 +7,7 @@ class RetailerShippingFeesAndProductCost < ActiveRecord::Migration
       t.decimal :cost_price, :precision => 8, :scale => 2, :null => false, :default => 0.0
       t.timestamps
     end
+    
     Spree::Retailer.all.each do |retailer|
       retailer.update_attribute(:reimburse_shipping_cost, true)
     end
@@ -15,6 +16,6 @@ class RetailerShippingFeesAndProductCost < ActiveRecord::Migration
 
   def down
     drop_table :spree_product_costs
-    remmove_column :spree_retailers, :reimburse_shipping_cost
+    remove_column :spree_retailers, :reimburse_shipping_cost
   end
 end

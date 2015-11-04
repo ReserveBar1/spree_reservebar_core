@@ -81,6 +81,7 @@ Spree::Order.class_eval do
 
     before_transition :to => ['delivery'] do |order|
       order.shipments.each { |s| s.destroy unless s.shipping_method.available_to_order?(order) }
+      order.set_retailer
     end
 
     after_transition :to => 'complete', :do => :finalize!
@@ -99,7 +100,7 @@ Spree::Order.class_eval do
     # we had called order.finalize! here, which was then executed twice....
     after_transition :to => 'complete' do |order, transition|
       order.gift_notification if order.is_gift?
-      Spree::OrderMailer.retailer_submitted_email(order).deliver if (order.retailer && !Spree::MailLog.has_email_been_sent_already?(order, 'Order::retailer_submitted_email') )
+      Spree::OrderMailer.delay.retailer_submitted_email(order) if (order.retailer && !Spree::MailLog.has_email_been_sent_already?(order, 'Order::retailer_submitted_email') )
     end
   end
 
@@ -187,7 +188,7 @@ Spree::Order.class_eval do
 
 
   def gift_notification
-    Spree::OrderMailer.giftee_notify_email(self).deliver unless (self.gift.email.blank? || Spree::MailLog.has_email_been_sent_already?(self, 'Order::giftee_notify_email'))
+    Spree::OrderMailer.delay.giftee_notify_email(self) unless (self.gift.email.blank? || Spree::MailLog.has_email_been_sent_already?(self, 'Order::giftee_notify_email'))
   end
 
   def retailer
@@ -265,6 +266,45 @@ Spree::Order.class_eval do
 
   def update_line_item_costs
     line_items.each { |line_item| line_item.update_costs }
+  end
+
+  # Set retailer based on shipping address and the order contents
+  # The retailer selector will return false if we cannot ship to the state.
+  # Need to handle that some way or other.
+  def set_retailer
+    if Spree::Config[:use_county_based_routing]
+      order_retailer = Spree::ReservebarCore::RetailerSelectorProfit.select(self)
+    else
+      order_retailer = Spree::ReservebarCore::RetailerSelector.select(self)
+    end
+    # And save the association between order and order_retailer
+    if order_retailer.id != retailer_id
+      self.retailer = order_retailer
+      # Create the fulfillment fee adjustment for the order, now that we know the order_retailer:
+      create_fulfillment_fee!
+      # Somehow this got lost along the way, force it here, where the order_retailer (and therefore the tax rate) is known
+      # If the order_retailer is changed, we need to recreate the tax charge
+      create_tax_charge!
+      ## Reload the current order, the tax charge does not show up on the first page load
+      #reload
+    end
+  end
+
+
+  # Finalizes an in progress order after checkout is complete.
+  # Called after transition to complete state when payments will have been processed
+  def finalize!
+    update_attribute(:completed_at, Time.now)
+    Spree::InventoryUnit.assign_opening_inventory(self)
+    # lock any optional adjustments (coupon promotions, etc.)
+    adjustments.optional.each { |adjustment| adjustment.update_attribute('locked', true) }
+    Spree::OrderMailer.delay.confirm_email(self)
+
+    self.state_events.create({
+      :previous_state => 'cart',
+      :next_state     => 'complete',
+      :name           => 'order' ,
+      :user_id        => (Spree::User.respond_to?(:current) && Spree::User.current.try(:id)) || self.user_id                       })
   end
 
   private

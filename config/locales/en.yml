@@ -84,4 +84,6 @@ en:
   edit_retailer_counties: "Edit Counties"
   florida_special: "Florida Retailer Rates"
   spree_gateway_error_flash_for_checkout_detailed: "Payment could not be processed."
-  
+  exception:
+    ardbeg_supernova_not_deliverable: "Unfortunately, we are not able to fulfill your pre-order of Supernova 2015. As stated on the product page, Ardbeg 2015 is available as a limited edition in extremely limited quantities, and it has sold out. We apologize that we have not been able to satisfy your request. As a token of our appreciation, we are providing you a promo code - ARDBEG2015 - that will be good for 15% off your next purchase of any Ardbeg product on ReserveBar.com (promo code expires 12/31/15)."
+    product_not_deliverable: "Thank you for attempting to make a purchase through ReserveBar. We appreciate your business; unfortunately, we cannot accept your order because the item you have ordered is not distributed by the brand in the state in which you have requested delivery. If you would like to choose another product, we invite you to continue shopping.  Please sign up for an <a href='/account'>email notification</a> of when the brand has expanded distribution to additional states. We apologize for the inconvenience and thank you again for gifting with ReserveBar."

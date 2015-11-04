@@ -33,5 +33,16 @@ Deface::Override.new(
   name: 'listrak_conversion',
   insert_top: 'body',
   partial: 'spree/listrak/conversion',
+  sequence: 2,
+  disabled: false
+)
+
+# Listrak Subscription Points
+Deface::Override.new(
+  virtual_path: 'spree/layouts/spree_application',
+  name: 'listrak_subscription_points',
+  insert_top: 'body',
+  partial: 'spree/listrak/subscription_points',
+  sequence: 1,
   disabled: false
 )

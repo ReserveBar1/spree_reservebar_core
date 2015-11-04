@@ -26,3 +26,12 @@ Deface::Override.new(
   sequence: 10,
   disabled: false
 )
+
+# Listrak Conversion Tracking
+Deface::Override.new(
+  virtual_path: 'spree/layouts/spree_application',
+  name: 'listrak_conversion',
+  insert_top: 'body',
+  partial: 'spree/listrak/conversion',
+  disabled: false
+)

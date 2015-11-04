@@ -4,7 +4,7 @@ Deface::Override.new(
   name: "floodlight_grand_marnier_brand",
   insert_top: "body",
   partial: "spree/floodlight_tags/grand_marnier/brand",
-  disabled: false
+  disabled: true
 )
 
 # Insert on Grand Marnier product pages
@@ -13,7 +13,7 @@ Deface::Override.new(
   name: "floodlight_grand_marnier_products",
   insert_top: "body",
   partial: "spree/floodlight_tags/grand_marnier/products",
-  disabled: false
+  disabled: true
 )
 
 # Insert on Grand Marnier ALL product pages
@@ -22,7 +22,7 @@ Deface::Override.new(
   name: "floodlight_grand_marnier_all_products",
   insert_top: "body",
   partial: "spree/floodlight_tags/grand_marnier/all_products",
-  disabled: false
+  disabled: true
 )
 
 # Insert on Cart page, if there are Grand Marnier products
@@ -31,7 +31,7 @@ Deface::Override.new(
   name: "floodlight_grand_marnier_cart",
   insert_top: "body",
   partial: "spree/floodlight_tags/grand_marnier/cart",
-  disabled: false
+  disabled: true
 )
 
 # Insert on Address page, if there are Grand Marnier products
@@ -40,7 +40,7 @@ Deface::Override.new(
   name: "floodlight_grand_marnier_address",
   insert_top: "body",
   partial: "spree/floodlight_tags/grand_marnier/address",
-  disabled: false
+  disabled: true
 )
 
 # Insert on Confirmation page, if there are Grand Marnier products
@@ -49,5 +49,5 @@ Deface::Override.new(
   name: "floodlight_grand_marnier_confirmation",
   insert_top: "body",
   partial: "spree/floodlight_tags/grand_marnier/confirmation",
-  disabled: false
+  disabled: true
 )

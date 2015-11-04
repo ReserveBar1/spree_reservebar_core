@@ -1,3 +1,4 @@
+<% if false %>
 <% if flash[:commerce_tracking] %>
 <%= "<!-- Bing Code for SEM Conversions Conversion Page -->".html_safe %>
 <script type="text/javascript">
@@ -15,4 +16,5 @@ if (!window.mstag) mstag = {loadTag : function(){},time : (new Date()).getTime()
 	<iframe src="//flex.atdmt.com/mstag/tag/980355c3-27b0-44a2-a9c8-fda2be656362/analytics.html?dedup=1&domainId=2450150&type=1&revenue=<%= @order.total -%>&actionid=140275" frameborder="0" scrolling="no" width="1" height="1" style="visibility:hidden;display:none"> 
 	</iframe>
 </noscript>
+<% end %>
 <% end %>

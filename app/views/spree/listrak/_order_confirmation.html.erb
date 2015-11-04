@@ -1,0 +1,28 @@
+<% if controller.controller_name == "orders" && controller.action_name == "show" %>
+  <% if flash[:commerce_tracking] %>
+    <script type="text/javascript"> 
+      (function(d) { if (document.addEventListener) document.addEventListener('ltkAsyncListener', d);
+      else {e = document.documentElement; e.ltkAsyncProperty = 0; e.attachEvent('onpropertychange', function (e) {
+      if (e.propertyName == 'ltkAsyncProperty'){d();}});}})(function() {
+        /********** Begin Custom Code **********/
+         /** Handle ORDER **/
+        _ltk.Order.SetCustomer('<%= @order.email %>', '<%= @order.bill_address.try(:firstname) %>', '<%= @order.bill_address.try(:lastname) %>');
+        _ltk.Order.OrderNumber = '<%= @order.number %>';
+        _ltk.Order.ItemTotal = '<%= @order.item_total.to_f %>';
+        _ltk.Order.ShippingTotal = '<%= @order.ship_total.to_f %>';
+        _ltk.Order.TaxTotal = '<%= @order.tax_total.to_f %>';
+        _ltk.Order.OrderTotal = '<%= @order.total.to_f %>';
+        <% @order.line_items.each do |li| %>
+        _ltk.Order.AddItem('<%= li.variant.sku %>', <%= li.quantity %>, '<%= li.price.to_f %>');
+        <% end %>
+        _ltk.Order.Submit();
+
+         /** Handle SCA Removal **/
+        _ltk.SCA.SetCustomer('<%= @order.email %>', '<%= @order.bill_address.try(:firstname) %>', '<%= @order.bill_address.try(:lastname) %>');
+        _ltk.SCA.OrderNumber = '<%= @order.number %>';
+        _ltk.SCA.Submit();
+        /********** End Custom Code **********/
+      });
+    </script>
+  <% end %>
+<% end %>

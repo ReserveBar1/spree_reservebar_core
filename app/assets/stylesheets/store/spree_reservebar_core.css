@@ -3,3 +3,10 @@
  *= require store/spree_auth
  *= require store/gift
 */
+
+#guardians_opt_in {
+  font-size: 16px;
+  font-weight: bold;
+  border: 2px solid rgba(232, 216, 206, 1.0);
+  padding: 15px 0px 15px 10px;
+}

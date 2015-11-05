@@ -3,6 +3,7 @@ class GuardiansOptInJob < Struct.new(:email)
 
   class GuardianAPI
     include HTTParty
+    # debug_output $stdout
 
     def set_email(email)
       unless Rails.env == 'production'

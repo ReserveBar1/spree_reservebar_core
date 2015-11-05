@@ -1,0 +1,16 @@
+<% if @order.state == 'address' %>
+  <%
+    tgl_products = false
+    @order.line_items.each do |li|
+      if li.product.taxons.map(&:name).include? 'The Glenlivet'
+        tgl_products = true
+      end
+    end
+  %>
+  <% if tgl_products %>
+    <div id="guardians_opt_in" data-hook="guardians_opt_in_box">
+      <%= check_box_tag(:guardians_email_opt_in) %>
+      <%= label_tag(:guardians_email_opt_in, "Join the ranks of The Glenlivet Guardians and unlock a world of exclusive privileges.") %>
+    </div>
+  <% end %>
+<% end %>

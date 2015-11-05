@@ -18,4 +18,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'spree_auth', '1.0.3'
   s.add_dependency 'spree_api', '1.0.3'
   s.add_dependency 'spree_promo', '1.0.3'
+  s.add_dependency 'httparty', '0.11.0'
 end

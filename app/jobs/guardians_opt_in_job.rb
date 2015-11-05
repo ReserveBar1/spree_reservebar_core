@@ -3,12 +3,19 @@ class GuardiansOptInJob < Struct.new(:email)
 
   class GuardianAPI
     include HTTParty
-    base_uri 'https://reachv4-pnr.uat.kbmg.com'
 
     def set_email(email)
+      unless Rails.env == 'production'
+        base_uri = 'https://reachv4-pnr.uat.kbmg.com'
+        token = '1eb8554d-141f-4d3a-8517-8eb831540347'
+      else
+        base_uri = 'https://reachv4-pnr.kbmg.com'
+        token = 'df8ec201-f816-4135-a7e8-5d4e5f71b0c0'
+      end
+
       body = { 
-        'apiToken' => '1eb8554d-141f-4d3a-8517-8eb831540347',
-        'Request' => [ {"Email"=>"#{email}"} ].to_json
+        'apiToken' => token,
+        'Request' => [ {"Email" => "#{email}"} ].to_json
       }
 
       headers = {
@@ -17,7 +24,7 @@ class GuardiansOptInJob < Struct.new(:email)
         'content-encoding' => 'utf-8'
       }
 
-      self.class.post('/People/PeopleSet', body: body, headers: headers)
+      self.class.post("#{base_uri}/People/PeopleSet", body: body, headers: headers)
     end
   end
 

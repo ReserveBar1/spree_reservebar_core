@@ -33,7 +33,6 @@ Deface::Override.new(
   name: 'listrak_conversion',
   insert_top: 'body',
   partial: 'spree/listrak/conversion',
-  sequence: 2,
   disabled: false
 )
 
@@ -44,5 +43,14 @@ Deface::Override.new(
   insert_top: 'body',
   partial: 'spree/listrak/subscription_points',
   sequence: 1,
+  disabled: false
+)
+
+# Listrak Collect Cart Information
+Deface::Override.new(
+  virtual_path: 'spree/layouts/spree_application',
+  name: 'listrak_cart_info',
+  insert_top: 'body',
+  partial: 'spree/listrak/cart_info',
   disabled: false
 )

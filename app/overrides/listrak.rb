@@ -54,3 +54,12 @@ Deface::Override.new(
   partial: 'spree/listrak/cart_info',
   disabled: false
 )
+
+# Listrak Capture Email Addresses
+Deface::Override.new(
+  virtual_path: 'spree/layouts/spree_application',
+  name: 'listrak_capture_email',
+  insert_top: 'body',
+  partial: 'spree/listrak/capture_email',
+  disabled: false
+)

@@ -1,0 +1,27 @@
+<% if controller.controller_name == "orders" && controller.action_name == "edit" %>
+  <% if @order.line_items.present? %>
+    <script type="text/javascript"> 
+      (function(d) { if (document.addEventListener) document.addEventListener('ltkAsyncListener', d);
+      else {e = document.documentElement; e.ltkAsyncProperty = 0; e.attachEvent('onpropertychange', function (e) {
+      if (e.propertyName == 'ltkAsyncProperty'){d();}});}})(function() {
+        /********** Begin Custom Code **********/
+          <% @order.line_items.each do |li| %>
+          <% prod = li.product %>
+          _ltk.SCA.AddItemWithLinks('<%= li.variant.sku %>', <%= li.quantity %>, '<%= li.price.to_f %>', '<%= prod.name %>', '<%= prod.images.first.attachment.url(:large) %>', '/products/<%= prod.permalink %>');
+          <% end %>
+          _ltk.SCA.Submit();
+        /********** End Custom Code **********/
+      });
+    </script>
+  <% else %>
+    <script type="text/javascript"> 
+      (function(d) { if (document.addEventListener) document.addEventListener('ltkAsyncListener', d);
+      else {e = document.documentElement; e.ltkAsyncProperty = 0; e.attachEvent('onpropertychange', function (e) {
+      if (e.propertyName == 'ltkAsyncProperty'){d();}});}})(function() {
+        /********** Begin Custom Code **********/
+          _ltk.SCA.ClearCart();
+        /********** End Custom Code **********/
+      });
+    </script>
+  <% end %>
+<% end %>

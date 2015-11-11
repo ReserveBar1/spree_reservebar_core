@@ -16,6 +16,9 @@ class GuardiansOptInJob < Struct.new(:email)
 
       body = { 
         'apiToken' => token,
+        'Source' => 'RB',
+        'SiteName' => 'ReserveBar',
+        'Origin' => 'RB Guardian Optin',
         'Request' => [ {"Email" => "#{email}"} ].to_json
       }
 

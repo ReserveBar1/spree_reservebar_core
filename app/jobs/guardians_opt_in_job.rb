@@ -14,21 +14,28 @@ class GuardiansOptInJob < Struct.new(:email)
         token = 'df8ec201-f816-4135-a7e8-5d4e5f71b0c0'
       end
 
-      body = { 
-        'apiToken' => token,
-        'Source' => 'RB',
-        'SiteName' => 'ReserveBar',
-        'Origin' => 'RB Guardian Optin',
-        'Request' => [ {"Email" => "#{email}"} ].to_json
-      }
-
       headers = {
         'content-type' => 'application/x-www-form-urlencoded',
         'accept' => 'application/json',
         'content-encoding' => 'utf-8'
       }
 
-      self.class.post("#{base_uri}/People/PeopleSet", body: body, headers: headers)
+      set_body = { 
+        'apiToken' => token,
+        'Request' => [ {"Email" => "#{email}"} ].to_json
+      }
+      resp = self.class.post("#{base_uri}/People/PeopleSet", body: set_body, headers: headers)
+
+      set_metadata_body = { 
+        'apiToken' => token,
+        'personId' => resp['Data']['People'][0]['PersonId'],
+        'metadata' => [
+          {'Key' => 'Source', 'Value' => 'RB'},
+          {'Key' => 'SiteName', 'Value' => 'ReserveBar'},
+          {'Key' => 'Origin', 'Value' => 'RB Guardian Optin'}
+        ].to_json
+      }
+      self.class.post("#{base_uri}/People/SetPersonMetadata", body: set_metadata_body, headers: headers)
     end
   end
 

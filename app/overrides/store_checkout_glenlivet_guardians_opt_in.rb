@@ -4,5 +4,5 @@ Deface::Override.new(
   name: 'glenlivet_guardians_opt_in',
   insert_after: "code[erb-loud]:contains('checkout_form_')",
   partial: 'spree/checkout/glenlivet_guardians_opt_in',
-  disabled: false
+  disabled: true
 )

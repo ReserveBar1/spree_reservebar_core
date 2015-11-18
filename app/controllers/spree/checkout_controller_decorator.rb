@@ -10,7 +10,7 @@ Spree::CheckoutController.class_eval do
   respond_to :js, :only => [:apply_coupon]
 
   before_filter :set_gift_params, only: :update
-  before_filter :check_guardians_opt_in, only: :update
+  # before_filter :check_guardians_opt_in, only: :update
 
   # if we don't have a retailer that can ship alcohol to the state, we need to set a warning flag and throw the user back to the address state
   rescue_from Exceptions::NoRetailerShipsToStateError, :with => :rescue_from_no_retailer_ships_to_state_error

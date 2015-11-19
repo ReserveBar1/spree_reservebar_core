@@ -4,7 +4,7 @@ Deface::Override.new(
   name: "facebook_ole_smoky_cart",
   insert_top: "head",
   partial: "spree/facebook_tags/ole_smoky/cart",
-  disabled: false
+  disabled: true
 )
 
 # Insert on Address page, if there are Ole Smoky products
@@ -13,7 +13,7 @@ Deface::Override.new(
   name: "facebook_ole_smoky_address",
   insert_top: "head",
   partial: "spree/facebook_tags/ole_smoky/address",
-  disabled: false
+  disabled: true
 )
 
 # Insert on Confirmation page, if there are Ole Smoky products
@@ -22,5 +22,5 @@ Deface::Override.new(
   name: "facebook_ole_smoky_confirmation",
   insert_top: "head",
   partial: "spree/facebook_tags/ole_smoky/confirmation",
-  disabled: false
+  disabled: true
 )

@@ -4,7 +4,7 @@ Deface::Override.new(
   name: "floodlight_cruzan",
   insert_top: "body",
   partial: "spree/floodlight_tags/cruzan_tag",
-  disabled: false
+  disabled: true
 )
 
 Deface::Override.new(
@@ -12,5 +12,5 @@ Deface::Override.new(
   name: "facebook_cruzan",
   insert_top: "head",
   partial: "spree/facebook_tags/cruzan_tag",
-  disabled: false
+  disabled: true
 )

@@ -9,7 +9,8 @@ Spree::CheckoutController.class_eval do
   # Ajax update for coupon codes
   respond_to :js, :only => [:apply_coupon]
 
-  before_filter :set_gift_params, :only => :update
+  before_filter :set_gift_params, only: :update
+  # before_filter :check_guardians_opt_in, only: :update
 
   # if we don't have a retailer that can ship alcohol to the state, we need to set a warning flag and throw the user back to the address state
   rescue_from Exceptions::NoRetailerShipsToStateError, :with => :rescue_from_no_retailer_ships_to_state_error
@@ -109,6 +110,12 @@ Spree::CheckoutController.class_eval do
     
     if params[:order][:is_gift].to_i == 0
       params[:order].delete(:gift_attributes)
+    end
+  end
+
+  def check_guardians_opt_in
+    if params[:guardians_email_opt_in]
+      Delayed::Job.enqueue GuardiansOptInJob.new(@order.email)
     end
   end
 

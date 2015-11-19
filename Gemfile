@@ -13,7 +13,7 @@ gem 'spree_essential_blog', :git => 'git://github.com/citrus/spree_essential_blo
 gem 'spree_gift_packaging', :git => 'git://github.com/ReserveBar1/spree_gift_packaging.git'
 gem 'spree_related_products', :git => 'git://github.com/spree/spree_related_products.git', :branch => '1-0-stable'
 gem 'spree_sendgrid', :git => 'git://github.com/ReserveBar1/spree_sendgrid.git'
-
+gem 'httparty'
 
 # Gems used only for assets and not required
 # in production environments by default.

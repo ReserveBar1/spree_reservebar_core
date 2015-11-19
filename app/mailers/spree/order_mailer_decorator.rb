@@ -1,6 +1,6 @@
 Spree::OrderMailer.class_eval do
   default :from => "ReserveBar Orders <no-reply@reservebar.com>"
-  
+
   # sent to giftor
   def confirm_email(order, resend = false)
     @order = order
@@ -8,7 +8,7 @@ Spree::OrderMailer.class_eval do
     subject += "#{t('order_mailer.confirm_email.subject')}"
     mail(:to => order.email, :reply_to => "support@reservebar.com", :bcc => Spree::Config[:mail_bcc], :subject => subject)
   end
-  
+
   def cancel_email(order, resend = false)
     @order = order
     subject = (resend ? "[#{t(:resend).upcase}] " : '')
@@ -55,7 +55,7 @@ Spree::OrderMailer.class_eval do
       mail(:to => order.gift.email, :reply_to => "support@reservebar.com", :bcc => Spree::Config[:mail_bcc], :subject => subject)
     end
   end
-  
+
   # sent to retailer
   def retailer_submitted_email(order, resend=false)
     @order = order
@@ -72,7 +72,7 @@ Spree::OrderMailer.class_eval do
     subject += "#{t('order_mailer.retailer_removed_email.subject')}"
     mail(:to => @old_retailer.email, :reply_to => "orders@reservebar.com", :bcc => Spree::Config[:mail_bcc], :subject => subject)
   end
-  
+
   # send email to reservebar.com that retailer has accepted an order
   def accepted_notification(order, resend = false)
     @order = order
@@ -81,7 +81,7 @@ Spree::OrderMailer.class_eval do
     subject += "#{t('order_mailer.accepted_notification.subject')} ##{order.number}"
     mail(:to => Spree::Config[:mail_notification_to], :subject => subject)
   end
-  
+
   # send email to reservebar.com with all orders that have not been accepted yet
   def not_accepted_notification(hours = 6, resend = false)
     @hours = hours
@@ -98,14 +98,20 @@ Spree::OrderMailer.class_eval do
     subject += "#{t('order_mailer.regular_reminder_email.subject')}"
     mail(:to => Spree::Config[:mail_notification_to], :reply_to => "orders@reservebar.com", :subject => subject)
   end
-  
-  
-  # Send email to reservebar if a payment capture fails for some reason
+
+  # Send email to Neil/Janet if a payment capture fails for some reason
   def capture_payment_error_notification(order, error)
     @order = order
     @error = error
     subject = "Payment Capture Failed - #{order.number}"
-    mail(:to => Spree::Config[:mail_notification_to], :subject => subject)
+    mail(:to => "nflanagan@reservebar.com, jgroves@reservebar.com", :subject => subject)
   end
-  
+
+  # Send email to Neil/Janet if there is no payment on an order
+  def no_payment_error_notification(order)
+    @order = order
+    subject = "No Payment for #{order.number}"
+    mail(:to => "nflanagan@reservebar.com, jgroves@reservebar.com", :subject => subject, body: 'Retailer tried to accept, but no payment was found.')
+  end
+
 end

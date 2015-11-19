@@ -130,6 +130,9 @@ Spree::Admin::OrdersController.class_eval do
     # If the order has been canceled, the retailer can no longer accept it
     if @order.state == 'canceled'
       flash["notice"] = 'This order has been canceled - do not process it!'
+    elsif @order.payments.blank?
+      flash[:error] = "Something went wrong with the payment on this order. Please hold off on shipping and contact ReserveBar."
+      Spree::OrderMailer.no_payment_error_notification(@order).deliver
     elsif @order.accepted_at.blank? && (@current_retailer && @current_retailer.id == @order.retailer_id)
       @order.update_attribute(:accepted_at, Time.now)
       @order.create_profit_and_loss
@@ -146,16 +149,35 @@ Spree::Admin::OrdersController.class_eval do
         @order.payments.each do |payment|
           payment.payment_source.send("capture", payment)
         end
-        # We disable this notification for now, until there is a better scheme of notifications decided
-        ## Spree::OrderMailer.accepted_notification(@order).deliver
       rescue Spree::Core::GatewayError => error
-        # Handle messaging to retailer - error flash that something
-        flash[:error] = "Something went wrong with the payment on this order. Please hold off on shipping and contact ReserveBar."
-        # Dump error to separate log
-        log_payment_error(error)
-        # Send email to reservbar that something went wrong
-        Spree::OrderMailer.capture_payment_error_notification(@order, error).deliver
-        @order.update_attribute(:accepted_at, nil)
+        # Try to authorize and capture a new payment on the same source
+        begin
+          unless @order.payments.count > 1
+            payment = @order.payment
+            credit_card = payment.payment_source
+            # check retailer matches merchant account of payment_source, in case order was moved
+            if credit_card.bt_merchant_id == @order.retailer.bt_merchant_id
+              new_payment = payment.dup
+              new_payment.response_code = nil
+              new_payment.save
+              # authorize and capture new payment
+              credit_card.authorize(new_payment.amount, new_payment)
+              credit_card.send("capture", new_payment)
+            else
+              raise 'Order changed Retailers'
+            end
+          else
+            raise 'More than one payment'
+          end
+        rescue
+          @order.update_attribute(:accepted_at, nil)
+          # Handle messaging to retailer - error flash that something
+          flash[:error] = "Something went wrong with the payment on this order. Please hold off on shipping and contact ReserveBar."
+          # Dump error to separate log
+          log_payment_error(error)
+          # Send email to reservbar that something went wrong
+          Spree::OrderMailer.capture_payment_error_notification(@order, error).deliver
+        end
       end
     end
     redirect_to admin_order_url(@order)

@@ -31,5 +31,5 @@ Deface::Override.new(
   name: "google_oak_by_absolut_confirmation",
   insert_top: "body",
   partial: "spree/google_tags/oak_by_absolut/confirmation",
-  disabled: false
+  disabled: true
 )

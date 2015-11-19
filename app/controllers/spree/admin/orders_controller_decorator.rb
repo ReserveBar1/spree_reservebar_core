@@ -130,6 +130,9 @@ Spree::Admin::OrdersController.class_eval do
     # If the order has been canceled, the retailer can no longer accept it
     if @order.state == 'canceled'
       flash["notice"] = 'This order has been canceled - do not process it!'
+    elsif @order.payments.blank?
+      flash[:error] = "Something went wrong with the payment on this order. Please hold off on shipping and contact ReserveBar."
+      Spree::OrderMailer.no_payment_error_notification(@order).deliver
     elsif @order.accepted_at.blank? && (@current_retailer && @current_retailer.id == @order.retailer_id)
       @order.update_attribute(:accepted_at, Time.now)
       @order.create_profit_and_loss

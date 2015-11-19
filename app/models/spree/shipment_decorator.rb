@@ -45,8 +45,8 @@ Spree::Shipment.class_eval do
   # Override here to avoid sending the stock email and instead send the (wrongly placed) new emails
   def after_ship
     inventory_units.each &:ship!
-    #Spree::OrderMailer.giftor_shipped_email(self.order).deliver() unless Spree::MailLog.has_email_been_sent_already?(self.order, 'Order::giftor_shipped_email')
-    #Spree::OrderMailer.giftee_shipped_email(self.order).deliver() if (self.order.is_gift? && !self.order.gift.email.blank? && !Spree::MailLog.has_email_been_sent_already?(order, 'Order::giftee_shipped_email'))
+    Spree::OrderMailer.giftor_shipped_email(self.order).deliver() unless Spree::MailLog.has_email_been_sent_already?(self.order, 'Order::giftor_shipped_email')
+    Spree::OrderMailer.giftee_shipped_email(self.order).deliver() if (self.order.is_gift? && !self.order.gift.email.blank? && !Spree::MailLog.has_email_been_sent_already?(order, 'Order::giftee_shipped_email'))
   end
   
   

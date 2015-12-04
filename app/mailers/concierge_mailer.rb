@@ -1,4 +1,4 @@
-class TiffanyMailer < ActionMailer::Base
+class ConciergeMailer < ActionMailer::Base
   default from: "noreply@reservebar.com"
 
   def send_email(data)

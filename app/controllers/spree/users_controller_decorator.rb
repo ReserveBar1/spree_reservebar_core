@@ -5,12 +5,12 @@ Spree::UsersController.class_eval do
     @orders = @user.orders.complete.order("spree_orders.created_at desc")
   end
 
-  # Used to send an email for the Tiffany's form
-  def tiffany_email
+  # Used to send an email for the concierge forms
+  def concierge_email
     params.delete :controller
     params.delete :action
-    TiffanyMailer.send_email(params.to_s).deliver
     redirect_to '/tiffany-champagne-concierge-service-request-submitted'
+    ConciergeMailer.send_email(params.to_s).deliver
   end
 
 end

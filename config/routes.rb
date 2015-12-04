@@ -7,7 +7,7 @@ Spree::Core::Engine.routes.prepend do
   resources :business_giftings
   get '/business_gifting', :to => 'business_giftings#new', :as => :business_gifting
 
-  post '/tiffany-email', to: 'users#tiffany_email'
+  post '/concierge-email', to: 'users#concierge_email'
 
   # AdRoll feed
   match '/feed' => 'products#adroll_feed', defaults: { format: 'text' }

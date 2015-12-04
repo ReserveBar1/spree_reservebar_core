@@ -7,10 +7,12 @@ Spree::UsersController.class_eval do
 
   # Used to send an email for the concierge forms
   def concierge_email
+    brand_name = params['brand_name']
     params.delete :controller
     params.delete :action
-    redirect_to '/tiffany-champagne-concierge-service-request-submitted'
-    ConciergeMailer.send_email(params.to_s).deliver
+    params.delete :brand_name
+    ConciergeMailer.send_email(params.to_s, brand_name.capitalize).deliver
+    redirect_to "/#{brand_name}-concierge-service-request-submitted"
   end
 
 end

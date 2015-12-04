@@ -1,10 +1,10 @@
 class ConciergeMailer < ActionMailer::Base
   default from: "noreply@reservebar.com"
 
-  def send_email(data)
+  def send_email(data, brand_name)
     mail(
       to: 'nflanagan@reservebar.com, slesser@reservebar.com',
-      subject: "Tiffany Email Submitted",
+      subject: "#{brand_name} Email Submitted",
       body: data
     )
   end

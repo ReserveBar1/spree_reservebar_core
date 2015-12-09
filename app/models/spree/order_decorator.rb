@@ -8,7 +8,8 @@ Spree::Order.class_eval do
   has_and_belongs_to_many :retailers, :join_table => :spree_orders_retailers
   belongs_to :gift
 
-  has_one :profit_and_loss, :dependent => :destroy
+  has_one :profit_and_loss, dependent: :destroy
+  has_one :signifyd_case, dependent: :destroy
 
   accepts_nested_attributes_for :gift
 
@@ -101,6 +102,7 @@ Spree::Order.class_eval do
     after_transition :to => 'complete' do |order, transition|
       order.gift_notification if order.is_gift?
       Spree::OrderMailer.delay.retailer_submitted_email(order) if (order.retailer && !Spree::MailLog.has_email_been_sent_already?(order, 'Order::retailer_submitted_email') )
+      Delayed::Job.enqueue SignifydJob.new(order.id)
     end
   end
 

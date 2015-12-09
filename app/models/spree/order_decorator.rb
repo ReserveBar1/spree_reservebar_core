@@ -8,7 +8,8 @@ Spree::Order.class_eval do
   has_and_belongs_to_many :retailers, :join_table => :spree_orders_retailers
   belongs_to :gift
 
-  has_one :profit_and_loss, :dependent => :destroy
+  has_one :profit_and_loss, dependent: :destroy
+  has_one :signifyd_case, dependent: :destroy
 
   accepts_nested_attributes_for :gift
 

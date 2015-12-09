@@ -1,19 +1,26 @@
 class SignifydJob < Struct.new(:order_id)
   require 'httparty'
 
+  def perform
+    order = Spree::Order.find(order_id)
+    unless order.signifyd_case.present?
+      SignifydAPI.new(order_id).send_order if order.complete?
+      sleep 15
+    end
+    SignifydAPI.new(order_id).get_order
+  end
+
   class SignifydAPI
     include HTTParty
-    debug_output $stdout
 
-    def set_api_metadata(order_id)
+    def initialize(order_id)
       @base_uri = 'https://api.signifyd.com/v2/cases'
       @api_key = 'IcrmDy9H74DmsKsISOj05RDdl'
       @headers = { 'content_type' => 'application/json' }
       @order = Spree::Order.find(order_id)
     end
 
-    def send_order(order_id)
-      set_api_metadata(order_id)
+    def send_order
       bill_addr = @order.bill_address
       ship_addr = @order.ship_address
       body = {
@@ -61,8 +68,7 @@ class SignifydJob < Struct.new(:order_id)
       end
     end
 
-    def get_order(order_id)
-      set_api_metadata(order_id)
+    def get_order
       signifyd_case = @order.signifyd_case
 
       begin
@@ -80,15 +86,6 @@ class SignifydJob < Struct.new(:order_id)
         raise 'Comm error with Signifyd'
       end
     end
-  end
-
-  def perform
-    order = Spree::Order.find(order_id)
-    unless order.signifyd_case.present?
-      SignifydAPI.new.send_order(order_id) if order.complete?
-      sleep 15
-    end
-    SignifydAPI.new.get_order(order_id)
   end
 
 end

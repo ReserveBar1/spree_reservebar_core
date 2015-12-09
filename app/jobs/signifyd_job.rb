@@ -60,6 +60,26 @@ class SignifydJob < Struct.new(:order_id)
         raise 'Comm error with Signifyd'
       end
     end
+
+    def get_order(order_id)
+      set_api_metadata(order_id)
+      signifyd_case = @order.signifyd_case
+
+      begin
+        resp = self.class.get(
+          "#{@base_uri}/#{signifyd_case.case_number}",
+          headers: @headers, basic_auth: { username: @api_key, password: '' }
+        )
+        if resp.success?
+          signifyd_case.status = resp['status']
+          signifyd_case.score = resp['score']
+          signifyd_case.review_disposition = resp['reviewDisposition']
+          signifyd_case.save
+        end
+      rescue
+        raise 'Comm error with Signifyd'
+      end
+    end
   end
 
   def perform
@@ -68,6 +88,7 @@ class SignifydJob < Struct.new(:order_id)
       SignifydAPI.new.send_order(order_id) if order.complete?
       sleep 15
     end
+    SignifydAPI.new.get_order(order_id)
   end
 
 end

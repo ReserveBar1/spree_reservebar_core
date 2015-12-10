@@ -4,7 +4,7 @@ Deface::Override.new(
   name: "floodlight_oak_by_absolut_product",
   insert_top: "body",
   partial: "spree/floodlight_tags/oak_by_absolut/product",
-  disabled: true
+  disabled: false
 )
 
 Deface::Override.new(
@@ -12,7 +12,7 @@ Deface::Override.new(
   name: "facebook_oak_by_absolut_product",
   insert_top: "head",
   partial: "spree/facebook_tags/oak_by_absolut/product",
-  disabled: true
+  disabled: false
 )
 
 # Insert on Cart page, if there are OAK by Absolut products
@@ -21,7 +21,7 @@ Deface::Override.new(
   name: "floodlight_oak_by_absolut_cart",
   insert_top: "body",
   partial: "spree/floodlight_tags/oak_by_absolut/cart",
-  disabled: true
+  disabled: false
 )
 
 Deface::Override.new(
@@ -29,7 +29,7 @@ Deface::Override.new(
   name: "facebook_oak_by_absolut_cart",
   insert_top: "head",
   partial: "spree/facebook_tags/oak_by_absolut/cart",
-  disabled: true
+  disabled: false
 )
 
 # Insert on Address page, if there are OAK by Absolut products
@@ -38,14 +38,14 @@ Deface::Override.new(
   name: "floodlight_oak_by_absolut_address",
   insert_top: "body",
   partial: "spree/floodlight_tags/oak_by_absolut/address",
-  disabled: true
+  disabled: false
 )
 Deface::Override.new(
   virtual_path: "spree/layouts/spree_application",
   name: "facebook_oak_by_absolut_address",
   insert_top: "head",
   partial: "spree/facebook_tags/oak_by_absolut/address",
-  disabled: true
+  disabled: false
 )
 
 # Insert on Confirmation page, if there are OAK by Absolut products
@@ -54,7 +54,7 @@ Deface::Override.new(
   name: "floodlight_oak_by_absolut_confirmation",
   insert_top: "body",
   partial: "spree/floodlight_tags/oak_by_absolut/confirmation",
-  disabled: true
+  disabled: false
 )
 
 Deface::Override.new(
@@ -62,5 +62,5 @@ Deface::Override.new(
   name: "facebook_oak_by_absolut_confirmation",
   insert_top: "head",
   partial: "spree/facebook_tags/oak_by_absolut/confirmation",
-  disabled: true
+  disabled: false
 )

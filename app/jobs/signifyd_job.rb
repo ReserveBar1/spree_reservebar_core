@@ -3,11 +3,13 @@ class SignifydJob < Struct.new(:order_id)
 
   def perform
     order = Spree::Order.find(order_id)
-    unless order.signifyd_case.present?
-      SignifydAPI.new(order_id).send_order if order.complete?
-      sleep 15
+   if order.complete?
+      unless order.signifyd_case.present?
+        SignifydAPI.new(order_id).send_order
+        sleep 15
+      end
+      SignifydAPI.new(order_id).get_order
     end
-    SignifydAPI.new(order_id).get_order
   end
 
   class SignifydAPI

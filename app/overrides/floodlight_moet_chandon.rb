@@ -4,7 +4,7 @@ Deface::Override.new(
   name: "floodlight_moet_chandon_brand",
   insert_top: "body",
   partial: "spree/floodlight_tags/moet_chandon/brand",
-  disabled: true
+  disabled: false
 )
 
 # Insert on Moet Chandon product pages
@@ -13,7 +13,7 @@ Deface::Override.new(
   name: "floodlight_moet_chandon_products",
   insert_top: "body",
   partial: "spree/floodlight_tags/moet_chandon/products",
-  disabled: true
+  disabled: false
 )
 
 # Insert on Cart page, if there are Moet Chandon products
@@ -22,7 +22,7 @@ Deface::Override.new(
   name: "floodlight_moet_chandon_cart",
   insert_top: "body",
   partial: "spree/floodlight_tags/moet_chandon/cart",
-  disabled: true
+  disabled: false
 )
 
 # Insert on Address page, if there are Moet Chandon products
@@ -31,7 +31,7 @@ Deface::Override.new(
   name: "floodlight_moet_chandon_address",
   insert_top: "body",
   partial: "spree/floodlight_tags/moet_chandon/address",
-  disabled: true
+  disabled: false
 )
 
 # Insert on Confirmation page, if there are Moet Chandon products
@@ -40,5 +40,5 @@ Deface::Override.new(
   name: "floodlight_moet_chandon_confirmation",
   insert_top: "body",
   partial: "spree/floodlight_tags/moet_chandon/confirmation",
-  disabled: true
+  disabled: false
 )

@@ -23,21 +23,32 @@ class SignifydJob < Struct.new(:order_id)
     end
 
     def send_order
+      user = @order.user
+      ship_method = @order.shipments.first.shipping_method
       bill_addr = @order.bill_address
       ship_addr = @order.ship_address
       body = {
         "purchase" => {
-          "browserIpAddress" => @order.user.current_sign_in_ip,
+          "browserIpAddress" => user.current_sign_in_ip,
           "orderId" => @order.number,
           "createdAt" => @order.created_at.utc.iso8601,
-          "totalPrice" => @order.total.to_f
+          "paymentGateway" => "BRAINTREE",
+          # "avsResponseCode" => "",
+          # "cvvResponseCode" => "",
+          "orderChannel" => "WEB",
+          "totalPrice" => @order.total.to_f,
+          "shipments" => [{
+            "shipper" => "FedEx",
+            "shippingMethod" => ship_method.name,
+            "shippingPrice" => ship_method.price,
+          }],
         },
         "recipient" => {
           "fullName" => "#{ship_addr.firstname} #{ship_addr.lastname}",
           "confirmationEmail" => @order.email,
+          "confirmationPhone" => bill_addr.phone,
           "deliveryAddress" => {
             "streetAddress" => ship_addr.address1,
-            "unit" => ship_addr.address2,
             "city" => ship_addr.city,
             "provinceCode" => ship_addr.state.abbr,
             "postalCode" => ship_addr.zipcode,
@@ -46,14 +57,19 @@ class SignifydJob < Struct.new(:order_id)
         },
         "card" => {
           "cardHolderName" => "#{bill_addr.firstname} #{bill_addr.lastname}",
+          # "bin" => "",
           "billingAddress" => {
             "streetAddress" => bill_addr.address1,
-            "unit" => bill_addr.address2,
             "city" => bill_addr.city,
             "provinceCode" => bill_addr.state.abbr,
             "postalCode" => bill_addr.zipcode,
             "countryCode" => bill_addr.country.iso,
           }
+        },
+        "userAccount" => {
+          "email" => user.email,
+          "username" => "#{user.login unless user.login.include?('@example.net')}",
+          "created_at" => user.created_at.utc.iso8601,
         }
       }
 

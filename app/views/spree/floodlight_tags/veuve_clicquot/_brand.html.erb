@@ -1,0 +1,20 @@
+<% if controller.controller_name == "taxons" && controller.action_name == "show" %>
+  <% if @taxon.children.empty? && @taxon.name == 'Veuve Clicquot' %>
+    <%= "<!--
+    Start of DoubleClick Floodlight Tag: Please do not remove
+    Activity name of this tag: Reserve Bar Brand Page
+    URL of the webpage where the tag is expected to be placed: http://www.reservebar.com/t/type/champagne/veuve-clicquot
+    This tag must be placed between the <body> and </body> tags, as close as possible to the opening tag.
+    Creation Date: 03/30/2015
+    -->".html_safe %>
+    <script type="text/javascript">
+      var axel = Math.random() + "";
+      var a = axel * 10000000000000;
+      document.write('<iframe src="https://4130714.fls.doubleclick.net/activityi;src=4130714;type=vcrsrv01;cat=vcrsrvb1;ord=' + a + '?" width="1" height="1" frameborder="0" style="display:none"></iframe>');
+    </script>
+    <noscript>
+      <iframe src="https://4130714.fls.doubleclick.net/activityi;src=4130714;type=vcrsrv01;cat=vcrsrvb1;ord=1?" width="1" height="1" frameborder="0" style="display:none"></iframe>
+    </noscript>
+    <%= "<!-- End of DoubleClick Floodlight Tag: Please do not remove -->".html_safe %>
+  <% end %>
+<% end %>

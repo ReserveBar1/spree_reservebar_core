@@ -29,7 +29,7 @@ class SignifydJob < Struct.new(:order_id)
       ship_addr = @order.ship_address
       body = {
         "purchase" => {
-          "browserIpAddress" => user.current_sign_in_ip,
+          "browserIpAddress" => @order.browser_ip,
           "orderId" => @order.number,
           "createdAt" => @order.created_at.utc.iso8601,
           "paymentGateway" => "BRAINTREE",

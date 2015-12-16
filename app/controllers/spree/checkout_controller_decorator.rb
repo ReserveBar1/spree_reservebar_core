@@ -63,6 +63,9 @@ Spree::CheckoutController.class_eval do
   end
 
   def before_delivery
+    # Store user's browser IP address to send to Signifyd
+    current_order.update_attribute(:browser_ip, request.remote_ip)
+
     blacklist = Array.new
     current_order.products.map(&:state_blacklist).each {|s| blacklist << s.split(',') unless s.nil?}
     # If any products are blacklisted in the user's state

@@ -1,7 +1,20 @@
 <% if @order.state == 'delivery' %>
-<ul style="color:red;"><strong>CHRISTMAS DELIVERY:</strong>
-<li>-- Engraved order deadline is Monday, December 15th - please choose Express Delivery</li>
-<li>-- Non-engraved order deadline is Tuesday, December 16th - Ground Delivery</li>
-<li>-- Non-engraved order deadline is Wednesday, December 17th - Express Delivery</li>
-<li><em>Orders received after these dates are not guaranteed for Christmas delivery.</em></li></ul>
+  <div style="color:red;">
+    <strong>CHRISTMAS DELIVERY:</strong>
+    <em>Orders received after these dates are not guaranteed for Christmas delivery.</em>
+    <table>
+      <td style="border:0px important!;margin-right:30px;">
+        ENGRAVED:
+        <li>Ground: Tues, Dec 15 (12PM)</li>
+        <li>2-day: Thurs, Dec 17 (12PM)</li>
+        <li>Overnight: Fri, Dec 18 (12PM)</li>
+      </td>
+      <td style="border:0px important!;">
+        NON-ENGRAVED:
+        <li>Ground: Thurs, Dec 17 (12PM)</li>
+        <li>2-day: Mon, Dec 21 (12PM)</li>
+        <li>Overnight: Tues, Dec 22 (12PM)</li>
+      </td>
+    </table>
+  </div>
 <% end %>

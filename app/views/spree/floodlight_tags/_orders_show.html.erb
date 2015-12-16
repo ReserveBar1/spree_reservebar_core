@@ -6,38 +6,6 @@
 	prices = []
 	products = []
 	categories = []
-	items = @order.line_items.select {|l| l.product.name.include? "Veuve" } 
-	items.each do |item|
-		quantities << item.quantity
-		prices << item.product.price
-		total_price = total_price + (item.product.price * item.quantity)
-		products << item.product.name.gsub(' ','+')
-		categories << "Veuve"
-	end
-	products = products.join('|')
-	prices = prices.join('|')
-	quantities = quantities.join('|')
-	categories = categories.join('|')
-%>
-
-<%= "<!--
-Start of DoubleClick Floodlight Tag: Please do not remove
-Activity name of this tag: VC ReserveBar Sales Confirmation Page
-URL of the webpage where the tag is expected to be placed: http://www.reservebar.com//orders/
-This tag must be placed between the <body> and </body> tags, as close as possible to the opening tag.
-Creation Date: 11/13/2012
--->".html_safe %>
-<iframe src="http://2723186.fls.doubleclick.net/activityi;src=2723186;type=2012s414;cat=vcres021;qty=1;cost=<%= total_price -%>;u9=<%= prices -%>;u8=<%= categories -%>;u7=<%= products -%>;u10=<%= quantities -%>;ord=<%= @order.number -%>?" width="1" height="1" frameborder="0" style="display:none"></iframe>
-
-<%= "<!-- End of DoubleClick Floodlight Tag: Please do not remove -->".html_safe %>
-
-
-<% 	
-	quantities = []
-	total_price = 0
-	prices = []
-	products = []
-	categories = []
 	items = @order.line_items.select {|l| l.product.name.include? "Ardbeg" } 
 	items.each do |item|
 		quantities << item.quantity

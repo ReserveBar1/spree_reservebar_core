@@ -10,6 +10,12 @@ Spree::OrdersController.class_eval do
   # Add customization to line item after the other stuff 
   after_filter :handle_customization, :only => [:populate, :update]
 
+  # Shows the current incomplete order from the session (Cart)
+  def edit
+    @order = current_order(true)
+    @order.update_attribute(:browser_ip, request.remote_ip) if @order.present?
+  end
+
   protected
 
   # We'll need to add customization data to the SKU's either when it was submitted in the form or when the SKU requires it but it has not been 

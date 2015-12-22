@@ -2,7 +2,7 @@ Spree::Order.class_eval do
   attr_accessible :is_legal_age, :is_gift, :gift_attributes, :unread, :viewed_at, :admin_notes
   attr_accessor :is_gift
 
-  attr_accessible :has_accepted_terms
+  attr_accessible :has_accepted_terms, :newsletter_optin
   attr_accessor :has_accepted_terms
 
   has_and_belongs_to_many :retailers, :join_table => :spree_orders_retailers
@@ -33,6 +33,8 @@ Spree::Order.class_eval do
     }
 
   search_methods :not_accepted_hours
+
+  scope :opted_in, where('newsletter_optin IS NOT NULL')
 
   # KN: the lines below (before the state_machine is defined) are pulled from the current version of spree
   # and allow us to redefine the state machine inside this order decorator.

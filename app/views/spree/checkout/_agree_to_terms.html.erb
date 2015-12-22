@@ -1,5 +1,10 @@
 <% if @order.state == 'payment' %>
 <br class="space" />
+<div>
+  <input id="order_newsletter_optin" checked='checked' type="checkbox" value="1" name="order[newsletter_optin]">&nbsp;
+  <%= form.label :newsletter_optin, "By checking the box, you will opt-in for our newsletter to receive special offers, promotions, & information about new releases delivered right to your inbox. You can unsubscribe at any time.".html_safe %>
+</div>
+<br class="space" />
 <div id="checkout-terms" data-hook="checkout_terms_box">
   <input id="order_has_accepted_terms" class="required" type="checkbox" value="1" name="order[has_accepted_terms]">&nbsp;
   <%= form.label :has_accepted_terms, "I have read and agree to the <a href='/pages/terms' target='_blank'>terms and conditions.</a>".html_safe %><span class="req">*</span>

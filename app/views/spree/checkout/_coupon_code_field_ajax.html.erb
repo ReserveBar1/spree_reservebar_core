@@ -1,10 +1,11 @@
 <% if @order.state == 'payment' && Spree::Promotion.count > 0 %>
 	<%= form_for @order, :url => apply_coupon_checkout_path(@order.state), :html => { :id => "apply_coupon_checkout_form", :class => "apply_coupon_checkout_form" }, :remote => true do |form| %>
 		<p>
-		  <%= form.label :coupon_code %><br />
+		  <%= form.label 'Promo Code' %><br />
 		  <%= form.text_field :coupon_code %>
 		  <%= form.submit "Apply" %>
 		</p>
+		<p>Only one promotion code may be used per order.</p>
 	<% end %>
 	<div id="coupon-result-field"></div>
 

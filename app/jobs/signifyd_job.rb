@@ -27,6 +27,7 @@ class SignifydJob < Struct.new(:order_id)
       ship_method = @order.shipments.first.shipping_method
       bill_addr = @order.bill_address
       ship_addr = @order.ship_address
+      credit_card = @order.payment.source
       body = {
         "purchase" => {
           "browserIpAddress" => @order.browser_ip,
@@ -57,7 +58,7 @@ class SignifydJob < Struct.new(:order_id)
         },
         "card" => {
           "cardHolderName" => "#{bill_addr.firstname} #{bill_addr.lastname}",
-          # "bin" => "",
+          "bin" => credit_card.bin,
           "billingAddress" => {
             "streetAddress" => bill_addr.address1,
             "city" => bill_addr.city,

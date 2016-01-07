@@ -1,4 +1,6 @@
 Spree::OrdersController.class_eval do
+  skip_before_filter :verify_authenticity_token, only: :signifyd_webhook
+
   require 'exceptions'
 
   before_filter :check_bottle_number_limit, :only => [:populate, :update]
@@ -14,6 +16,14 @@ Spree::OrdersController.class_eval do
   def edit
     @order = current_order(true)
     @order.update_attribute(:browser_ip, request.remote_ip) if @order.present?
+  end
+
+  def signifyd_webhook
+    signifyd_case = SignifydCase.find_by_order_id(params['orderId'].to_i)
+    unless signifyd_case.nil?
+      signifyd_case.update_attribute(:guarantee_disposition, params['guaranteeDisposition'])
+    end
+    render nothing: true
   end
 
   protected

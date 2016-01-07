@@ -9,6 +9,8 @@ Spree::Core::Engine.routes.prepend do
 
   post '/concierge-email', to: 'users#concierge_email'
 
+  post '/signifyd_webhook', to: 'orders#signifyd_webhook'
+
   # AdRoll feed
   match '/feed' => 'products#adroll_feed', defaults: { format: 'text' }
 

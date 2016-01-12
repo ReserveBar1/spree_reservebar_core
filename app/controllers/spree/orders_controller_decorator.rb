@@ -19,11 +19,21 @@ Spree::OrdersController.class_eval do
   end
 
   def signifyd_webhook
-    signifyd_case = SignifydCase.find_by_order_id(params['orderId'].to_i)
-    unless signifyd_case.nil?
-      signifyd_case.update_attribute(:guarantee_disposition, params['guaranteeDisposition'])
+    signifyd_case = Spree::Order.find_by_number(params['orderId']).signifyd_case
+    if signifyd_case.nil?
+      render nothing: true, status: 404
+    else
+      begin
+        signifyd_case.score = params['adjustedScore']
+        signifyd_case.status = params['status']
+        signifyd_case.review_disposition = params['reviewDisposition']
+        signifyd_case.guarantee_disposition = params['guaranteeDisposition']
+        signifyd_case.save
+        render nothing: true, status: 200
+      rescue
+        render nothing: true, status: 500
+      end
     end
-    render nothing: true, status: 200
   end
 
   protected

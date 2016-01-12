@@ -14,6 +14,7 @@ class SignifydJob < Struct.new(:order_id)
 
   class SignifydAPI
     include HTTParty
+    # debug_output $stdout
 
     def initialize(order_id)
       @base_uri = 'https://api.signifyd.com/v2/cases'
@@ -28,6 +29,18 @@ class SignifydJob < Struct.new(:order_id)
       bill_addr = @order.bill_address
       ship_addr = @order.ship_address
       credit_card = @order.payment.source
+      products = []
+      @order.line_items.each do |li|
+        product = li.product
+        products << {
+          "itemId" => product.sku,
+          "itemName" => product.name,
+          "itemUrl" => "http://reservebar.com/products/#{product.permalink}",
+          "itemImage" => "http://reservebar.com#{product.images.first.attachment}",
+          "itemQuantity" => li.quantity,
+          "itemPrice" => li.price.to_f,
+        }
+      end
       body = {
         "purchase" => {
           "browserIpAddress" => @order.browser_ip,
@@ -38,6 +51,7 @@ class SignifydJob < Struct.new(:order_id)
           # "cvvResponseCode" => "",
           "orderChannel" => "WEB",
           "totalPrice" => @order.total.to_f,
+          "products" => products,
           "shipments" => [{
             "shipper" => "FedEx",
             "shippingMethod" => ship_method.name,

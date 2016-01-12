@@ -3,12 +3,8 @@ class SignifydJob < Struct.new(:order_id)
 
   def perform
     order = Spree::Order.find(order_id)
-   if order.complete?
-      unless order.signifyd_case.present?
-        SignifydAPI.new(order_id).send_order
-        sleep 15
-      end
-      SignifydAPI.new(order_id).get_order
+    if order.complete?
+      SignifydAPI.new(order_id).send_order unless order.signifyd_case.present?
     end
   end
 
@@ -95,25 +91,6 @@ class SignifydJob < Struct.new(:order_id)
         )
         if resp.success?
           @order.build_signifyd_case(case_number: resp['investigationId']).save
-        end
-      rescue
-        raise 'Comm error with Signifyd'
-      end
-    end
-
-    def get_order
-      signifyd_case = @order.signifyd_case
-
-      begin
-        resp = self.class.get(
-          "#{@base_uri}/#{signifyd_case.case_number}",
-          headers: @headers, basic_auth: { username: @api_key, password: '' }
-        )
-        if resp.success?
-          signifyd_case.status = resp['status']
-          signifyd_case.score = resp['score']
-          signifyd_case.review_disposition = resp['reviewDisposition']
-          signifyd_case.save
         end
       rescue
         raise 'Comm error with Signifyd'

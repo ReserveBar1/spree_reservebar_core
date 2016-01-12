@@ -72,7 +72,7 @@ class SignifydJob < Struct.new(:order_id)
         },
         "card" => {
           "cardHolderName" => "#{bill_addr.firstname} #{bill_addr.lastname}",
-          "bin" => credit_card.bin,
+          "bin" => credit_card.try(:bin),
           "billingAddress" => {
             "streetAddress" => bill_addr.address1,
             "city" => bill_addr.city,

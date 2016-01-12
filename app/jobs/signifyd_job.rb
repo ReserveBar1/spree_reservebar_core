@@ -82,7 +82,7 @@ class SignifydJob < Struct.new(:order_id)
           }
         },
         "userAccount" => {
-          "email" => user.email,
+          "email" => "#{user.email unless user.email.include?('@example.net')}",
           "username" => "#{user.login unless user.login.include?('@example.net')}",
           "created_at" => user.created_at.utc.iso8601,
         }

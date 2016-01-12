@@ -23,7 +23,7 @@ Spree::OrdersController.class_eval do
     unless signifyd_case.nil?
       signifyd_case.update_attribute(:guarantee_disposition, params['guaranteeDisposition'])
     end
-    render nothing: true
+    render nothing: true, status: 200
   end
 
   protected

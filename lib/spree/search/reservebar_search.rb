@@ -6,7 +6,7 @@ module Spree::Search
       @products_scope = @product_group.apply_on(base_scope)
       curr_page = manage_pagination && keywords ? 1 : page
 
-      @products = @products_scope.includes([:images, :master, :taxons]).reverse_order.page(curr_page).per(per_page)
+      @products = @products_scope.includes([:images, :master, :taxons]).page(curr_page).per(per_page)
     end
 
     # method should return new scope based on base_scope

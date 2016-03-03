@@ -72,12 +72,11 @@ Spree::Product.class_eval do
   # Used on product page to sow where this product can be shipped to
   # This could probably do with some pretty heavy caching
   def ships_to_states
-    method = "ships_#{self.shipping_category.name.downcase.gsub(' ','_')}_to".to_sym
-    if self.state_blacklist.nil?
-      states = (Spree::Retailer.active.map(&method) - [""]).join(',').split(',').uniq.sort.to_sentence
-    else
-      states = ((Spree::Retailer.active.map(&method) - [""]).join(',').split(',').uniq - self.state_blacklist.split(',')).sort.to_sentence
-    end
+    method = "ships_#{shipping_category.name.downcase.gsub(' ','_')}_to".to_sym
+    states = (Spree::Retailer.active.map(&method) - [""]).join(',').split(',').uniq
+    states = states - state_blacklist.split(',') if state_blacklist.present?
+    states.each_with_index { |s, i| states[i] = states[i].strip }
+    states.uniq.sort.to_sentence
   end
 
   # Returns true if this product is availble for shipping to all states.

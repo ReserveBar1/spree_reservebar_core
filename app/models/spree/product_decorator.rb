@@ -74,9 +74,9 @@ Spree::Product.class_eval do
   def ships_to_states
     method = "ships_#{shipping_category.name.downcase.gsub(' ','_')}_to".to_sym
     states = (Spree::Retailer.active.map(&method) - [""]).join(',').split(',').uniq
+    states = states.each_with_index { |s, i| states[i] = states[i].strip }.uniq
     states = states - state_blacklist.split(',') if state_blacklist.present?
-    states.each_with_index { |s, i| states[i] = states[i].strip }
-    states.uniq.sort.to_sentence
+    states.sort.to_sentence
   end
 
   # Returns true if this product is availble for shipping to all states.

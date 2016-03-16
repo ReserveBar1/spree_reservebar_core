@@ -1,0 +1,45 @@
+<% if controller.controller_name == "orders" && controller.action_name == "show" %>
+  <% if flash[:commerce_tracking] %>
+    <% 
+      permalinks = []
+      quantities = []
+      revenue = 0
+      skus = []
+      product_names = []
+      @order.line_items.each do |li|
+        if li.product.brand.brand_owner.title == "Pernod Ricard"
+          permalinks << li.product.permalink
+          quantities << li.quantity
+          revenue += li.price.to_f * li.quantity
+          skus << li.variant.sku
+          product_names << li.product.name.gsub(' ','+').gsub("'","")
+        end
+      end
+      permalinks = permalinks.join('|')
+      quantities = quantities.join('|')
+      skus = skus.join('|')
+      product_names = product_names.join('|')
+    %>
+    <% unless product_names.empty? %>
+      <%= "<!--
+      Start of DoubleClick Floodlight Tag: Please do not remove
+      Activity name of this tag: FY16_PernodRicard_Desk_ReserveBar_ConfirmationPageItemsSold
+      URL of the webpage where the tag is expected to be placed: http://www.reservebar.com/confirmation
+      This tag must be placed between the <body> and </body> tags, as close as possible to the opening tag.
+      Creation Date: 02/23/2016
+      -->".html_safe %>
+      <iframe src="https://4533689.fls.doubleclick.net/activityi;src=4533689;type=fy16r0;cat=fy16_00;qty=<%= quantities %>;cost=<%= revenue %>;u1=<%= permalinks %>;u2=<%= @order.number %>;u3=<%= @order.ship_address.city.gsub(' ','+') %>;u6=<%= @order.ship_address.state.abbr %>;u7=<%= skus %>;u9=<%= product_names %>;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;ord=<%= @order.number %>?" width="1" height="1" frameborder="0" style="display:none"></iframe>
+      <%= "<!-- End of DoubleClick Floodlight Tag: Please do not remove -->".html_safe %>
+
+      <%= "<!--
+      Start of DoubleClick Floodlight Tag: Please do not remove
+      Activity name of this tag: FY16_PernodRicard_Desk_ReserveBar_ConfirmationPageTransactions
+      URL of the webpage where the tag is expected to be placed: http://www.reservebar.com/confirmation
+      This tag must be placed between the <body> and </body> tags, as close as possible to the opening tag.
+      Creation Date: 02/23/2016
+      -->".html_safe %>
+      <iframe src="https://4533689.fls.doubleclick.net/activityi;src=4533689;type=fy16r0;cat=fy16_0;qty=1;cost=<%= revenue %>;u1=<%= permalinks %>;u2=<%= @order.number %>;u3=<%= @order.ship_address.city.gsub(' ','+') %>;u6=<%= @order.ship_address.state.abbr %>;u7=<%= skus %>;u9=<%= product_names %>;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;ord=<%= @order.number %>?" width="1" height="1" frameborder="0" style="display:none"></iframe>
+      <%= "<!-- End of DoubleClick Floodlight Tag: Please do not remove -->".html_safe %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,23 @@
+<% if controller.controller_name == "orders" && controller.action_name == "show" %>
+  <% if flash[:commerce_tracking] %>
+    <%
+      revenue = 0
+      @order.line_items.each do |li|
+        if li.product.permalink.include? 'absolut-elyx-gift-set'
+          revenue += li.price.to_f * li.quantity
+        end
+      end
+    %>
+    <% unless revenue == 0 %>
+      <%= "<!--
+      Start of DoubleClick Floodlight Tag: Please do not remove
+      Activity name of this tag: Sid Lee Media - Absolut Elyx Pineapple Support H2 2016 - ReserveBar Elyx Complete - EN
+      URL of the webpage where the tag is expected to be placed: https://www.reservebar.com/orders
+      This tag must be placed between the <body> and </body> tags, as close as possible to the opening tag.
+      Creation Date: 03/15/2016
+      -->".html_safe %>
+      <iframe src="https://5116507.fls.doubleclick.net/activityi;src=5116507;type=resbar15;cat=sidle0;qty=1;cost=<%= revenue %>;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;ord=<%= @order.number %>?" width="1" height="1" frameborder="0" style="display:none"></iframe>
+      <%= "<!-- End of DoubleClick Floodlight Tag: Please do not remove -->".html_safe %>
+    <% end %>
+  <% end %>
+<% end %>

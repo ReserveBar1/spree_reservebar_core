@@ -1,0 +1,20 @@
+<% if controller.controller_name == "pages" && controller.action_name == "show" %>
+  <% if @page.path.include? 'absolut-elyx-gift-set' %>
+    <%= "<!--
+    Start of DoubleClick Floodlight Tag: Please do not remove
+    Activity name of this tag: Sid Lee Media - Absolut Elyx Pineapple Support H2 2016 - ReserveBar Elyx Landing Page - EN
+    URL of the webpage where the tag is expected to be placed: http://www.reservebar.com/absolutelyx?utm_source=hp_slider&utm_medium=promo_spot&utm_campaign=AbsolutElyx_Pineapple
+    This tag must be placed between the <body> and </body> tags, as close as possible to the opening tag.
+    Creation Date: 03/15/2016
+    -->".html_safe %>
+    <script type="text/javascript">
+      var axel = Math.random() + "";
+      var a = axel * 10000000000000;
+      document.write('<iframe src="https://5116507.fls.doubleclick.net/activityi;src=5116507;type=actio0;cat=sidle0;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;ord=' + a + '?" width="1" height="1" frameborder="0" style="display:none"></iframe>');
+    </script>
+    <noscript>
+      <iframe src="https://5116507.fls.doubleclick.net/activityi;src=5116507;type=actio0;cat=sidle0;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;ord=1?" width="1" height="1" frameborder="0" style="display:none"></iframe>
+    </noscript>
+    <%= "<!-- End of DoubleClick Floodlight Tag: Please do not remove -->".html_safe %>
+  <% end %>
+<% end %>

@@ -47,6 +47,7 @@ Spree::Admin::OrdersController.class_eval do
     unless @order.state == 'canceled'
       @current_retailer = @order.retailer
       available_retailers = Spree::Retailer.active.where("id != ?", @current_retailer.id)
+      @all_available_retailers = available_retailers.map { |r| [r.name, r.id] } # used for force updates
       unless @order.accepted_at.blank?
         available_retailers = available_retailers.where(bt_merchant_id: @current_retailer.bt_merchant_id)
       end
@@ -105,6 +106,27 @@ Spree::Admin::OrdersController.class_eval do
       flash[:error] = 'Please select a retailer'
       redirect_to edit_admin_order_path(@order) and return
     end
+  end
+
+  # No additional checks or processing for moving an order between retailers or accepting
+  def force_update
+    begin
+      # force retailer change
+      if params['target_retailer_id'].present?
+        new_retailer = Spree::Retailer.find(params['target_retailer_id'])
+        @order.retailer = new_retailer
+      end
+
+      # force acceptance
+      if params['accepted'].present? and params['accepted'] == 'yes'
+        @order.update_attribute(:accepted_at, Time.now)
+      end
+
+      flash[:notice] = 'Forced updates were made to the order.'
+    rescue
+      flash[:error] = 'Updates could not be applied'
+    end
+    redirect_to admin_order_path(@order)
   end
 
   def export

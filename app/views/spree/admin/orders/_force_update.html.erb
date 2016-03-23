@@ -1,0 +1,26 @@
+<% if @all_available_retailers.present? && @order.state != 'canceled' %>
+  <p id='enable-force-update' style='font-size: 12px; text-decoration: underline; font-weight:bold;'>
+    Access admin super-powers?
+  </p>
+
+  <div id='force-update' style="display: none;">
+    <fieldset>
+      <legend>Forced Order Updates</legend>
+      <%= form_tag( { controller: 'orders', action: 'force_update' }, method: 'post' ) do %>
+        <% if @order.accepted_at.nil? %>
+          <%= check_box_tag(:accepted, 'yes', false) %>
+          <%= label_tag :accepted, 'Mark Accepted' %>
+          <br />
+        <% end %>
+        <%= label_tag :target_retailer, "Move order from #{@current_retailer.name} to" %>
+        <%= select_tag :target_retailer_id, options_for_select(@all_available_retailers), include_blank: '' %>
+        <p style='font-size: 10px; margin-top: 15px;'>
+          With great power comes great responsibility. NO checks or validations will be done with these changes.
+          <br />
+          It is your responsibility to make sure retailers are notified and merchant accounts are updated accordingly.
+        </p>
+        <%= submit_tag 'Force Update' %>
+      <% end %>
+    </fieldset>
+  </div>
+<% end %>

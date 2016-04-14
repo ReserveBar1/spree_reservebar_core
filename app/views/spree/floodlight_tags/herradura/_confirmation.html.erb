@@ -1,0 +1,23 @@
+<% if controller.controller_name == "orders" && controller.action_name == "show" %>
+  <% if flash[:commerce_tracking] %>  
+    <% 
+      revenue = 0
+      @order.line_items.each do |li|
+        if li.product.taxons.map(&:name).include? 'Herradura'
+          revenue += li.price.to_f * li.quantity
+        end
+      end
+    %>
+    <% unless revenue == 0 %>
+      <%= "<!--
+      Start of DoubleClick Floodlight Tag: Please do not remove
+      Activity name of this tag: Thank You/Order Confirmation Page
+      URL of the webpage where the tag is expected to be placed: http://www.reservebar.com/orders/RXXXXXXXXX
+      This tag must be placed between the <body> and </body> tags, as close as possible to the opening tag.
+      Creation Date: 04/13/2016
+      -->".html_safe %>
+      <iframe src="https://4817404.fls.doubleclick.net/activityi;src=4817404;type=hersale;cat=thank0;qty=1;cost=<%= revenue %>;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;ord=<%= @order.number %>?" width="1" height="1" frameborder="0" style="display:none"></iframe>
+      <%= "<!-- End of DoubleClick Floodlight Tag: Please do not remove -->".html_safe %>
+    <% end %>
+  <% end %>
+<% end %>

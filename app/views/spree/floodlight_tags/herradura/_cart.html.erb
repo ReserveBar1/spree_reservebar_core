@@ -1,0 +1,24 @@
+<% if controller.controller_name == "orders" && controller.action_name == "edit" %>
+  <%
+    product_owners = Array.new
+    @order.line_items.map { |i| product_owners << i.product.taxons.map(&:name) }
+  %>
+  <% if product_owners.flatten.uniq.include? 'Herradura' %>
+    <%= "<!--
+    Start of DoubleClick Floodlight Tag: Please do not remove
+    Activity name of this tag: Cart Page
+    URL of the webpage where the tag is expected to be placed: http://www.reservebar.com/cart
+    This tag must be placed between the <body> and </body> tags, as close as possible to the opening tag.
+    Creation Date: 04/13/2016
+    -->".html_safe %>
+    <script type="text/javascript">
+      var axel = Math.random() + "";
+      var a = axel * 10000000000000;
+      document.write('<iframe src="https://4817404.fls.doubleclick.net/activityi;src=4817404;type=herra;cat=cartp0;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;ord=' + a + '?" width="1" height="1" frameborder="0" style="display:none"></iframe>');
+    </script>
+    <noscript>
+      <iframe src="https://4817404.fls.doubleclick.net/activityi;src=4817404;type=herra;cat=cartp0;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;ord=1?" width="1" height="1" frameborder="0" style="display:none"></iframe>
+    </noscript>
+    <%= "<!-- End of DoubleClick Floodlight Tag: Please do not remove -->".html_safe %>
+  <% end %>
+<% end %>

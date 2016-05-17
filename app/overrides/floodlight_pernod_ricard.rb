@@ -7,6 +7,15 @@ Deface::Override.new(
   disabled: false
 )
 
+# Insert on Product page, if there are Chivas products
+Deface::Override.new(
+  virtual_path: "spree/layouts/spree_application",
+  name: "floodlight_pernod_ricard_chivas",
+  insert_top: "body",
+  partial: "spree/floodlight_tags/pernod_ricard/chivas",
+  disabled: false
+)
+
 # Insert on Confirmation page, if there are Pernod Ricard products
 Deface::Override.new(
   virtual_path: "spree/layouts/spree_application",

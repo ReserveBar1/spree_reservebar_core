@@ -53,21 +53,19 @@ Spree::Creditcard.class_eval do
   end
   
   
-  ### THOMAS: The following three methods are duplicated here, so we can have the response set and logged, will become obsolete
-  ## once we update to Active Merchant 1.28 or higher
   def authorize(amount, payment)
-    # ActiveMerchant is configured to use cents so we need to multiply order total by 100
+    # Customized for Braintree
     payment_gateway = payment.payment_method
-    check_environment(payment_gateway)
-
-    response = payment_gateway.authorize((amount * 100).round, self, gateway_options(payment))
-    ## Thomas: add action here, until we update to a later version of active merchant
-    response.params['action'] = "AUTHORIZE" unless response.params['action']
+    order = payment.order
+    retailer = order.retailer
+    payment_gateway.set_provider(retailer.bt_merchant_id, retailer.bt_public_key, retailer.bt_private_key)
+    response = payment_gateway.authorize(amount, self.gateway_payment_profile_id, order.number)
+    # response.params['action'] = "AUTHORIZE" unless response.params['action']
     record_log payment, response
 
     if response.success?
-      payment.response_code = response.authorization
-      payment.avs_response = response.avs_result['code']
+      payment.response_code = response.transaction.id
+      # payment.avs_response = response.avs_result['code']
       payment.pend
     else
       payment.failure

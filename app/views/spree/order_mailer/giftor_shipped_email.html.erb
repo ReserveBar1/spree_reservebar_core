@@ -37,7 +37,6 @@
 		  <p>Here is your Tracking Number: 
 			<%= render :partial => '/spree/admin/shared/tracking_link', :locals => {:shipment => @order.shipment} %>
 		  </p>
-		  <p>Please see below for Order Details.</p>
 		  <p>Thank you again for your order. We look forward to serving you and exceeding your expectations every time here at ReserveBar.com. If you have any questions, please visit our FAQ page on our site.<br /></p>
 
 			<p><b><bigger>As a valued customer, you can use promo code 'VALUEDCUSTOMER' during checkout to get $10 off your next purchase at ReserveBar.com.</bigger></b></p>
@@ -47,9 +46,6 @@
 	    Good Spirits. Delivered.</p></td>
 		    <td valign="middle" align="center">
 				<% product = @order.line_items.first.product %>
-				<% unless product.images.empty? %>
-				<img src="http://<%= Spree::Config[:site_url] %><%= product.images.first.attachment.url(:product) %>">
-				<% end %>
 			</td>
 	      </tr>
 	    </tbody></table></td>
@@ -119,93 +115,5 @@
 	    </tbody></table></td>
 		<td valign="top" align="left"><br _moz_dirty="" type="_moz"></td>
 	</tr>
-	<tr>
-	  <td valign="top" height="26" align="left"><br _moz_dirty="" type="_moz"></td>
-	  <td valign="top" height="26" align="left" colspan="4"><br _moz_dirty="" type="_moz"></td>
-	  <td valign="top" height="26" align="left"><br _moz_dirty="" type="_moz"></td>
-  </tr>
-	<tr>
-	  <td width="54" valign="top" height="53" align="left" rowspan="2"><br _moz_dirty="" type="_moz"></td>
-		<td width="549px" valign="top" height="26" align="center" colspan="4"><table width="549px" cellpadding="0" border="0" align="center" style=" margin:0; padding:0px; border:4px double #593D2B">
-		  <tbody><tr style="border:none">
-		    <td valign="middle" height="36" style="background-color:#C13828" colspan="7"><table width="100%" cellpadding="0" border="0">
-		      <tbody><tr>
-		        <td width="18"><br _moz_dirty="" type="_moz"></td>
-		        <td style="font: 20px Georgia, 'Times New Roman', Times, serif; font-weight:bold; color:#FFF; vertical-align:middle">ORDER SUMMARY</td>
-	          </tr>
-	        </tbody></table></td>
-	      </tr>
-		  <tr>
-		    <td height="12" style="border-top:4px double #593D2B" colspan="7">&nbsp;</td>
-	    </tr>
-
-		  <tr>
-		    <td width="18">&nbsp;</td>
-		    <td><table cellspacing="0" cellpadding="0" border="0" width="100%" style="font: 12px Georgia, 'Times New Roman', Times, serif; font-weight:normal; text-align:left">
-		      <tbody><tr>
-		        <td valign="top" style="font-size:14px" colspan="4"><table width="100%" align="right">
-		            <tbody><tr>
-		              <td align="left" valign="top" style="font-size: 15px; text-align:left; font-family: georgia,serif;"><strong>Order #: </strong><%= @order.number %></td>
-		              </tr>
-		            <tr style="font-family: georgia,serif;">
-		              <td width="100%" valign="top" height="36px" style="font:Georgia, 'Times New Roman', Times, serif; font-size:15px; text-align:left"><strong><span _moz_dirty="" style="font-family: georgia,serif;">Shipping Method</span>: </strong><span _moz_dirty="" style="font-family: georgia,serif;"><%= @order.shipping_method.name %></span></td>
-	                </tr>
-	            </tbody></table></td>
-	          </tr>
-		      <% @order.line_items.each do |item| %>
-		      <% bgcolor = cycle('#d8d8d8', '#ffffff') %>
-		      <tr>
-		        <td width="60%" height="21" style="text-align:right;background:<%= bgcolor -%>;font-size:12px;font-family:Georgia;text-decoration:none;font-weight:400;min-height:15.75pt"><%= sanitize(item.variant.product.name, :tags => %w(sup)) %>
-            </td>
-		        <td width="9px" style="background:<%= bgcolor -%>; text-align:center;">Quantity: <%= item.quantity %>
-            </td>
-		        <td style="background:<%= bgcolor -%>;font-size:12px;width:74pt;font-family:Georgia;text-decoration:none;font-weight:400">
-            	<%= number_to_currency(item.price * item.quantity) %>
-            </td>
-	        </tr>
-		      <tr>
-		        <td width="60%" height="21" style="text-align:right;background:<%= bgcolor -%>;font-size:12px;font-family:Georgia;text-decoration:none;font-weight:400;min-height:15.75pt"><%= item.gift_package ? "Gift Packaging" : "No Gift Packaging" %>
-            </td>
-		        <td width="9px" style="background:<%= bgcolor -%>"><br>
-            </td>
-		        <td style="background:<%= bgcolor -%>;font-size:12px;width:74pt;font-family:Georgia;text-decoration:none;font-weight:400">
-            	<%= item.gift_package ? number_to_currency(item.gift_package.price * item.quantity) : number_to_currency(0) %>
-            </td>
-	        </tr>
-	        <% end %>                
-		      <tr>
-		        <td height="9" style=" border-bottom:2px solid #593D2B" colspan="3">&nbsp;</td>
-	          </tr>
-		      <tr>
-		        <td colspan="2" valign="bottom" height="18" style="text-align: right; color: rgb(193, 56, 40); font-family: georgia,serif;padding-right:15px;"><strong>SubTotal</strong></td>
-		        <td valign="bottom" height="18" style="color: rgb(193, 56, 40); font-family: georgia,serif;"><strong><%= number_to_currency(@order.item_total + @order.gift_packaging_total) %></strong></td>
-	          </tr>
-		      <tr>
-		        <td colspan="3"><br _moz_dirty="" type="_moz"></td>
-	          </tr>
-		      <% @order.adjustments.eligible.each do |adjustment| %>
-					<% next if (adjustment.originator_type == 'Spree::TaxRate') and (adjustment.amount == 0) %>
-						<tr class="total">
-						  <td colspan="2" valign="bottom" height="18" style="text-align: right; font-family: georgia,serif;padding-right:15px;"><strong><%= hide_rate(adjustment.label) %></strong></td>
-						  <td valign="bottom" height="18" style="font-family: georgia,serif;"><span><%= number_to_currency adjustment.amount %></span></td>
-						</tr>
-					<% end %>
-		      <tr>
-		        <td colspan="3"><br _moz_dirty="" type="_moz"></td>
-	          </tr>
-		      <tr>
-		        <td colspan="2" valign="top" height="36" style="text-align: right; font-size: 15px; color: rgb(89, 61, 43); font-family: georgia,serif;padding-right:15px;"><strong>Order Total</strong></td>
-		        <td valign="top" height="36" style="font-size: 15px; color: rgb(89, 61, 43); font-family: georgia,serif;"><strong><%= number_to_currency(@order.total) %></strong></td>
-	          </tr>
-	        </tbody></table></td>
-		    <td width="18">&nbsp;</td>
-	      </tr>
-
-	        </tbody></table></td>
-		    <td rowspan="2">&nbsp;</td>
-  </tr>
-	<tr>
-	  <td valign="top" height="26" align="center" colspan="4">&nbsp;</td>
-  </tr>
 </tbody>
 </table>
